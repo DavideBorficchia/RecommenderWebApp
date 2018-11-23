@@ -1,0 +1,13 @@
+@import '../node_modules/@angular/material/theming';
+
+@include mat-core();
+
+$landing-page-theme-primary: mat-palette($mat-deep-purple);
+$landing-page-theme-accent: mat-palette($mat-brown,500,600,700);
+$landing-page-theme-warn:mat-palette($mat-red);
+
+$landing-page-theme: mat-light-theme($landing-page-theme-primary, $landing-page-theme-accent, $landing-page-theme-warn);
+
+
+
+@include angular-material-theme($landing-page-theme);

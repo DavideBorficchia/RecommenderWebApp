@@ -1,0 +1,20 @@
+color palette for #3F51B5 
+P — Dark: #002984
+P — Light: #757de8
+
+color palette for   #f06292
+S — Dark: #ba2d65
+S — Light: #ff94c2
+
+
+complementary: #B5A340 (dull yellow)
+
+triad colors
+{
+    #51B53F soft green
+    #4052B5 light navy
+    #B53F51 soft red
+}
+
+short hand syntax css
+margin top right bottom left (clockwise round)

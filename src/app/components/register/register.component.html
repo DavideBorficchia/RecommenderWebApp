@@ -1,9 +1,42 @@
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Favorite food" value="Sushi">
-  </mat-form-field>
+<mat-card class="login-card">
+  <div fxLayout="column" fxLayoutAlign="center center">
 
-  <mat-form-field class="example-full-width">
-    <textarea matInput placeholder="Leave a comment"></textarea>
-  </mat-form-field>
-</form>
+
+    <!--  The variable login is now a reference to the NgForm directive that governs the form as a whole -->
+    <form class="login-form" #login="ngForm">
+
+      <mat-form-field class="form-group full-width " color="primary">
+        <mat-label>Enter your user name</mat-label>
+        <input class="form-control" type="text" matInput placeholder="Cool Username" #username required [(ngModel)]="formUser.userName"
+          value="{{formUser.userName}}" name="nameField">
+        <mat-icon style="font-size: 25px" matSuffix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field class="form-group full-width " color="primary">
+        <mat-label>Enter your e-mail</mat-label>
+        <input class="form-control" type="text" matInput placeholder="email@yourprovider.com" name="emailField"
+          required [(ngModel)]="formUser.email" value="{{formUser.email}}">
+        <mat-icon style="font-size: 25px" matSuffix> alternate_email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field class="full-width" color="primary">
+        <mat-label>Enter your password</mat-label>
+        <input class="form-control" type="password" matInput placeholder="Password" #password [type]="hide ? 'password' : 'text'"
+          [(ngModel)]="formUser.password" value="{{formUser.password}}" name="passwordField" required>
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </mat-form-field>
+
+
+    </form>
+    <mat-card-actions fxLayout="column" fxLayoutAlign="center center">
+      <button mat-raised-button color="primary" class="large-button" (click)="onLogIn()">Log
+        In</button>
+      <a id="signup-link" mat-button [routerLink]="[{ outlets: { test: ['register'] } }]" (click)="onNeedRegister()">Don't
+        have an
+        account yet? Sign Up here</a>
+      <div *ngIf="isSpinnerShown">
+        <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
+      </div>
+    </mat-card-actions>
+  </div>
+</mat-card>

@@ -3,8 +3,8 @@
   <!-- <span>Custom Toolbar</span>-->
   <span class="spacer"></span>
   <span>
-    <h1>
-      Welcome to {{ title }}!
+    <h1 *ngIf="currentLoggedInUser.userName">
+      Welcome {{ currentLoggedInUser.userName }}!
     </h1>
   </span>
   <span class="spacer"></span>
@@ -12,8 +12,19 @@
 
 
 </mat-toolbar>
+<div fxLayout="row" fxLayoutAlign="center center" id="register-component-container">
 
-<router-outlet></router-outlet>
-<div id="register-component-container">
-  <app-register></app-register>
+  <router-outlet name="test"></router-outlet>
+
+
+
+  <div>
+    <app-register *ngIf="!needRegister" [currentLoggedInUser]="currentLoggedInUser" (registerClicked)=onNeedRegisterClick($event)></app-register>
+  </div>
+
+  <!-- <div>
+    <app-sign-up></app-sign-up>
+  </div> -->
 </div>
+
+<!-- Routed components go here -->
