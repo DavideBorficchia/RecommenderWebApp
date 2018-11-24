@@ -2,12 +2,14 @@
   <!-- <mat-card-header>
     <mat-card-title>Log In</mat-card-title>
   </mat-card-header> -->
-  <div fxLayout="row wrap" fxLayoutAlign="center center">
+  <div fxLayout="row" fxLayout.xs="column wrap" fxLayoutAlign="center center">
 
-    <div fxLayout="column" fxLayoutAlign="center center" style="margin:20px;">
+    <div fxLayout="column" fxLayoutAlign="center start" id="leftsection" >
 
+      <h1>Log In into your account</h1>
       <!-- production link: ./assets/login.svg -->
-      <img src="./assets/login.svg" class="login-icon">
+      <img src="../../../assets/login.svg" class="login-icon">
+      <p>In order to log in you need to create an account. Click the link on the right if you need to</p>
     </div>
 
     <div fxLayout="column" fxLayoutAlign="center center" id="form-container">
@@ -15,13 +17,6 @@
 
       <!--  The variable login is now a reference to the NgForm directive that governs the form as a whole -->
       <form class="login-form" fxLayout="column" fxLayoutAlign="center center" #login="ngForm">
-
-        <mat-form-field class="form-group full-width " color="primary">
-          <mat-label>Enter your user name</mat-label>
-          <input class="form-control" type="text" matInput placeholder="Cool Username" #username required [(ngModel)]="formUser.userName"
-            value="{{formUser.userName}}" name="nameField">
-          <mat-icon style="font-size: 25px" matSuffix>person</mat-icon>
-        </mat-form-field>
 
         <mat-form-field class="form-group full-width " color="primary">
           <mat-label>Enter your e-mail</mat-label>

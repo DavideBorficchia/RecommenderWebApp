@@ -1,79 +1,58 @@
 <mat-card class="login-card">
-  <!-- <div fxLayout="column" fxLayoutAlign="center center">
-    <form class="login-form">
-      <mat-form-field class="full-width " color="primary">
-        <mat-label>Enter your user name</mat-label>
-        <input matInput placeholder="Cool Username" #username>
-        <mat-icon style="font-size: 25px" matSuffix>person</mat-icon>
-      </mat-form-field>
-    </form>
-  </div> -->
-  <mat-horizontal-stepper [linear]="isLinear" #stepper>
-    <mat-step [stepControl]="firstFormGroup" color="accent">
-      <form class="form-group" [formGroup]="firstFormGroup">
-        <ng-template matStepLabel>Fill out your personal informations</ng-template>
-        <div fxLayout="row" fxLayoutAlign="center center" class="user-personal-info">
-          <mat-form-field class="form-group full-width " color="primary">
-            <mat-label>Enter your user name</mat-label>
-            <input class="form-control" type="text" matInput placeholder="Cool Username" #username required name="nameField">
-            <mat-icon style="font-size: 25px" matSuffix>person</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field class="form-group full-width " color="primary">
-            <mat-label>Enter your e-mail</mat-label>
-            <input class="form-control" type="text" matInput placeholder="email@yourprovider.com" name="emailField"
-              required>
-            <mat-icon style="font-size: 25px" matSuffix> alternate_email</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field class="full-width" color="primary">
-            <mat-label>Enter your password</mat-label>
-            <input class="form-control" type="password" matInput placeholder="Password" #password [type]="hide ? 'password' : 'text'"
-              name="passwordField" required>
-            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </mat-form-field>
-        </div>
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="secondFormGroup" color="accent">
-      <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>Fill your body and gender specifics</ng-template>
-        <div fxLayout="row" fxLayoutAlign="center center" class="user-personal-info">
-          <mat-form-field class="form-group full-width " color="primary">
-            <mat-label>Enter your user name</mat-label>
-            <input class="form-control" type="text" matInput placeholder="Cool Username" #username required name="nameField">
-            <mat-icon style="font-size: 25px" matSuffix>person</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field class="form-group full-width " color="primary">
-            <mat-label>Enter your e-mail</mat-label>
-            <input class="form-control" type="text" matInput placeholder="email@yourprovider.com" name="emailField"
-              required>
-            <mat-icon style="font-size: 25px" matSuffix> alternate_email</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field class="full-width" color="primary">
-            <mat-label>Enter your password</mat-label>
-            <input class="form-control" type="password" matInput placeholder="Password" #password [type]="hide ? 'password' : 'text'"
-              name="passwordField" required>
-            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </mat-form-field>
-
-        </div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </form>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      You are now done.
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
+    <!-- <mat-card-header>
+      <mat-card-title>Log In</mat-card-title>
+    </mat-card-header> -->
+    <div fxLayout="row" fxLayout.xs="column wrap" fxLayoutAlign="center center">
+  
+      <div fxLayout="column" fxLayoutAlign="center start" id="leftsection" >
+  
+        <h1>Create your account</h1>
+        <!-- production link: ./assets/login.svg -->
+        <img src="../../../assets/login.svg" class="login-icon">
+        <p>Create an account before log in. More information will be needed later, but let's keep it simple for now ;)</p>
       </div>
-    </mat-step>
-  </mat-horizontal-stepper>
-</mat-card>
+  
+      <div fxLayout="column" fxLayoutAlign="center center" id="form-container">
+  
+  
+        <!--  The variable login is now a reference to the NgForm directive that governs the form as a whole -->
+        <form class="login-form" fxLayout="column" fxLayoutAlign="center center" #login="ngForm">
+  
+            <mat-form-field class="form-group full-width " color="primary">
+                <mat-label>Enter your user name</mat-label>
+                <input class="form-control" type="text" matInput placeholder="cool username" name="emailField"
+                  required [(ngModel)]="formUser.userName" value="{{formUser.userName}}">
+                <mat-icon style="font-size: 25px" matSuffix> person</mat-icon>
+              </mat-form-field>  
+
+
+          <mat-form-field class="form-group full-width " color="primary">
+            <mat-label>Enter your e-mail</mat-label>
+            <input class="form-control" type="text" matInput placeholder="email@yourprovider.com" name="emailField"
+              required [(ngModel)]="formUser.email" value="{{formUser.email}}">
+            <mat-icon style="font-size: 25px" matSuffix> alternate_email</mat-icon>
+          </mat-form-field>
+  
+          <mat-form-field class="full-width" color="primary">
+            <mat-label>Enter your password</mat-label>
+            <input class="form-control" type="password" matInput placeholder="Password" #password [type]="hide ? 'password' : 'text'"
+              [(ngModel)]="formUser.password" value="{{formUser.password}}" name="passwordField" required>
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
+  
+  
+        </form>
+        <mat-card-actions fxLayout="column" fxLayoutAlign="center center">
+          <button mat-raised-button color="primary" class="large-button" (click)="onLogIn()">Log
+            In</button>
+          <a id="signup-link" mat-button linkActive="/">
+            name="needregisterLink">Don't
+            have an
+            account yet? Sign Up here</a>
+          <div *ngIf="isSpinnerShown">
+            <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
+          </div>
+        </mat-card-actions>
+      </div>
+    </div>
+  </mat-card>

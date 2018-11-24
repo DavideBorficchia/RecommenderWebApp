@@ -8,19 +8,17 @@ import { User } from '../register/model/user';
   styleUrls: ['./sign-up.component.css', '../register/register.component.css']
 })
 export class SignUpComponent implements OnInit {
-  isLinear = false;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
+
   formUser: User = new User()
   hide: boolean;
-  constructor(private _formBuilder: FormBuilder) { }
+  isSpinnerShown:boolean;
+  constructor() { }
+
+  onLogIn(){
+
+  }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
+   
   }
 }

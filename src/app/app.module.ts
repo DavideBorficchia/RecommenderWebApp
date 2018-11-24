@@ -25,7 +25,10 @@ const appRoutes: Routes = [
 
   {
     path: 'register', component: SignUpComponent, outlet: 'test'
-  }
+  },
+  {
+    path: 'home', component: RegisterComponent, outlet: 'test'
+  },
 
 ];
 @NgModule({

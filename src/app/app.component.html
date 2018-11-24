@@ -12,7 +12,7 @@
 
 
 </mat-toolbar>
-<div fxLayout="row" fxLayoutAlign="center center" id="register-component-container">
+<div fxLayout="row" fxLayoutAlign="center " id="register-component-container">
 
   <router-outlet *ngIf="needRegister" name="test"></router-outlet>
 
@@ -24,6 +24,7 @@
     <app-register *ngIf="!needRegister" [parentUser]="currentLoggedInUser" (onNeedRegister)="onNeedRegister($event)"></app-register>
   </div>
 
-  
 </div>
+<!-- <app-footer></app-footer> -->
+
 <!-- <app-footer></app-footer> -->
