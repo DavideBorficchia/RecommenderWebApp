@@ -14,5 +14,6 @@
 
   #register-component-container{
     height: 80vh;
+    overflow: hidden;
   }
 }
