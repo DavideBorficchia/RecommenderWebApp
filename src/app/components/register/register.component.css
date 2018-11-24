@@ -9,18 +9,25 @@
   border-width: 7px;
   /* max-height: 340px; */
   /* max-width: 350px; */
-  margin: 30px ;
+  margin: 30px;
   max-height: 100%;
   max-width: 600px;
   overflow: hidden;
+  min-width: 300px;
 }
+
+/* #matcontent{
+  max-width: ;
+} */
 
 #leftsection {
   margin: 0 !important;
-  padding: 20px 20px 20px 20px;
+  padding: 20px;
   background-color: #9a67ea;
   max-width: inherit !important;
+  max-height: inherit !important;
   overflow: hidden;
+  
 }
 
 .login-card>mat-card-header {
@@ -75,18 +82,22 @@
   }
   .login-form {
     margin-right: 20px;
+    margin-top: 0px;
   }
   #form-container {
     margin-right: 30px;
     margin-left: 30px;
-    margin-top: 20px;
+    margin-top: 0px;
   }
 }
 
 @media screen and (max-width: 600px) {
+  #leftsection {
+    /* padding: 5px 40px; */
+  }
   .login-card {
     max-width: 400px;
-    margin-top: 0;
+    margin-top: 20px;
     /* max-height: inherit; */
   }
   .full-width {
@@ -99,16 +110,16 @@
   }
   .login-form {
     max-width: 300px !important;
-    margin: 10px !important;
+    margin: 5px !important;
   }
 }
-  @media screen and (max-width: 500px) {
-    h1 {
-      font-size: 25px;
-    }
-    .login-card {
-      margin: 10px !important  ;
-      /* max-height: inherit; */
-    }
-  
+
+@media screen and (max-width: 500px) {
+  h1 {
+    font-size: 25px;
   }
+  .login-card {
+    margin: 10px !important;
+    /* max-height: inherit; */
+  }
+}

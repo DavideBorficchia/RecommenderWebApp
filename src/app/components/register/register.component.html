@@ -6,7 +6,7 @@
 
     <div fxLayout="column" fxLayoutAlign="center start" id="leftsection" >
 
-      <h1>Log In into your account</h1>
+      <h2>Log In </h2>
       <!-- production link: ./assets/login.svg -->
       <img src="./assets/login.svg" class="login-icon">
       <p>In order to log in you need to create an account. Click the link on the right if you need to</p>
@@ -41,10 +41,11 @@
           name="needregisterLink">Don't
           have an
           account yet? Sign Up here</a>
-        <div *ngIf="isSpinnerShown">
-          <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
-        </div>
+       
       </mat-card-actions>
+      <div *ngIf="isSpinnerShown">
+        <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
+      </div>
     </div>
   </div>
 </mat-card>

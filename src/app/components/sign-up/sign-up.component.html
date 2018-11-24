@@ -4,27 +4,26 @@
     </mat-card-header> -->
     <div fxLayout="row" fxLayout.xs="column wrap" fxLayoutAlign="center center">
   
-      <div fxLayout="column" fxLayoutAlign="center start" id="leftsection" >
-  
-        <h2>Create your account</h2>
+      <div fxLayout="column" fxLayoutAlign="center start" id="leftsection" class="signupsection">
+
+        <h2>Sign Up</h2>
         <!-- production link: ./assets/login.svg -->
         <img src="./assets/login.svg" class="login-icon">
-        <p>Create an account before log in. More information will be needed later, but let's keep it simple for now ;)</p>
+        <p>Create your account if you don't have one already. More information will be needed later on, but let's keep it simple for now ;)</p>
       </div>
   
       <div fxLayout="column" fxLayoutAlign="center center" id="form-container">
   
-  
+  <!--sdkjchksldjvhfdjsklòaskjfh-->
         <!--  The variable login is now a reference to the NgForm directive that governs the form as a whole -->
         <form class="login-form" fxLayout="column" fxLayoutAlign="center center" #login="ngForm">
   
-            <mat-form-field class="form-group full-width " color="primary">
-                <mat-label>Enter your user name</mat-label>
-                <input class="form-control" type="text" matInput placeholder="cool username" name="emailField"
-                  required [(ngModel)]="formUser.userName" value="{{formUser.userName}}">
-                <mat-icon style="font-size: 25px" matSuffix> person</mat-icon>
-              </mat-form-field>  
-
+          <mat-form-field class="form-group full-width " color="primary">
+            <mat-label>Enter your user name</mat-label>
+            <input class="form-control" type="text" matInput placeholder="Your Username" name="username"
+              required [(ngModel)]="formUser.userName" value="{{formUser.userName}}">
+            <mat-icon style="font-size: 25px" matSuffix> person</mat-icon>
+          </mat-form-field>
 
           <mat-form-field class="form-group full-width " color="primary">
             <mat-label>Enter your e-mail</mat-label>
@@ -43,14 +42,15 @@
   
         </form>
         <mat-card-actions id="actions" fxLayout="column" fxLayoutAlign="center center">
-          <button mat-raised-button color="primary" class="large-button" (click)="onSignUp()">Log
-            In</button>
+          <button mat-raised-button color="primary" class="large-button" (click)="onSignUp()">Sign
+            Up</button>
           <a id="signup-link" mat-button linkActive="/"(click)="linkClicked.emit(true)">
            Do you have an account? Log In here</a>
-          <div *ngIf="isSpinnerShown">
-            <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
-          </div>
+          
         </mat-card-actions>
+        <div style="height:30px;">
+          <mat-spinner  *ngIf="isSpinnerShown" class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
+        </div>
       </div>
     </div>
   </mat-card>
