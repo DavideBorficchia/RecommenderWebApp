@@ -6,7 +6,7 @@
   
       <div fxLayout="column" fxLayoutAlign="center start" id="leftsection" >
   
-        <h1>Create your account</h1>
+        <h2>Create your account</h2>
         <!-- production link: ./assets/login.svg -->
         <img src="./assets/login.svg" class="login-icon">
         <p>Create an account before log in. More information will be needed later, but let's keep it simple for now ;)</p>
@@ -46,7 +46,7 @@
           <button mat-raised-button color="primary" class="large-button" (click)="onSignUp()">Log
             In</button>
           <a id="signup-link" mat-button linkActive="/"(click)="linkClicked.emit(true)">
-           Don't have an account yet? Sign Up here</a>
+           Do you have an account? Log In here</a>
           <div *ngIf="isSpinnerShown">
             <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
           </div>
