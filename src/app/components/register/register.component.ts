@@ -13,10 +13,10 @@ export class RegisterComponent implements OnInit {
   //the instance must be created in the parent not in the child
   @Input() parentUser: User;
   @Output('onNeedRegister') linkClicked = new EventEmitter<boolean>();
-  private formUser: User = new User();
+  formUser: User = new User();
   hide = true;
   isSpinnerShown: boolean;
-  isSmartphone:boolean;
+  isSmartphone: boolean;
 
 
   constructor(private registerService: RegisterService, private breakpointObserver: BreakpointObserver) {
@@ -56,12 +56,12 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.breakpointObserver.observe([
       Breakpoints.Handset
-    ]).subscribe(result=>{
-      if(result.matches && this.breakpointObserver.isMatched('(max-width:300px)')){
+    ]).subscribe(result => {
+      if (result.matches && this.breakpointObserver.isMatched('(max-width:300px)')) {
         this.isSmartphone = true;
-        
+
       }
-      else{
+      else {
         this.isSmartphone = false
       }
       console.log(this.isSmartphone)

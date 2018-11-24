@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import {ReactiveFormsModule} from '@angular/forms'; 
+import { ReactiveFormsModule } from '@angular/forms';
 import { User } from '../register/model/user';
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.css','../register/register.component.css']
+  styleUrls: ['./sign-up.component.css', '../register/register.component.css']
 })
 export class SignUpComponent implements OnInit {
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-  formUser:User= new User()
-
-  constructor(private _formBuilder: FormBuilder) {}
+  formUser: User = new User()
+  hide: boolean;
+  constructor(private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
