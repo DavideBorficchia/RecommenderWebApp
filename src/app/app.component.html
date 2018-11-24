@@ -14,17 +14,16 @@
 </mat-toolbar>
 <div fxLayout="row" fxLayoutAlign="center center" id="register-component-container">
 
-  <router-outlet name="test"></router-outlet>
+  <router-outlet *ngIf="needRegister" name="test"></router-outlet>
 
 
 
   <div>
-    <app-register *ngIf="!needRegister" [currentLoggedInUser]="currentLoggedInUser" (registerClicked)=onNeedRegisterClick($event)></app-register>
+    <!-- Sintassi input binding: tra le quadre il nome della variabile che deve avere il child component,
+   tra le virgole il nome della variabile del parent component -->
+    <app-register *ngIf="!needRegister" [parentUser]="currentLoggedInUser" (onNeedRegister)="onNeedRegister($event)"></app-register>
   </div>
 
-  <!-- <div>
-    <app-sign-up></app-sign-up>
-  </div> -->
+  
 </div>
-
-<!-- Routed components go here -->
+<!-- <app-footer></app-footer> -->

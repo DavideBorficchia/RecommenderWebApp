@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angu
 import { User } from './model/user';
 import { Guid } from "guid-typescript";
 import { RegisterService } from 'src/app/services/register.service';
-
+import { LayoutModule, BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-register',
@@ -11,47 +11,61 @@ import { RegisterService } from 'src/app/services/register.service';
 })
 export class RegisterComponent implements OnInit {
   //the instance must be created in the parent not in the child
-  @Input('currentLoggedInUser') parentUserToShow: User;
+  @Input() parentUser: User;
+  @Output('onNeedRegister') linkClicked = new EventEmitter<boolean>();
   private formUser: User = new User();
   hide = true;
   isSpinnerShown: boolean;
-
-  constructor(private registerService: RegisterService) { }
-
+  isSmartphone:boolean;
 
 
-  onLogIn() {
-    console.log(this.formUser.userName)
-    // if (name && email && password) {
-
-
-    //   this.isSpinnerShown = true
-
-    //   var userToPost = new User();
-    //   userToPost.id = Guid.create().toString();
-    //   userToPost.email = email = email;
-    //   userToPost.password = password;
-    //   userToPost.userName = name;
-    //   this.registerService.doLogin(userToPost).subscribe(response => {
-    //     if (response.status == 201) {
-    //       setTimeout(() => {
-    //         // this.isSpinnerShown = false
-    //         this.parentUserToShow.email = email;
-    //         this.parentUserToShow.userName = name;
-    //       }, 500);
-
-
-    //     }
-    //   })
-
-    // }
+  constructor(private registerService: RegisterService, private breakpointObserver: BreakpointObserver) {
 
   }
 
 
 
-  ngOnInit() {
+  onLogIn() {
 
+    // console.log(this.formUser.userName)
+
+    if (this.formUser.userName && this.formUser.email && this.formUser.password) {
+
+
+      this.isSpinnerShown = true
+
+
+      this.formUser.id = Guid.create().toString();
+
+      this.registerService.doLogin(this.formUser).subscribe(response => {
+        if (response.status == 201) {
+          setTimeout(() => {
+            this.isSpinnerShown = false
+            // this.parentUser = this.formUser;
+            this.parentUser.userName = this.formUser.userName
+            console.log(this.parentUser.userName)
+          }, 500);
+
+
+        }
+      })
+
+    }
+
+  }
+  ngOnInit() {
+    this.breakpointObserver.observe([
+      Breakpoints.Handset
+    ]).subscribe(result=>{
+      if(result.matches && this.breakpointObserver.isMatched('(max-width:300px)')){
+        this.isSmartphone = true;
+        
+      }
+      else{
+        this.isSmartphone = false
+      }
+      console.log(this.isSmartphone)
+    })
   }
 
 }

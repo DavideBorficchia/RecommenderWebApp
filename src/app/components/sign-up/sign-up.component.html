@@ -1,5 +1,5 @@
 <mat-card class="login-card">
-  <div fxLayout="column" fxLayoutAlign="center center">
+  <!-- <div fxLayout="column" fxLayoutAlign="center center">
     <form class="login-form">
       <mat-form-field class="full-width " color="primary">
         <mat-label>Enter your user name</mat-label>
@@ -7,6 +7,73 @@
         <mat-icon style="font-size: 25px" matSuffix>person</mat-icon>
       </mat-form-field>
     </form>
-  </div>
+  </div> -->
+  <mat-horizontal-stepper [linear]="isLinear" #stepper>
+    <mat-step [stepControl]="firstFormGroup" color="accent">
+      <form class="form-group" [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Fill out your personal informations</ng-template>
+        <div fxLayout="row" fxLayoutAlign="center center" class="user-personal-info">
+          <mat-form-field class="form-group full-width " color="primary">
+            <mat-label>Enter your user name</mat-label>
+            <input class="form-control" type="text" matInput placeholder="Cool Username" #username required name="nameField">
+            <mat-icon style="font-size: 25px" matSuffix>person</mat-icon>
+          </mat-form-field>
 
+          <mat-form-field class="form-group full-width " color="primary">
+            <mat-label>Enter your e-mail</mat-label>
+            <input class="form-control" type="text" matInput placeholder="email@yourprovider.com" name="emailField"
+              required>
+            <mat-icon style="font-size: 25px" matSuffix> alternate_email</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field class="full-width" color="primary">
+            <mat-label>Enter your password</mat-label>
+            <input class="form-control" type="password" matInput placeholder="Password" #password [type]="hide ? 'password' : 'text'"
+              name="passwordField" required>
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
+        </div>
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup" color="accent">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Fill your body and gender specifics</ng-template>
+        <div fxLayout="row" fxLayoutAlign="center center" class="user-personal-info">
+          <mat-form-field class="form-group full-width " color="primary">
+            <mat-label>Enter your user name</mat-label>
+            <input class="form-control" type="text" matInput placeholder="Cool Username" #username required name="nameField">
+            <mat-icon style="font-size: 25px" matSuffix>person</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field class="form-group full-width " color="primary">
+            <mat-label>Enter your e-mail</mat-label>
+            <input class="form-control" type="text" matInput placeholder="email@yourprovider.com" name="emailField"
+              required>
+            <mat-icon style="font-size: 25px" matSuffix> alternate_email</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field class="full-width" color="primary">
+            <mat-label>Enter your password</mat-label>
+            <input class="form-control" type="password" matInput placeholder="Password" #password [type]="hide ? 'password' : 'text'"
+              name="passwordField" required>
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
+
+        </div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      You are now done.
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
 </mat-card>

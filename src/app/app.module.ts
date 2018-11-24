@@ -16,14 +16,15 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { FormsModule }   from '@angular/forms';
-
-
+import { FormsModule, ReactiveFormsModule}   from '@angular/forms';
+import { FooterComponent } from './components/footer/footer.component';
+import {MatStepperModule} from '@angular/material/stepper';
+import {LayoutModule} from '@angular/cdk/layout';
 
 const appRoutes: Routes = [
 
   {
-    path: 'register', component: RegisterComponent, outlet: 'test'
+    path: 'register', component: SignUpComponent, outlet: 'test'
   }
 
 ];
@@ -33,10 +34,12 @@ const appRoutes: Routes = [
     RegisterComponent,
     SignUpComponent,
     WelcomeComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    MatStepperModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -48,6 +51,8 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatIconModule,
     MatFormFieldModule,
+    ReactiveFormsModule,
+    LayoutModule,
     RouterModule.forRoot(
       appRoutes
     )
