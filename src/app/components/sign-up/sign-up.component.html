@@ -42,10 +42,10 @@
   
   
         </form>
-        <mat-card-actions fxLayout="column" fxLayoutAlign="center center">
-          <button mat-raised-button color="primary" class="large-button" (click)="onLogIn()">Log
+        <mat-card-actions id="actions" fxLayout="column" fxLayoutAlign="center center">
+          <button mat-raised-button color="primary" class="large-button" (click)="onSignUp()">Log
             In</button>
-          <a id="signup-link" mat-button linkActive="/">
+          <a id="signup-link" mat-button linkActive="/"(click)="linkClicked.emit(true)">
            Don't have an account yet? Sign Up here</a>
           <div *ngIf="isSpinnerShown">
             <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>

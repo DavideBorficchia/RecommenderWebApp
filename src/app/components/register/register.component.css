@@ -9,7 +9,7 @@
   border-width: 7px;
   /* max-height: 340px; */
   /* max-width: 350px; */
-  margin: 30px !important;
+  margin: 30px ;
   max-height: 100%;
   max-width: 600px;
   overflow: hidden;
@@ -105,6 +105,10 @@
   @media screen and (max-width: 500px) {
     h1 {
       font-size: 25px;
+    }
+    .login-card {
+      margin: 10px !important  ;
+      /* max-height: inherit; */
     }
   
   }
