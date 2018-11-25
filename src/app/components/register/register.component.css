@@ -27,7 +27,6 @@
   max-width: inherit !important;
   max-height: inherit !important;
   overflow: hidden;
-  
 }
 
 .login-card>mat-card-header {
@@ -105,8 +104,9 @@
     font-size: 13px;
   }
   .login-icon {
-    width: 0px;
-    height: 0px;
+    width: 80px;
+    height: 80px;
+    margin-left: 30px;
   }
   .login-form {
     max-width: 300px !important;
@@ -121,5 +121,11 @@
   .login-card {
     margin: 10px !important;
     /* max-height: inherit; */
+  }
+  @media screen and (max-width: 400px){
+.login-card{
+margin-left: 3px !important;
+margin-right: 3px !important;
+}
   }
 }

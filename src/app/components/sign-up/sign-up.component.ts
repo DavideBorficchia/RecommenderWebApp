@@ -15,7 +15,7 @@ export class SignUpComponent implements OnInit {
   @Input() parentUser: User;
   @Output('onNeedRegister') linkClicked = new EventEmitter<boolean>();
   formUser: User = new User()
-  hide: boolean;
+  hide = true;
   isSpinnerShown: boolean;
   constructor(private registerService:RegisterService) { }
 
@@ -28,7 +28,7 @@ export class SignUpComponent implements OnInit {
 
       this.formUser.id = Guid.create().toString();
 
-      this.registerService.doLogin(this.formUser).subscribe(response => {
+      this.registerService.doSignUp(this.formUser).subscribe(response => {
         if (response.status == 201) {
           setTimeout(() => {
             this.isSpinnerShown = false

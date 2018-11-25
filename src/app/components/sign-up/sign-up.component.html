@@ -4,7 +4,7 @@
     </mat-card-header> -->
     <div fxLayout="row" fxLayout.xs="column wrap" fxLayoutAlign="center center">
   
-      <div fxLayout="column" fxLayoutAlign="center start" id="leftsection" class="signupsection">
+      <div fxLayout="column" fxLayout.xs="row wrap"  fxLayoutAlign.xs ="start center" fxLayoutAlign="center start" id="leftsection" class="signupsection">
 
         <h2>Sign Up</h2>
         <!-- production link: ./assets/login.svg -->
@@ -44,7 +44,7 @@
         <mat-card-actions id="actions" fxLayout="column" fxLayoutAlign="center center">
           <button mat-raised-button color="primary" class="large-button" (click)="onSignUp()">Sign
             Up</button>
-          <a id="signup-link" mat-button linkActive="/"(click)="linkClicked.emit(true)">
+          <a id="signup-link" mat-button linkActive="/"(click)="linkClicked.emit(false)">
            Do you have an account? Log In here</a>
           
         </mat-card-actions>

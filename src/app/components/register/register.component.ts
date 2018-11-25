@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
 
     // console.log(this.formUser.userName)
 
-    if (this.formUser.userName && this.formUser.email && this.formUser.password) {
+    if (this.formUser.email && this.formUser.password) {
 
 
       this.isSpinnerShown = true
@@ -37,12 +37,14 @@ export class RegisterComponent implements OnInit {
 
       this.formUser.id = Guid.create().toString();
 
-      this.registerService.doLogin(this.formUser).subscribe(response => {
-        if (response.status == 201) {
+      this.registerService.doLogin(this.formUser.email).subscribe(response => {
+        if (response.status == 200) {
           setTimeout(() => {
             this.isSpinnerShown = false
             // this.parentUser = this.formUser;
-            this.parentUser.userName = this.formUser.userName
+            var userResponse = response.body;
+            console.log(userResponse)
+            this.parentUser.userName = userResponse.userName
             console.log(this.parentUser.userName)
           }, 500);
 
