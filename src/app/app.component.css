@@ -9,13 +9,13 @@
   height: 100%;
   width: 100vw;
   background-image: url('../assets/food_pattern_mobile.svg');
-  overflow: scroll;
+  overflow: hidden;
   
 }
 
 @media screen and (max-width:600px){
   #register-component-container{
     height: 750px !important;
-    
+    /* overflow: hidden; */
   }
 }
