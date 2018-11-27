@@ -1,3 +1,15 @@
-<p>
-  welcome works!
-</p>
+<div *ngIf="!isSignUpDone && !isLoginDone" fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutAlign.xs="center "
+  id="register-component-container">
+
+  <!-- <div>
+  
+    <app-sign-up *ngIf="needRegister"  (onNeedRegister)="onNeedRegister($event)" (onSignUpDone)="onSignUpDone($event)"></app-sign-up>
+  </div> -->
+
+
+  <!-- <div>
+  
+    <app-register *ngIf="!needRegister"  (onNeedRegister)="onNeedRegister($event)"></app-register>
+  </div> -->
+    <router-outlet></router-outlet>
+</div>

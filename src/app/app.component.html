@@ -1,33 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<mat-toolbar color="primary" class="mat-elevation-z8" style="position:relative">
-  <!-- <span>Custom Toolbar</span>-->
-  <span class="spacer"></span>
-  <span>
-    <h1 *ngIf="currentLoggedInUser.userName">
-      Welcome {{ currentLoggedInUser.userName }}!
-    </h1>
-  </span>
-  <span class="spacer"></span>
-  <!--<span>Custom Toolbar</span> -->
+<app-toolbar></app-toolbar>
+<!-- <router-outlet></router-outlet> -->
+<app-welcome></app-welcome>
 
-
-</mat-toolbar>
-<div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutAlign.xs = "center " id="register-component-container">
-
-  <div>
-    <!-- Sintassi input binding: tra le quadre il nome della variabile che deve avere il child component,
-   tra le virgole il nome della variabile del parent component -->
-    <app-sign-up *ngIf="needRegister" [parentUser]="currentLoggedInUser" (onNeedRegister)="onNeedRegister($event)"></app-sign-up>
-  </div>
-
-
-  <div>
-    <!-- Sintassi input binding: tra le quadre il nome della variabile che deve avere il child component,
-   tra le virgole il nome della variabile del parent component -->
-    <app-register *ngIf="!needRegister" [parentUser]="currentLoggedInUser" (onNeedRegister)="onNeedRegister($event)"></app-register>
-  </div>
-
-</div>
-<!-- <app-footer></app-footer> -->
-
-<!-- <app-footer></app-footer> -->

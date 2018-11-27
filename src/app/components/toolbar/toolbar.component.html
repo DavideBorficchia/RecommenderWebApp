@@ -1,0 +1,19 @@
+<mat-toolbar color="primary" class="mat-elevation-z8" style="position:relative">
+  <!-- <span>Custom Toolbar</span>-->
+  <button mat-icon-button>
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="spacer"></span>
+  <span>
+    <h1>
+      <!-- Welcome {{ currentLoggedInUser.userName }}! *ngIf="currentLoggedInUser.userName" -->
+    </h1>
+  </span>
+  <span class="spacer"></span>
+  <!--<span>Custom Toolbar</span> -->
+  <button mat-raised-button color="primary" routerLink="/signup"  routerLinkActive="active">Sign
+    Up</button>
+  <button mat-raised-button color="accent" routerLink="/login"  routerLinkActive="active">Log In</button>
+
+
+</mat-toolbar>

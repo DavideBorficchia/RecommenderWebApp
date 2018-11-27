@@ -14,21 +14,19 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule, Routes } from '@angular/router';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
-import {MatIconModule} from '@angular/material/icon';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule}   from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FooterComponent } from './components/footer/footer.component';
-import {MatStepperModule} from '@angular/material/stepper';
-import {LayoutModule} from '@angular/cdk/layout';
-
+import { MatStepperModule } from '@angular/material/stepper';
+import { LayoutModule } from '@angular/cdk/layout';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import {MatSnackBarModule} from '@angular/material';
 const appRoutes: Routes = [
 
-  {
-    path: 'register', component: SignUpComponent, outlet: 'test'
-  },
-  {
-    path: 'home', component: RegisterComponent, outlet: 'test'
-  },
+  { path: "signup", component:SignUpComponent},
+  { path: "login", component:RegisterComponent}
+
 
 ];
 @NgModule({
@@ -38,11 +36,14 @@ const appRoutes: Routes = [
     SignUpComponent,
     WelcomeComponent,
     FooterComponent,
+    ToolbarComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     MatStepperModule,
+    MatSnackBarModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -61,6 +62,6 @@ const appRoutes: Routes = [
     )
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

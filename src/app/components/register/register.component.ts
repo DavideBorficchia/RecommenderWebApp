@@ -3,6 +3,10 @@ import { User } from './model/user';
 import { Guid } from "guid-typescript";
 import { RegisterService } from 'src/app/services/register.service';
 import { LayoutModule, BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material';
+import { HttpErrorResponse } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-register',
@@ -11,15 +15,10 @@ import { LayoutModule, BreakpointObserver, Breakpoints } from '@angular/cdk/layo
 })
 export class RegisterComponent implements OnInit {
   //the instance must be created in the parent not in the child
-  @Input() parentUser: User;
-  @Output('onNeedRegister') linkClicked = new EventEmitter<boolean>();
   formUser: User = new User();
-  hide = true;
   isSpinnerShown: boolean;
-  isSmartphone: boolean;
-
-
-  constructor(private registerService: RegisterService, private breakpointObserver: BreakpointObserver) {
+  hide= true;
+  constructor(private registerService: RegisterService, private router:Router,public snackBar:MatSnackBar) {
 
   }
 
@@ -44,11 +43,26 @@ export class RegisterComponent implements OnInit {
             // this.parentUser = this.formUser;
             var userResponse = response.body;
             console.log(userResponse)
-            this.parentUser.userName = userResponse.userName
-            console.log(this.parentUser.userName)
+            sessionStorage["user"]=JSON.stringify(response.body.id);
+            this.router.navigate(["/"])
+
           }, 500);
 
 
+        }
+       
+      }, (error:HttpErrorResponse)=>{
+        console.log("error "+error.message)
+
+        if(error.status==422){
+          setTimeout(() => {
+
+            this.isSpinnerShown = false
+           
+            this.snackBar.open(error.error.toString(),"OK", {
+              duration:3000
+            })
+          }, 500);
         }
       })
 
@@ -56,18 +70,6 @@ export class RegisterComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.breakpointObserver.observe([
-      Breakpoints.Handset
-    ]).subscribe(result => {
-      if (result.matches && this.breakpointObserver.isMatched('(max-width:300px)')) {
-        this.isSmartphone = true;
-
-      }
-      else {
-        this.isSmartphone = false
-      }
-      console.log(this.isSmartphone)
-    })
   }
 
 }

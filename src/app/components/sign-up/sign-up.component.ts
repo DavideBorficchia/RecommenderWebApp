@@ -5,6 +5,9 @@ import { Guid } from "guid-typescript";
 import { RegisterService } from 'src/app/services/register.service';
 import { LayoutModule, BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { User } from '../register/model/user';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-sign-up',
@@ -12,12 +15,13 @@ import { User } from '../register/model/user';
   styleUrls: ['./sign-up.component.css', '../register/register.component.css']
 })
 export class SignUpComponent implements OnInit {
-  @Input() parentUser: User;
-  @Output('onNeedRegister') linkClicked = new EventEmitter<boolean>();
+  // @Output('onNeedRegister') linkClicked = new EventEmitter<boolean>();
+  // @Output('onSignUpDone') signUpCompleted = new EventEmitter<boolean>();
   formUser: User = new User()
-  hide = true;
   isSpinnerShown: boolean;
-  constructor(private registerService:RegisterService) { }
+  hide = true;
+  constructor(private registerService: RegisterService, private router: Router, public snackBar:MatSnackBar) { }
+
 
   onSignUp() {
     if (this.formUser.userName && this.formUser.email && this.formUser.password) {
@@ -33,11 +37,22 @@ export class SignUpComponent implements OnInit {
           setTimeout(() => {
             this.isSpinnerShown = false
             // this.parentUser = this.formUser;
-            this.parentUser.userName = this.formUser.userName
-            console.log(this.parentUser.userName)
+
+            sessionStorage["user"] = JSON.stringify(response.body.id);
+            //this.signUpCompleted.emit(true);
+            this.router.navigate(["/"])
           }, 500);
 
 
+        }
+      }, (error: HttpErrorResponse) => {
+        if (error.status == 422) {
+          setTimeout(() => {
+            this.isSpinnerShown = false;
+            this.snackBar.open(error.error.toString(),"OK",{
+              duration: 3000
+            })
+          }, 500)
         }
       })
     }

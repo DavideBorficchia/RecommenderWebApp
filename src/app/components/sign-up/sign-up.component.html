@@ -32,7 +32,7 @@
             <mat-icon style="font-size: 25px" matSuffix> alternate_email</mat-icon>
           </mat-form-field>
   
-          <mat-form-field class="full-width" color="primary">
+          <mat-form-field class="form-group full-width" color="primary">
             <mat-label>Enter your password</mat-label>
             <input class="form-control" type="password" matInput placeholder="Password" #password [type]="hide ? 'password' : 'text'"
               [(ngModel)]="formUser.password" value="{{formUser.password}}" name="passwordField" required>
@@ -44,7 +44,7 @@
         <mat-card-actions id="actions" fxLayout="column" fxLayoutAlign="center center">
           <button mat-raised-button color="primary" class="large-button" (click)="onSignUp()">Sign
             Up</button>
-          <a id="signup-link" mat-button linkActive="/"(click)="linkClicked.emit(false)">
+          <a id="signup-link" mat-button routerLink="/login">
            Do you have an account? Log In here</a>
           
         </mat-card-actions>
