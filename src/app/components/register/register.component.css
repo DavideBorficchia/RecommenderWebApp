@@ -100,13 +100,13 @@
     /* max-height: inherit; */
   }
   .full-width {
-    max-width: 280px !important;
+    max-width: 300px !important;
     font-size: 13px;
   }
   .login-icon {
     width: 80px;
     height: 80px;
-    margin-left: 30px;
+    margin-left: 80px;
   }
   .login-form {
     max-width: 300px !important;
@@ -122,10 +122,11 @@
     margin: 10px !important;
     /* max-height: inherit; */
   }
-  @media screen and (max-width: 400px){
-.login-card{
-margin-left: 3px !important;
-margin-right: 3px !important;
-}
+  @media screen and (max-width: 400px) {
+    .login-card {
+      margin-left: 3px !important;
+      margin-right: 3px !important;
+    }
+  
   }
 }
