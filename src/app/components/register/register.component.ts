@@ -43,7 +43,10 @@ export class RegisterComponent implements OnInit {
             // this.parentUser = this.formUser;
             var userResponse = response.body;
             console.log(userResponse)
-            sessionStorage["user"]=JSON.stringify(response.body.id);
+            sessionStorage["user"]=JSON.stringify(response.body);
+            this.snackBar.open("Hi "+response.body.userName +"!", "OK", {
+              duration:3000
+            })
             this.router.navigate(["/"])
 
           }, 500);
@@ -55,6 +58,16 @@ export class RegisterComponent implements OnInit {
         console.log("error "+error.message)
 
         if(error.status==422){
+          setTimeout(() => {
+
+            this.isSpinnerShown = false
+           
+            this.snackBar.open(error.error.toString(),"OK", {
+              duration:3000
+            })
+          }, 500);
+        }
+        else{
           setTimeout(() => {
 
             this.isSpinnerShown = false

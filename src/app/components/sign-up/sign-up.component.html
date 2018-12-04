@@ -42,10 +42,11 @@
   
         </form>
         <mat-card-actions id="actions" fxLayout="column" fxLayoutAlign="center center">
-          <button mat-raised-button color="primary" class="large-button" (click)="onSignUp()">Sign
-            Up</button>
-          <a id="signup-link" mat-button routerLink="/login">
-           Do you have an account? Log In here</a>
+          <button mat-raised-button color="primary" class="large-button" (click)="onSignUp()">Sign Up</button>
+          <!-- <a id="signup-link" mat-button [routerLink]="['/', { outlets: { registration: ['login'] } }]">
+           Do you have an account? Log In here</a> -->
+           <a id="signup-link" mat-button routerLink="/registration/login">
+            Do you have an account? Log In here</a>
           
         </mat-card-actions>
         <div style="height:30px;">

@@ -1,5 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<app-toolbar></app-toolbar>
-<!-- <router-outlet></router-outlet> -->
-<app-welcome></app-welcome>
-
+<app-toolbar (sidenavToggled) = "onSideNaveToggle($event)"></app-toolbar>
+<router-outlet (activate)="onActivatedComponent($event)"></router-outlet>
+<!-- <app-welcome *ngIf="showWelcome || !userIsLoggedIn"></app-welcome>
+<app-sidebar *ngIf ="!showWelcome"></app-sidebar>
+ -->

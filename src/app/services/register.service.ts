@@ -29,5 +29,14 @@ export class RegisterService {
       return throwError(error)
     }));
   }
+  public updateDetails(user: User) {
+    let headers = new HttpHeaders({
+      'content-type': 'application/json'
+    })
+    return this.httpClient.put<User>(this.baseUrl.concat("/update"), user, { headers: headers, observe: 'response' })
+      .pipe(catchError(error => {
+        return throwError(error)
+      }))
+  }
 
 }

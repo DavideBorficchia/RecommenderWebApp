@@ -1,0 +1,20 @@
+<mat-accordion #dayaccordion="matAccordion" multi="true">
+  <mat-expansion-panel *ngFor="let item of mealTypes()" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px !important;">
+    <mat-expansion-panel-header>
+      <mat-panel-title [ngSwitch]="item" fxLayout="row" fxLayoutAlign="start center">
+        <img *ngSwitchCase="'Lunch'" src="./assets/luchman.svg" style="width: 30px;height: 30px; margin-right: 30px;">
+        <img *ngSwitchCase="'Breakfast'" src="./assets/milkcoffee.svg" style="width: 30px;height: 30px; margin-right: 30px;">
+        <img *ngSwitchCase="'Morning Break'" src="./assets/coffebreak.svg" style="width: 30px;height: 30px; margin-right: 30px;">
+        <img *ngSwitchCase="'Dinner'" src="./assets/dinner.svg" style="width: 30px;height: 30px; margin-right: 30px;">
+        <img *ngSwitchCase="'Afternoon Break'" src="./assets/coffebreak.svg" style="width: 30px;height: 30px; margin-right: 30px;">
+        {{item}}
+      </mat-panel-title>
+
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+
+      <app-meal [mealType]="item" [day]="day"></app-meal>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-divider></mat-divider>

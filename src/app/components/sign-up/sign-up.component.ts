@@ -20,7 +20,7 @@ export class SignUpComponent implements OnInit {
   formUser: User = new User()
   isSpinnerShown: boolean;
   hide = true;
-  constructor(private registerService: RegisterService, private router: Router, public snackBar:MatSnackBar) { }
+  constructor(private registerService: RegisterService, private router: Router, public snackBar: MatSnackBar) { }
 
 
   onSignUp() {
@@ -38,8 +38,10 @@ export class SignUpComponent implements OnInit {
             this.isSpinnerShown = false
             // this.parentUser = this.formUser;
 
-            sessionStorage["user"] = JSON.stringify(response.body.id);
-            //this.signUpCompleted.emit(true);
+            sessionStorage["user"] = JSON.stringify(response.body);
+            this.snackBar.open("Hi "+response.body.userName +"!", "OK", {
+              duration: 3000
+            })
             this.router.navigate(["/"])
           }, 500);
 
@@ -49,7 +51,7 @@ export class SignUpComponent implements OnInit {
         if (error.status == 422) {
           setTimeout(() => {
             this.isSpinnerShown = false;
-            this.snackBar.open(error.error.toString(),"OK",{
+            this.snackBar.open(error.error.toString(), "OK", {
               duration: 3000
             })
           }, 500)

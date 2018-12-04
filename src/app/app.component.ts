@@ -1,40 +1,56 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { User } from './components/register/model/user';
 import { Router, NavigationStart, RouterOutlet } from '@angular/router';
 import { slideInAnimation } from '../animations';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  animations:[slideInAnimation]
+  animations: [slideInAnimation]
 })
 export class AppComponent implements OnInit {
 
-  currentLoggedInUser: User = new User();
-  needRegister;
+
+  private sidebarComponent: SidebarComponent;
+
+  showWelcome: boolean;
+  userIsLoggedIn: boolean;
   constructor(private router: Router) { }
 
-  onNeedRegister(event: boolean) {
-    console.log(event)
-    this.needRegister = event;
+  onActivatedComponent(event) {
+    this.sidebarComponent = event;
+  }
+
+  onSideNaveToggle(event: boolean) {
+    this.sidebarComponent.toggleSideBar()
+
   }
 
   ngOnInit(): void {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-        console.log(event.url)
-        if (event.url === "/") {
-          this.needRegister = false;
-        }
-        if (event.url === "/(test:register)") {
-          this.needRegister = true;
-        }
+    this.userIsLoggedIn = sessionStorage["user"] != undefined;
+
+    if (!this.userIsLoggedIn) {
+      this.showWelcome = true;
+      this.router.navigate(["/registration/login"])
+    }
+    var observer = this.router.events.subscribe((event: NavigationStart) => {
+      this.userIsLoggedIn = sessionStorage["user"] != undefined;
+      // console.log("sdjhbcsjdck "+this.userIsLoggedIn+" "+event.url)
+      if (event.url == "/" && this.userIsLoggedIn) {
+        this.showWelcome = false;
+        this.router.navigate(["/home/diary"]);
+      }
+      if (event.url == "/" && !this.userIsLoggedIn) {
+        this.router.navigate(["/registration/login"])
+      }
+      if ((event.url == "/registration/login" || event.url == "/registration/signup")) {
+
+        this.showWelcome = true
 
       }
     })
   }
-
-
 
 
 }

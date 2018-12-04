@@ -4,9 +4,10 @@
     max-height: 500px !important;
     min-height: 500px; 
     height: 100%;
-    width: 100vw;
+    width: 100%;
     background-image: url('../../../assets/food_pattern_mobile.svg');
     overflow: hidden;
+    margin-top: 60px;
   }
   
   @media screen and (max-width:600px) {

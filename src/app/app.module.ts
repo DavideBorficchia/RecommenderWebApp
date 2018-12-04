@@ -21,13 +21,38 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import {MatSnackBarModule} from '@angular/material';
+import { MatSnackBarModule, MatNativeDateModule, MatListModule, MatDividerModule, MatExpansionModule, MatSortModule, MatTableModule, MatChipsModule } from '@angular/material';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { DietComponent } from './components/diet/diet.component'
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { DiaryComponent } from './components/diary/diary.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { FoodComponent } from './components/food/food.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { DietCreatorComponent } from './components/diet-creator/diet-creator.component';
+import { DayComponent } from './components/day/day.component';
+import { MealComponent } from './components/meal/meal.component';
+
+
 const appRoutes: Routes = [
 
-  { path: "signup", component:SignUpComponent},
-  { path: "login", component:RegisterComponent}
-
-
+  // { path: "signup", component: SignUpComponent, outlet:"registration" },
+  // { path: "login", component: RegisterComponent, outlet:"registration" }
+  {
+    path: "registration", component: WelcomeComponent, children: [
+      { path: "signup", component: SignUpComponent },
+      { path: "login", component: RegisterComponent }
+    ]
+  },
+  {
+    path: "home", component: SidebarComponent, children:
+      [
+        { path: "diary", component: DiaryComponent }
+      ]
+  }
 ];
 @NgModule({
   declarations: [
@@ -37,9 +62,30 @@ const appRoutes: Routes = [
     WelcomeComponent,
     FooterComponent,
     ToolbarComponent,
+    SidebarComponent,
+    DietComponent,
+    DiaryComponent,
+    FoodComponent,
+    DietCreatorComponent,
+    DayComponent,
+    MealComponent
+   
   ],
   imports: [
+    MatSelectModule,
+    MatChipsModule,
+    MatExpansionModule,
+    MatTableModule,
+    MatSortModule,
+    MatListModule,
+    MatDividerModule,
+    MatGridListModule,
+    MatTabsModule,
+    MatNativeDateModule,
     BrowserModule,
+    MatDatepickerModule,
+    MatMenuModule,
+    MatSidenavModule,
     BrowserAnimationsModule,
     FormsModule,
     MatStepperModule,

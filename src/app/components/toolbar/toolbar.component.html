@@ -1,19 +1,33 @@
-<mat-toolbar color="primary" class="mat-elevation-z8" style="position:relative">
+<mat-toolbar color="primary" class="mat-elevation-z8" style="position:fixed; top:0; height: 60px;">
   <!-- <span>Custom Toolbar</span>-->
-  <button mat-icon-button>
+  <button mat-icon-button (click)="sidenavToggled.emit(true)">
     <mat-icon>menu</mat-icon>
   </button>
+  <button mat-button routerLink="/">
+    <mat-icon>home</mat-icon>
+  </button>
+  <!-- <mat-menu #action_menu>
+    <button mat-menu-item routerLink="/">
+      <mat-icon>home</mat-icon>
+      <span>Home</span>
+    </button></mat-menu> -->
+
+  <div *ngIf="!isMobile">
+    <a mat-button routerLink=".">Food</a>
+    <a mat-button routerLink=".">Physical Activities</a>
+    <a mat-button routerLink=".">Diary</a>
+  </div>
   <span class="spacer"></span>
-  <span>
-    <h1>
-      <!-- Welcome {{ currentLoggedInUser.userName }}! *ngIf="currentLoggedInUser.userName" -->
-    </h1>
-  </span>
-  <span class="spacer"></span>
-  <!--<span>Custom Toolbar</span> -->
-  <button mat-raised-button color="primary" routerLink="/signup"  routerLinkActive="active">Sign
-    Up</button>
-  <button mat-raised-button color="accent" routerLink="/login"  routerLinkActive="active">Log In</button>
+  <img mat-button [matMenuTriggerFor]="account_menu" src="./assets/man.svg" class="toolbar-icon">
+  <mat-menu #account_menu>
+
+    <button mat-menu-item routerLink="/registration/signup">Sign Up</button>
+    <button mat-menu-item routerLink="/registration/login">Log In</button>
+    <button mat-menu-item routerLink="." *ngIf="isMobile">Food</button>
+    <button mat-menu-item routerLink="." *ngIf="isMobile">Physical Activities</button>
+    <button mat-menu-item routerLink="." *ngIf="isMobile">Diary</button>
+
+  </mat-menu>
 
 
 </mat-toolbar>
