@@ -19,7 +19,7 @@
         <td>
             <mat-form-field style="width: 80px;">
                 <span matSuffix>g</span>
-                <input matInput #weight placeholder="Quantity" type="number" [value]="food.quantity" [ngModel]="food.quantity" (ngModelChange)="onQuantityChange($event)">
+                <input matInput #weight placeholder="Quantity" type="number"  [ngModel]="food.quantity" (ngModelChange)="onQuantityChange($event)">
             </mat-form-field>
         </td>
     </tr>

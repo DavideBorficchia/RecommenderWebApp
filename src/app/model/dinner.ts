@@ -1,23 +1,20 @@
 import { Meal } from "./meal";
 import { Food } from "./food";
 import { MealType } from "./mealtypes";
+import { Guid } from "guid-typescript";
+import { FoodAlreadyAddedException } from "./foodalreadyaddedexception";
+import { MealImpl } from "./abstarctmeal";
 
-export class Dinner implements Meal {
-   
+export class Dinner extends MealImpl {
+    
     mealType = MealType.Dinner;
-
-    allFoodEntries: Food[];
-
-    addFood(food: Food) {
-        this.allFoodEntries.push(food)
-    }
-    removeFood(food: Food) {
-        this.allFoodEntries.find(f=>f.type == food.type)
-    }
-
+   
+    // mealType = MealType.Breakfast;
+    // allFoodEntries: Food[];
 
     constructor() {
-        this.allFoodEntries = [];
+        super();
     }
+
 
 }

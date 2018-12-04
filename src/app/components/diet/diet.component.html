@@ -1,20 +1,25 @@
-<div fxLayout="row wrap" fxLayoutAlign="space-around start" fxLayout.xs="column" fxLayoutAlign.xs="center center" style="overflow:hidden; min-height: 500px; background-color: white">
+<div fxLayout="row wrap" fxLayoutAlign="space-around start" fxLayout.xs="column" fxLayoutAlign.xs="start center" style="overflow:hidden; min-height: 500px; background-color: white">
 
 
-  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" id="diet-component-container">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutAlign.xs="start center" id="diet-component-container">
 
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" id="titlecontainer" fxLayoutAlign.xs="start center">
-      <h2 style="font-weight: 300; ">Current Diet: </h2>
-      <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isNameChanging">{{diet.name}} </h2>
+      <h2 style="font-weight: 300; "*ngIf="isReady">Current Diet: </h2>
       <div fxLayout.xs="row" fxLayoutAlign="start center">
+        <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isReady">Loading diet...</h2>
+
+        <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isNameChanging && isReady">{{diet.name}} </h2>
 
         <mat-form-field *ngIf="isNameChanging" style="margin-left: 20px">
           <input matInput #height placeholder="Change your diet name" [(ngModel)]="diet.name">
         </mat-form-field>
 
-        <mat-icon matSuffix style="margin-left: 30px" (click)="modifyDietName()" *ngIf="!isNameChanging">mode_edit</mat-icon>
-        <mat-icon matSuffix style="margin-left: 30px" (click)="modifyDietName()" *ngIf="isNameChanging">check_circle</mat-icon>
+        <mat-icon matSuffix style="margin-left: 30px" (click)="isNameChanging = true" *ngIf="!isNameChanging && isReady">mode_edit</mat-icon>
+        <mat-icon matSuffix style="margin-left: 30px" (click)="createNewDiet()" *ngIf="isNameChanging && isReady">check_circle</mat-icon>
       </div>
+      <div *ngIf="isSpinnerShown" style="margin-top: 50px">
+          <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
+        </div>
       <!-- <mat-icon matSuffix style = "margin-left: 30px" (click)="modifyDietName()" ngIf="isNameChanging">check_circle</mat-icon> -->
 
 
@@ -25,7 +30,7 @@
       </div>
       <app-day></app-day>
     </div> -->
-    <mat-horizontal-stepper labelPosition="bottom" #stepper style="margin-top: 20px;" *ngIf="!isSmall">
+    <mat-horizontal-stepper labelPosition="bottom" #stepper style="margin-top: 20px;" *ngIf="!isSmall && isDietEditable">
       <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
         <ng-template matStepLabel>{{day}}</ng-template>
         <div style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; "
@@ -37,7 +42,7 @@
       </mat-step>
 
     </mat-horizontal-stepper>
-    <mat-horizontal-stepper labelPosition="bottom" #stepper style="margin-top: 20px; max-width: inherit;" *ngIf="isSmall">
+    <mat-horizontal-stepper labelPosition="bottom" #stepper style="margin-top: 20px; max-width: inherit;" *ngIf="isSmall && isDietEditable">
       <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
         <ng-template matStepLabel *ngIf="day.day2">{{day.day1.substring(0,3)}} - {{day.day2.substring(0,3)}}</ng-template>
         <ng-template matStepLabel *ngIf="day.day2==null">{{day.day1.substring(0,3)}}</ng-template>

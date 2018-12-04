@@ -1,22 +1,18 @@
 import { Meal } from "./meal";
 import { Food } from "./food";
 import { MealType } from "./mealtypes";
+import { FoodAlreadyAddedException } from "./foodalreadyaddedexception";
+import { MealImpl } from "./abstarctmeal";
 
-export class Lunch implements Meal {
-
+export class Lunch extends MealImpl {
+    
     mealType = MealType.Lunch;
-
-    allFoodEntries: Food[];
-
-    addFood(food: Food) {
-        this.allFoodEntries.push(food)
-    }
-    removeFood(food: Food) {
-        this.allFoodEntries.find(f => f.type == food.type)
-    }
+   
+    // mealType = MealType.Breakfast;
+    // allFoodEntries: Food[];
 
     constructor() {
-        this.allFoodEntries = [];
+        super();
     }
 
 

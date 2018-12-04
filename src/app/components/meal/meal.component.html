@@ -12,12 +12,13 @@
         </mat-form-field> -->
     </div>
     <div *ngFor="let food of foodToDisplay" fxLayout="column" fxLayoutAlign="start center" style="height: auto;">
-        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutAlign.xs="center center">
-            <h3 style="margin-bottom: 10px; font-weight: 300; margin-right: 10px">{{food.name}}</h3>
+        <div fxLayout="row"  fxLayoutAlign="center center" style="width:100%">
+            <h2 style="margin: 0px; font-weight: 300;">{{food.name}}</h2>
+            <img src="./assets/x-button.svg" style="width: 15px;height: auto; margin-left: 20px" (click)="onDeleteFood(food)">
         </div>
         <mat-list-item fxLayout="column" fxLayoutAlign="center center" style="margin-bottom: 20px; height: auto; margin-left: 10px; margin-right: 10px">
 
-            <app-food [food]="food"></app-food>
+            <app-food [food]="food" [day]="day" [mealType]="mealType"></app-food>
 
 
 
@@ -27,8 +28,8 @@
     </div>
     <mat-form-field style="min-width: 60px; margin-top: 20px; margin-bottom: 20px" color="accent" fxLayout="row"
         fxLayoutAlign="center start">
-        <mat-select placeholder="Pick some {{meal.mealType}} food" (selectionChange)="addFoodComponent($event)">
-            <mat-option *ngFor="let food of foodToDisplayForOptions" [value]="food.name">
+        <mat-select placeholder="Pick some {{meal.mealType}} food" #select>
+            <mat-option *ngFor="let food of foodToDisplayForOptions" [value]="food.name" (onSelect)="addFoodComponent(food.name)">
                 {{food.name}}
             </mat-option>
         </mat-select>
