@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DietComponent } from '../diet/diet.component';
 
 @Component({
   selector: 'app-diary',
@@ -7,8 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DiaryComponent implements OnInit {
 
+  @ViewChild('appdiet') appDiet:DietComponent
+  isHistoryClicked:boolean = false;
+  isSuggestionsClicked:boolean = false;
   constructor() { }
 
+  onHistoryClicked(){
+    console.log(this.isHistoryClicked)
+    this.appDiet.onHistoryClicked()
+  }
+  onSuggestionsClicked(){
+    this.appDiet.onSuggestionsClicked()
+  }
+  onDietClicked(){
+    this.appDiet.onDietSelected()
+  }
   ngOnInit() {
   }
 

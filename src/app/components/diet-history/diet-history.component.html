@@ -1,0 +1,102 @@
+<div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="50px  " style="margin-top:20px; max-height: 70vh">
+  <div>
+    <h2 style="font-weight: 300; margin-bottom: 5px">Your Diets' History</h2>
+    <h4 style="font-weight: 300">All the diets you've ever made</h4>
+  </div>
+  <!-- <mat-icon (click)="suggestionsClicked.emit(false)">library_books</mat-icon> -->
+
+</div>
+<div style="overflow-y:auto; max-height: 500px;background-color: rgba(0,0,0,.03); max-width: 300px; " >
+  <mat-accordion style="background-color: rgba(0,0,0,.03); max-width: inherit;" multi="true">
+    <mat-expansion-panel [expanded]="true" style="background-color: rgba(0,0,0,.03)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{getCurrentMonth()}}
+        </mat-panel-title>
+        <mat-panel-description>
+          From {{getFirtDayOfMonth()}} to {{getTodayDate()}}
+        </mat-panel-description>
+
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <mat-list>
+          <!-- <h3 mat-subheader>This month</h3> -->
+          <mat-list-item *ngFor="let diet of dietHistories; let lastItem = last" matRipple (click)="loadOlderDietHistory(diet.name)">
+            <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
+            <h4 mat-line>{{diet.name}}</h4>
+            <p mat-line> {{diet.timeStamp}} </p>
+            <mat-divider *ngIf="!lastItem"></mat-divider>
+
+          </mat-list-item>
+    
+      </mat-list>
+    </ng-template>
+
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="true" style="background-color: rgba(0,0,0,.03)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{2018}}
+        </mat-panel-title>
+        <mat-panel-description>
+          From {{getFirtDayOfMonth()}} to {{getTodayDate()}}
+        </mat-panel-description>
+
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <mat-list>
+        
+          <mat-list-item *ngFor="let diet of dietHistory2018; let lastItem = last" matRipple (click)="loadOlderDietHistory(diet.name)">
+            <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
+            <h4 mat-line>{{diet.name}}</h4>
+            <p mat-line> {{diet.timeStamp}} </p>
+            <mat-divider *ngIf="!lastItem"></mat-divider>
+
+          </mat-list-item>
+      </mat-list>
+    </ng-template>
+
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</div>
+
+<!-- <mat-slider style="margin-top: 35px; width: 100%"></mat-slider>
+
+
+<div style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; margin-top: 20px;"
+  fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.lt-md="center center">
+  <h3 style="font-weight: 300; margin-bottom: 20px;">Ciaone</h3>
+</div>
+
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Personal data
+      </mat-panel-title>
+      <mat-panel-description>
+        Type your name and age
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-form-field>
+      <input matInput placeholder="First name">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Age">
+    </mat-form-field>
+  </mat-expansion-panel>
+  <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Self aware panel
+      </mat-panel-title>
+      <mat-panel-description>
+        Currently I am {{panelOpenState ? 'open' : 'closed'}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>I'm visible because I am open</p>
+  </mat-expansion-panel>
+</mat-accordion> -->

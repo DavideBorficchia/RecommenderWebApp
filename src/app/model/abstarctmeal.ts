@@ -1,16 +1,13 @@
-import { Meal } from "./meal";
 import { MealType } from "./mealtypes";
 import { Food } from "./food";
 import { FoodAlreadyAddedException } from "./foodalreadyaddedexception";
 
-export abstract class MealImpl implements Meal {
-    abstract mealType: MealType;
+export class Meal {
+    public mealType: String;
     public allFoodEntries: Food[];
 
     addFood(food: Food) {
         var foodIndex = this.allFoodEntries.findIndex(f => f.name == food.name)
-        console.log(foodIndex)
-        console.log(this.allFoodEntries)
         if (foodIndex < 0) {
             this.allFoodEntries.push(food)
         }
@@ -27,5 +24,5 @@ export abstract class MealImpl implements Meal {
     constructor() {
         this.allFoodEntries = []
     }
-    
+
 }

@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http'
 import { User } from '../components/register/model/user';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { throwError, BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterService {
 
   baseUrl = "http://localhost:8080/recommender/users/registrations"
+  private userBehavior:BehaviorSubject<String>;
   constructor(private httpClient: HttpClient) {
 
   }
@@ -38,5 +39,19 @@ export class RegisterService {
         return throwError(error)
       }))
   }
+  public setUserBehavior(userId:String){
+    this.userBehavior = new BehaviorSubject(userId)
+    this.userBehavior.next(userId);
+  }
 
+  public getUserObservable(){
+    var currentUser = JSON.parse(sessionStorage["user"]) as User
+    if(!this.userBehavior){
+      this.userBehavior = new BehaviorSubject(currentUser.id)
+      this.userBehavior.next(currentUser.id)
+      return this.userBehavior.asObservable();
+
+    }
+    return this.userBehavior.asObservable()
+  }
 }

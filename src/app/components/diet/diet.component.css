@@ -1,7 +1,10 @@
 #diet-component-container {
     min-width: 200px;
     min-height: 200px;
-    margin-left: 30px;
+    max-width: 600px !important;
+    margin-bottom: 50px;
+    margin-left: 50px;
+
 }
 
 #titlecontainer {
@@ -9,19 +12,37 @@
     margin: 20px 20px 20px 30px;
 }
 
+.responsive-form {
+    margin-left: 20px;
+}
+
+
+
+@media screen and (min-width: 959px) and (max-width:1150px) {
+    #diet-component-container {
+        margin-left: 50px;
+        max-width: 600px !important;
+    }
+}
+
 @media screen and (max-width:600px) {
     #diet-component-container {
         margin-left: 0px;
         min-height: 150px;
+        max-width: 550px !important;
     }
 }
 
-@media screen and (max-width:400px) {
+@media screen and (max-width:500px) {
     #diet-component-container {
         max-width: 100% !important;
     }
-    #titlecontainer{
-        max-width: 280px ;
+    .responsive-form {
+        margin-left: 15px;
+        max-width: 100px;
+    }
+    #titlecontainer {
+        max-width: 280px;
         max-height: 100px !important;
         margin-top: 10px;
         margin-left: 0px;

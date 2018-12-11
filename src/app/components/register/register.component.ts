@@ -42,11 +42,11 @@ export class RegisterComponent implements OnInit {
             this.isSpinnerShown = false
             // this.parentUser = this.formUser;
             var userResponse = response.body;
-            console.log(userResponse)
             sessionStorage["user"]=JSON.stringify(response.body);
             this.snackBar.open("Hi "+response.body.userName +"!", "OK", {
               duration:3000
             })
+            this.registerService.setUserBehavior(response.body["id"])
             this.router.navigate(["/"])
 
           }, 500);

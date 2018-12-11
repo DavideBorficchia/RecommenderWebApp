@@ -36,7 +36,6 @@ export class AppComponent implements OnInit {
     }
     var observer = this.router.events.subscribe((event: NavigationStart) => {
       this.userIsLoggedIn = sessionStorage["user"] != undefined;
-      // console.log("sdjhbcsjdck "+this.userIsLoggedIn+" "+event.url)
       if (event.url == "/" && this.userIsLoggedIn) {
         this.showWelcome = false;
         this.router.navigate(["/home/diary"]);

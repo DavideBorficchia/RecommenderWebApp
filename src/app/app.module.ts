@@ -21,7 +21,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { MatSnackBarModule, MatNativeDateModule, MatListModule, MatDividerModule, MatExpansionModule, MatSortModule, MatTableModule, MatChipsModule } from '@angular/material';
+import { MatSnackBarModule, MatNativeDateModule, MatListModule, MatDividerModule, MatExpansionModule, MatSortModule, MatTableModule, MatChipsModule, MatSliderModule, MatRipple, MatRippleModule } from '@angular/material';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DietComponent } from './components/diet/diet.component'
@@ -29,12 +29,14 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { DiaryComponent } from './components/diary/diary.component';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { FoodComponent } from './components/food/food.component';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { DietCreatorComponent } from './components/diet-creator/diet-creator.component';
 import { DayComponent } from './components/day/day.component';
 import { MealComponent } from './components/meal/meal.component';
+import { DietHistoryComponent } from './components/diet-history/diet-history.component';
+import { FoodRecommenderComponent } from './components/food-recommender/food-recommender.component';
 
 
 const appRoutes: Routes = [
@@ -50,9 +52,23 @@ const appRoutes: Routes = [
   {
     path: "home", component: SidebarComponent, children:
       [
-        { path: "diary", component: DiaryComponent }
+        {
+          path: "diary", component: DiaryComponent, children:
+            [
+              {
+                path: "dietview", component: DietCreatorComponent
+              },
+              {
+                path: "history", component:DietHistoryComponent
+              },
+              {
+                path: "suggestions",component:FoodRecommenderComponent
+              }
+            ]
+        }
       ]
   }
+
 ];
 @NgModule({
   declarations: [
@@ -68,11 +84,14 @@ const appRoutes: Routes = [
     FoodComponent,
     DietCreatorComponent,
     DayComponent,
-    MealComponent
-   
+    MealComponent,
+    DietHistoryComponent,
+    FoodRecommenderComponent
+
   ],
   imports: [
     MatSelectModule,
+    MatSliderModule,
     MatChipsModule,
     MatExpansionModule,
     MatTableModule,
@@ -102,6 +121,7 @@ const appRoutes: Routes = [
     MatIconModule,
     MatFormFieldModule,
     ReactiveFormsModule,
+    MatRippleModule,
     LayoutModule,
     RouterModule.forRoot(
       appRoutes

@@ -1,13 +1,34 @@
-<div fxLayout="row" fxLayoutAlign="start center" class="section_header">
+<div fxLayout="row" fxLayoutAlign="space-between center" class="section_header">
+
   <h1 class="section_title">Diary</h1>
+  <div fxHide.md fxHide.lg>
+    <button mat-icon-button [matMenuTriggerFor]="menu" style="margin-left: 20px" >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu"  style="margin-left: 20px"  fxHide.md fxHide.lg>
+      <button mat-menu-item fxHide.md fxHide.lg (click)="onHistoryClicked()">
+        <mat-icon>history</mat-icon>
+        <span>Diet history</span>
+      </button>
+      <button mat-menu-item fxHide.md fxHide.lg (click)="onSuggestionsClicked()">
+        <mat-icon>favorite</mat-icon>
+        <span>Food suggestions</span>
+      </button>
+      <button mat-menu-item fxHide.md fxHide.lg (click)=onDietClicked()>
+          <mat-icon>kitchen</mat-icon>
+          <span>Current diet</span>
+        </button>
+      
+    </mat-menu>
+  </div>
 </div>
 
-
-  <mat-tab-group mat-align-tabs="center" animationDuration="0ms" style="width: 100%; ">
-    <mat-tab label="Diet">
-      <app-diet></app-diet>
-    </mat-tab>
-    <mat-tab label="Your Excercises"> Your Excercises </mat-tab>
-    <mat-tab label="Achievements"> Achivements </mat-tab>
-  </mat-tab-group>
-
+<mat-tab-group mat-align-tabs="center" animationDuration="0ms" style="width: 100%; ">
+  <mat-tab label="Diet">
+    <app-diet #appdiet ></app-diet>
+  </mat-tab>
+  <mat-tab label="Your Excercises">
+    <div style="height:100vh">Your Excercises</div>
+  </mat-tab>
+  <mat-tab label="Achievements"> Achivements </mat-tab>
+</mat-tab-group>

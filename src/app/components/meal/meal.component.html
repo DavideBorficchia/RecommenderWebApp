@@ -2,14 +2,6 @@
     <div fxLayout="column" fxLayoutAlign="center center" *ngIf="foodToDisplay.length == 0">
         <img src="./assets/sad.svg" width="40px;" height="auto" style="margin:20px">
         <h3 style="font-weight: 300">No food yet! Add some</h3>
-        <!-- <mat-form-field style="min-width: 250px; margin-top: 20px; margin-bottom: 20px" color="accent">
-            <mat-select placeholder="Pick some {{meal.mealType}} food" (selectionChange)="addFoodComponent($event)">
-                <mat-option *ngFor="let food of foodToDisplayForOptions" [value]="food.name">
-                    {{food.name}}
-                </mat-option>
-            </mat-select>
-            <mat-hint>You can add more food to your diet</mat-hint>
-        </mat-form-field> -->
     </div>
     <div *ngFor="let food of foodToDisplay" fxLayout="column" fxLayoutAlign="start center" style="height: auto;">
         <div fxLayout="row"  fxLayoutAlign="center center" style="width:100%">
@@ -28,8 +20,8 @@
     </div>
     <mat-form-field style="min-width: 60px; margin-top: 20px; margin-bottom: 20px" color="accent" fxLayout="row"
         fxLayoutAlign="center start">
-        <mat-select placeholder="Pick some {{meal.mealType}} food" #select>
-            <mat-option *ngFor="let food of foodToDisplayForOptions" [value]="food.name" (onSelect)="addFoodComponent(food.name)">
+        <mat-select placeholder="Pick some {{meal.mealType}} food" #select (selectionChange)="addFoodComponent($event)">
+            <mat-option *ngFor="let food of foodToDisplayForOptions" [value]="food.name" >
                 {{food.name}}
             </mat-option>
         </mat-select>

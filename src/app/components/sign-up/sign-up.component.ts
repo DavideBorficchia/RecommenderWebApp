@@ -42,6 +42,7 @@ export class SignUpComponent implements OnInit {
             this.snackBar.open("Hi "+response.body.userName +"!", "OK", {
               duration: 3000
             })
+            this.registerService.setUserBehavior(response.body.id)
             this.router.navigate(["/"])
           }, 500);
 
