@@ -297,6 +297,15 @@ MIT
 @angular/common
 MIT
 
+@angular/platform-browser
+MIT
+
+@angular/forms
+MIT
+
+@angular/animations
+MIT
+
 @angular/cdk
 MIT
 The MIT License
@@ -321,12 +330,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-
-@angular/platform-browser
-MIT
-
-@angular/router
-MIT
 
 @angular/material
 MIT
@@ -353,12 +356,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-@angular/animations
+@angular/material/dialog
+
+@angular/material/button
+
+@angular/material/datepicker
+
+@angular/material/snack-bar
+
+@angular/router
 MIT
-
-@angular/material/progress-spinner
-
-@angular/material/card
 
 @angular/flex-layout
 MIT
@@ -590,14 +597,33 @@ THE SOFTWARE.
 >>>>>>> Initial commit
 
 
-@angular/forms
-MIT
+@angular/material/progress-spinner
+
+@angular/material/card
 
 @angular/material/form-field
 
 @angular/material/icon
 
-@angular/material/button
+@angular/material/sidenav
+
+@angular/material/select
+
+@angular/material/core
+
+@angular/material/menu
+
+@angular/material/tabs
+
+@angular/material/divider
+
+@angular/material/list
+
+@angular/material/expansion
+
+@angular/material/stepper
+
+@angular/material/sort
 
 @angular/material/toolbar
 
