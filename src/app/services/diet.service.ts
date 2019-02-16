@@ -18,7 +18,8 @@ import { DietHistory } from '../model/diethistory';
 export class DietService {
 
 
-  private baseUrl = "http://localhost:8080/recommender/diets"
+  // private baseUrl = "http://localhost:8080/recommender/diets"
+  baseUrl = "https://recommender-gateway.herokuapp.com/recommender/diets"
   private diet: Diet;
   private allFood: Food[];
   private dietBehaviour: BehaviorSubject<Diet>;
