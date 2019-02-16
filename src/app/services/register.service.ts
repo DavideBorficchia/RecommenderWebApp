@@ -8,7 +8,8 @@ import { throwError, BehaviorSubject } from 'rxjs';
 })
 export class RegisterService {
 
-  baseUrl = "http://localhost:8080/recommender/users/registrations"
+  // baseUrl = "http://localhost:8080/recommender/users/registrations"
+  baseUrl = "https://recommender-gateway.herokuapp.com/recommender/users/registrations"
   private userBehavior:BehaviorSubject<String>;
   constructor(private httpClient: HttpClient) {
 
