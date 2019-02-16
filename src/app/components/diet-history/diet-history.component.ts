@@ -130,6 +130,23 @@ export class DietHistoryComponent implements OnInit {
             var month = timestamp.toString().substring(1,2);
             var name = dietObject["name"];
             var totalCalories = dietObject["totalCalories"]
+            this.dietHistories.push(new DietHistory(name, timestamp,totalCalories))
+
+          })
+
+
+        }
+
+      })
+      this.dietService.getDietHistoriesByYear("2018").subscribe(response => {
+        if (response.ok) {
+          
+         
+          Object.values(response.body).forEach(dietObject => {
+            var timestamp:String = dietObject["timeStamp"];
+            var month = timestamp.toString().substring(1,2);
+            var name = dietObject["name"];
+            var totalCalories = dietObject["totalCalories"]
             this.dietHistory2018.push(new DietHistory(name, timestamp,totalCalories))
 
           })

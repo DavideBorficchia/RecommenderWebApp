@@ -14,7 +14,7 @@ import { DietHistory } from '../model/diethistory';
 
 @Injectable({
   providedIn: 'root'
-})
+})  
 export class DietService {
 
 
