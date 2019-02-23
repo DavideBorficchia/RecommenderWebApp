@@ -46,7 +46,7 @@ export class MealComponent implements OnInit {
           if (error.status == 400) {
             console.log("bad request")
           }
-          if (error.status < 500) {
+          else if (error.status < 500) {
             this.snackBar.open(error.error, "OK", {
               duration: 2000
             })
