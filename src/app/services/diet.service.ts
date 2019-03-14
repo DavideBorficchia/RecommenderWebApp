@@ -34,12 +34,12 @@ export class DietService {
     // if (!this.foodEntries) {
 
     // }
-    this.allFood = [{ type: FoodType.Breakfast, name: "Milk and Coffe", calories: 123, carbs: 67, fat: 89, proteins: 13, healthy: "yes", mealTypes: [MealType.Breakfast], quantity: 100, caloriesPer100: 123 },
-    { type: FoodType.Breakfast, name: "Eggs and Bacon", calories: 1200, carbs: 67, fat: 89, proteins: 176, healthy: "no", mealTypes: [MealType.Breakfast, MealType.Lunch], quantity: 100, caloriesPer100: 1200 },
-    { type: FoodType.MainCourse, name: "Fried Chicked", calories: 1230, carbs: 67, fat: 89, proteins: 123, healthy: "no", mealTypes: [MealType.Lunch, MealType.Dinner], quantity: 100, caloriesPer100: 1230 },
-    { type: FoodType.MainCourse, name: "Pasta with Ragù", calories: 123, carbs: 67, fat: 89, proteins: 123, healthy: "no", mealTypes: [MealType.Lunch, MealType.Dinner], quantity: 100, caloriesPer100: 123 },
+    this.allFood = [{ vitamins:10,salts:10,type: FoodType.Beverage, name: "Milk and Coffe", calories: 123, carbs: 67, fat: 89, proteins: 13, mealTypes: [MealType.Breakfast], quantity: 100, caloriesPer100: 123 },
+    { vitamins:10,salts:10,type: FoodType.Fat, name: "Eggs and Bacon", calories: 1200, carbs: 67, fat: 89, proteins: 176, mealTypes: [MealType.Breakfast, MealType.Lunch], quantity: 100, caloriesPer100: 1200 },
+    { vitamins:10,salts:10,type: FoodType.Bakery, name: "Fried Chicked", calories: 1230, carbs: 67, fat: 89, proteins: 123, mealTypes: [MealType.Lunch, MealType.Dinner], quantity: 100, caloriesPer100: 1230 },
+    { vitamins:10,salts:10,type: FoodType.Bakery, name: "Pasta with Ragù", calories: 123, carbs: 67, fat: 89, proteins: 123, mealTypes: [MealType.Lunch, MealType.Dinner], quantity: 100, caloriesPer100: 123 },
     {
-      type: FoodType.Fruit, name: "Apple", calories: 34, carbs: 67, fat: 89, proteins: 123, healthy: "yes",
+      vitamins:10,salts:10,type: FoodType.Fruit, name: "Apple", calories: 34, carbs: 67, fat: 89, proteins: 123,
       mealTypes: [MealType.Lunch, MealType.Dinner, MealType.Breakfast, MealType.MorningBreak, MealType.AfternoonBreak], quantity: 100, caloriesPer100: 34
     }]
   }

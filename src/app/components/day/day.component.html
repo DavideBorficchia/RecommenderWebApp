@@ -1,4 +1,4 @@
-<mat-accordion #dayaccordion="matAccordion" multi="true">
+<mat-accordion #dayaccordion="matAccordion" multi="false">
   <mat-expansion-panel *ngFor="let item of mealTypes()" style="border-top-left-radius: 0px !important; border-top-right-radius: 0px !important;">
     <mat-expansion-panel-header>
       <mat-panel-title [ngSwitch]="item" fxLayout="row" fxLayoutAlign="start center">

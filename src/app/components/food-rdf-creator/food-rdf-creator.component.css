@@ -1,0 +1,96 @@
+mat-card {
+    width: 70vw;
+    height: 60vh;
+}
+
+.mat-card-image {
+    height: 300px;
+    width: auto;
+}
+
+.food_picked_avatar {
+    border-radius: 50%
+}
+
+.category-paragraph {
+    max-width: 400px;
+    margin-left: 40px;
+}
+
+.form-card {
+    max-width: 700px;
+    width: auto;
+    height: auto;
+    overflow: hidden;
+    /* max-height: 550px; */
+}
+
+.food-name {
+    font-weight: 300;
+    font-size: 40px;
+}
+
+.add-food {
+    position: fixed;
+    bottom: 70px;
+    right: 100px;
+    z-index: 3;
+}
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+@media screen and (max-width:350px) {
+    .form-card {
+        max-width: 250px;
+    }
+    .category-paragraph {
+        margin: 20px 0 20px 0;
+    }
+    .add-food {
+        bottom: 30px;
+        right: 40px;
+    }
+    .food-name{
+        font-size: 30px;
+
+    }
+}
+
+@media screen and (min-width:400px) and (max-width:500px) {
+    .form-card {
+        max-width: 350px;
+    }
+    .category-paragraph {
+        margin: 20px 0 20px 0;
+    }
+    .add-food {
+        bottom: 30px;
+        right: 40px;
+    }
+    .food-name{
+        font-size: 30px;
+
+    }
+}

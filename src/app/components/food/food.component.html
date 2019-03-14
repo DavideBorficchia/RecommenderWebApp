@@ -1,21 +1,23 @@
 <table matSort style="margin:10px;"  >
     <tr>
-        <th mat-sort-header="healthy">Healthy</th>
-        <th mat-sort-header="calories">Calories</th>
-        <th mat-sort-header="fat" *ngIf="!isOver">Fat (g)</th>
+        <th mat-sort-header="calories">Calories (kcal)</th>
+        <th mat-sort-header="fat" *ngIf="!isOver">Fats (g)</th>
         <th mat-sort-header="carbs" *ngIf="!isOver">Carbs (g)</th>
         <th mat-sort-header="proteins" *ngIf="!isOver">Proteins (g)</th>
+        <th mat-sort-header="vitamins" *ngIf="!isOver">Vitamins (g)</th>
+        <th mat-sort-header="salts" *ngIf="!isOver">Salts (g)</th>
         <th mat-sort-header="quantity">Quantity</th>
 
 
     </tr>
 
     <tr>
-        <td>{{food.healthy}}</td>
         <td [(ngModel)]="food.calories" name = "calories" ngDefaultControl>{{food.calories}}</td>
         <td *ngIf="!isOver">{{food.fat}}</td>
         <td *ngIf="!isOver">{{food.carbs}}</td>
         <td *ngIf="!isOver">{{food.proteins}}</td>
+        <td *ngIf="!isOver">{{food.salts}}</td>
+        <td *ngIf="!isOver">{{food.vitamins}}</td>
         <td>
             <mat-form-field style="width: 80px;">
                 <span matSuffix>g</span>

@@ -6,7 +6,7 @@
   <!-- <mat-icon (click)="suggestionsClicked.emit(false)">library_books</mat-icon> -->
 
 </div>
-<div style="overflow-y:auto; max-height: 500px;background-color: rgba(0,0,0,.03); max-width: 300px; " >
+<div style="overflow-y:auto; max-height: 500px;background-color: rgba(0,0,0,.03); max-width: 300px; ">
   <mat-accordion style="background-color: rgba(0,0,0,.03); max-width: inherit;" multi="true">
     <mat-expansion-panel [expanded]="true" style="background-color: rgba(0,0,0,.03)">
       <mat-expansion-panel-header>
@@ -21,40 +21,42 @@
       <ng-template matExpansionPanelContent>
         <mat-list>
           <!-- <h3 mat-subheader>This month</h3> -->
-          <mat-list-item *ngFor="let diet of dietHistories; let lastItem = last" matRipple (click)="loadOlderDietHistory(diet.name)">
+          <mat-list-item *ngFor="let diet of dietHistories; let lastItem = last" matRipple
+            (click)="loadOlderDietHistory(diet.name)">
             <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
+
             <h4 mat-line>{{diet.name}}</h4>
             <p mat-line> {{diet.timeStamp}} </p>
             <mat-divider *ngIf="!lastItem"></mat-divider>
 
           </mat-list-item>
-    
-      </mat-list>
-    </ng-template>
+
+        </mat-list>
+      </ng-template>
 
     </mat-expansion-panel>
     <mat-expansion-panel [expanded]="true" style="background-color: rgba(0,0,0,.03)">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{2018}}
-        </mat-panel-title>
+          2018 </mat-panel-title>
         <mat-panel-description>
-          From {{getFirtDayOfMonth()}} to {{getTodayDate()}}
+          From 01/01/2018 to 31/12/2018
         </mat-panel-description>
 
       </mat-expansion-panel-header>
       <ng-template matExpansionPanelContent>
         <mat-list>
-        
-          <mat-list-item *ngFor="let diet of dietHistory2018; let lastItem = last" matRipple (click)="loadOlderDietHistory(diet.name)">
+
+          <mat-list-item *ngFor="let diet of dietHistory2018; let lastItem = last" matRipple
+            (click)="loadOlderDietHistory(diet.name)">
             <!-- <mat-icon mat-list-icon>folder</mat-icon> -->
             <h4 mat-line>{{diet.name}}</h4>
             <p mat-line> {{diet.timeStamp}} </p>
             <mat-divider *ngIf="!lastItem"></mat-divider>
 
           </mat-list-item>
-      </mat-list>
-    </ng-template>
+        </mat-list>
+      </ng-template>
 
     </mat-expansion-panel>
 

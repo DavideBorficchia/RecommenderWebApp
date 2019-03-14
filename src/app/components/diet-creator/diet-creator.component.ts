@@ -137,7 +137,6 @@ export class DietCreatorComponent implements OnInit {
             food.caloriesPer100 = value["caloriesPer100"]
             food.carbs = value["carbs"]
             food.fat = value["fat"]
-            food.healthy = value["healthy"]
             food.mealTypes = value["mealTypes"]
             food.name = value["name"]
             food.proteins = value["proteins"]

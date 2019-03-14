@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class FoodRecommenderComponent implements OnInit {
   @Output() historyClicked = new EventEmitter<boolean>();
-    constructor(private router: Router) { }
+    constructor() { }
 
  
   ngOnInit() {

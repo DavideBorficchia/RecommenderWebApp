@@ -8,9 +8,10 @@ export class Food{
     fat:number;
     carbs:number;
     proteins:number;
-    healthy:String;
     mealTypes:String[];
     quantity:number;
     caloriesPer100:number;
+    salts:number;
+    vitamins;
     
 }

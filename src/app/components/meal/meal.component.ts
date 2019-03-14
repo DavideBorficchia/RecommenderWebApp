@@ -12,6 +12,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FoodAlreadyAddedException } from 'src/app/model/foodalreadyaddedexception';
 import { Meal } from 'src/app/model/abstarctmeal';
+import { FoodRecommenderService } from 'src/app/services/food-recommender.service';
 
 @Component({
   selector: 'app-meal',
@@ -26,10 +27,10 @@ export class MealComponent implements OnInit {
   meal: Meal;
   displayedColumns: string[] = ['name', 'type']
   isOver: boolean
-  foodToDisplayForOptions: Food[];
+  foodToDisplayForOptions: Food[] = [];
   foodToDisplay: Food[];
 
-  constructor(private dietService: DietService, public snackBar: MatSnackBar) { }
+  constructor(private dietService: DietService, public snackBar: MatSnackBar, private foodRecommenderService: FoodRecommenderService) { }
 
   addFoodComponent(event: MatSelectChange) {
     var value = event.value;
@@ -67,16 +68,16 @@ export class MealComponent implements OnInit {
     }
   }
   onDeleteFood(food: Food) {
-    this.dietService.deleteFoodRequest(food, this.day, this.mealType).subscribe(response=>{
-      if(response.ok){
-        this.dietService.deleteFoodFromMealHandler(food,this.mealType,this.day);
-        this.snackBar.open(food.name+" has been removed from your diet", "OK",
-        {
-          duration:2000
-        })
+    this.dietService.deleteFoodRequest(food, this.day, this.mealType).subscribe(response => {
+      if (response.ok) {
+        this.dietService.deleteFoodFromMealHandler(food, this.mealType, this.day);
+        this.snackBar.open(food.name + " has been removed from your diet", "OK",
+          {
+            duration: 2000
+          })
       }
-      else{
-        
+      else {
+
       }
     })
 
@@ -85,15 +86,39 @@ export class MealComponent implements OnInit {
 
 
     this.foodToDisplay = []
- 
+
     this.dietService.getObservableDiet().subscribe(diet => {
       this.meal = diet.dailyFood.get(this.day).find(m => m.mealType == this.mealType.toString())
-      console.log(this.meal+" "+diet.name)
+      console.log(this.meal + " " + diet.name)
       this.foodToDisplay = this.meal.allFoodEntries;
     })
 
-    this.foodToDisplayForOptions = this.dietService.getAllFood().filter(f => f.mealTypes.find(type => type == this.mealType.toString()))
-;
+    this.foodRecommenderService.getObservableFoodBehavior()
+      .subscribe(allFood => {
+        if (allFood) {
+          console.log(allFood)
+          console.log(this.mealType.toString())
+
+          allFood.filter(f=>f.bestEatenAt.includes(this.mealType.toString())).forEach(f => {
+            var food = new Food();
+            food.name = f.name;
+            food.proteins = f.proteins;
+            food.quantity = 100;
+            food.caloriesPer100 = f.caloriesPer100;
+            food.vitamins = f.vitamins;
+            food.fat = f.fats;
+            food.carbs = f.carbs;
+            food.salts = f.salts;
+            food.type = f.type;
+            food.calories = 100 *f.caloriesPer100
+            var mealTypes =  [];
+            f.bestEatenAt.forEach(mealName=>mealTypes.push(mealName))
+            food.mealTypes = mealTypes;
+            this.foodToDisplayForOptions.push(food)
+          })
+        }
+      })
+    // this.foodToDisplayForOptions = this.dietService.getAllFood().filter(f => f.mealTypes.find(type => type == this.mealType.toString()));
   }
 
 }
