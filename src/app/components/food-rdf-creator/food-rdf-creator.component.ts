@@ -85,10 +85,11 @@ export class FoodRdfCreatorComponent implements OnInit {
     this.compare();
     if (this.tempFoodBeforePosting.name !== 'Insert Name' && this.isSend) {
       this.isUpdating = true
-      this.foodRecommenderService.getFoodFromServer("Banana")
+      this.foodRecommenderService.updateFood(this.foodRdfPicked)
         .subscribe(response => {
           console.log(response)
           this.isUpdating = false;
+          this.isSend = false;
           const index = this.allFoodRdfs.indexOf(this.tempFoodBeforePosting);
 
           if (index >= 0) {
@@ -249,6 +250,8 @@ export class FoodRdfCreatorComponent implements OnInit {
     if (index >= 0) {
       this.foodRdfPicked.goodWith.splice(index, 1);
       this.foodListSameHeight()
+      this.onTextAreaDeselect();
+
 
     }
   }
@@ -257,6 +260,7 @@ export class FoodRdfCreatorComponent implements OnInit {
     if (index >= 0) {
       this.foodRdfPicked.goodSinergyWith.splice(index, 1);
       this.foodListSameHeight()
+      this.onTextAreaDeselect();
     }
   }
   onChipMealTypeRemoved(mealType: string) {
@@ -265,6 +269,7 @@ export class FoodRdfCreatorComponent implements OnInit {
     if (index >= 0) {
       this.foodRdfPicked.bestEatenAt.splice(index, 1);
       this.foodListSameHeight()
+      this.onTextAreaDeselect();
 
     }
   }

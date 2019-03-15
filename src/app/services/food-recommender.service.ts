@@ -9,6 +9,10 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class FoodRecommenderService {
+  updateFood(foodRdfPicked: FoodRdf): any {
+    return this.httpClient.put<FoodRdf>(this.baseUrl + "/properties/updates", foodRdfPicked)
+      .pipe(catchError(error => throwError(error)))
+  }
   postFood(foodRdfPicked: FoodRdf) {
     return this.httpClient.post<FoodRdf>(this.baseUrl + "/creations", foodRdfPicked)
       .pipe(catchError(error => throwError(error)))
