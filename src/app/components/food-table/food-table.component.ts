@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 export class FoodTableComponent implements OnInit {
 
   private foodCategories: FoodCategory[];
-  private foodCategorySelected: FoodCategory;
+   foodCategorySelected: FoodCategory;
   private routerSub = Subscription.EMPTY;
   numberOfCols = 4;
   rowHeight = "4:5";
@@ -56,22 +56,18 @@ export class FoodTableComponent implements OnInit {
       var categoryName = parsedUrl[1];
       this.foodCategorySelected = this.foodRecommenderService.getCategory(categoryName)
       this.foodRecommenderService.setNewFoodCategoryByName(categoryName);
-      console.log(parsedUrl)
     }
     this.foodCategories = this.foodRecommenderService.getFoodCategories();
     this.routerSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        console.log(event.url)
         if (event.url === "/home/food") {
           this.foodCategorySelected = null;
-          console.log(this.foodCategorySelected)
         }
         else {
           var parsedUrl = event.url.split("/home/food/");
           var categoryName = parsedUrl[1];
           this.foodCategorySelected = this.foodRecommenderService.getCategory(categoryName)
           this.foodRecommenderService.setNewFoodCategoryByName(categoryName);
-          console.log(parsedUrl)
         }
       }
 

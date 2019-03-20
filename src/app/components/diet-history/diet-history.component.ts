@@ -54,8 +54,8 @@ export class DietHistoryComponent implements OnInit {
             food.calories = value["calories"];
             food.caloriesPer100 = value["caloriesPer100"]
             food.carbs = value["carbs"]
-            food.fat = value["fat"]
-            food.mealTypes = value["mealTypes"]
+            food.fats = value["fat"]
+            // food.mealTypes = value["mealTypes"]
             food.name = value["name"]
             food.proteins = value["proteins"]
             food.quantity = value["quantity"]

@@ -34,14 +34,7 @@ export class DietService {
     // if (!this.foodEntries) {
 
     // }
-    this.allFood = [{ vitamins:10,salts:10,type: FoodType.Beverage, name: "Milk and Coffe", calories: 123, carbs: 67, fat: 89, proteins: 13, mealTypes: [MealType.Breakfast], quantity: 100, caloriesPer100: 123 },
-    { vitamins:10,salts:10,type: FoodType.Fat, name: "Eggs and Bacon", calories: 1200, carbs: 67, fat: 89, proteins: 176, mealTypes: [MealType.Breakfast, MealType.Lunch], quantity: 100, caloriesPer100: 1200 },
-    { vitamins:10,salts:10,type: FoodType.Bakery, name: "Fried Chicked", calories: 1230, carbs: 67, fat: 89, proteins: 123, mealTypes: [MealType.Lunch, MealType.Dinner], quantity: 100, caloriesPer100: 1230 },
-    { vitamins:10,salts:10,type: FoodType.Bakery, name: "Pasta with Ragù", calories: 123, carbs: 67, fat: 89, proteins: 123, mealTypes: [MealType.Lunch, MealType.Dinner], quantity: 100, caloriesPer100: 123 },
-    {
-      vitamins:10,salts:10,type: FoodType.Fruit, name: "Apple", calories: 34, carbs: 67, fat: 89, proteins: 123,
-      mealTypes: [MealType.Lunch, MealType.Dinner, MealType.Breakfast, MealType.MorningBreak, MealType.AfternoonBreak], quantity: 100, caloriesPer100: 34
-    }]
+
   }
 
   createNewDiet() {
@@ -90,7 +83,6 @@ export class DietService {
         observe: 'response',
         params:
         {
-          // dailyCalories: this.diet.caloriesPerDay.get(dayOfWeek).valueOf().toString(),
           userId: user.id
 
         }
@@ -140,7 +132,7 @@ export class DietService {
 
   updateFoodAndQuantityAndCaloriesRequest(food: Food, day: DayOfWeek, mealType: MealType) {
     var user = JSON.parse(sessionStorage["user"]) as User
-    return this.httpClient.put<Food>(this.baseUrl.concat("/" + this.diet.name + "/days/" + day.toString() + "/meals/" + mealType.toString() + "/" + food.name + "/nutritions"), food,
+    return this.httpClient.put<Food>(this.baseUrl.concat("/" + this.diet.name + "/days/" + day.toString() + "/meals/" + mealType.toString() + "/" + food.name), food,
       {
         observe: 'response',
         params:

@@ -22,8 +22,8 @@
                   cdkAutosizeMaxRows="3" [(ngModel)]="foodRdfPicked.name"></textarea>
               </mat-form-field>
               <mat-slide-toggle [disabled]="foodRdfPicked.rdfOutput === ''" (change)="onToggleChange($event)"
-                fxHide="false" fxHide.xs="true">
-                Show RDF Output</mat-slide-toggle>
+                fxHide="false" fxHide.xs="true" style="text-overflow:ellipsis">
+                Show RDF </mat-slide-toggle>
               <mat-slide-toggle [disabled]="foodRdfPicked.rdfOutput === ''" (change)="onToggleChange($event)"
                 fxHide="true" fxHide.xs="false">
               </mat-slide-toggle>
@@ -50,7 +50,7 @@
                 <div fxLayout="column" fxLayoutAlign="center center" *ngFor="let property of foodRdfsProperties;"
                   [ngSwitch]="property">
 
-                  <mat-form-field appearance="outline">
+                  <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
                     <mat-label>{{property}}</mat-label>
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
                       *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.salts">
@@ -156,7 +156,7 @@
             </div>
           </mat-card-content>
           <mat-card-content *ngIf="showRdf" style="min-height: 400px">
-            <p fxLayout="row" fxLayoutAlign="center center">
+            <p fxLayout="row" fxLayoutAlign="center center" >
               {{foodRdfPicked.rdfOutput}}
             </p>
           </mat-card-content>
@@ -211,7 +211,7 @@
             </mat-form-field>
             <mat-slide-toggle (change)="onToggleChange($event)" fxHide="false" fxHide.xs="true"
               [disabled]="foodRdfPicked.rdfOutput === '' ">
-              Show RDF Output</mat-slide-toggle>
+              Show RDF</mat-slide-toggle>
 
           </div>
         </mat-card-header>
@@ -219,8 +219,7 @@
 
         <mat-card-content *ngIf="!showRdf">
           <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="30px">
-            <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl">
-
+                <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl"   *ngIf="!pickImage">
             <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
               {{foodRdfPicked.description}}
 
@@ -237,7 +236,7 @@
               <div fxLayout="column" fxLayoutAlign="center center" *ngFor="let property of foodRdfsProperties;"
                 [ngSwitch]="property">
 
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
                   <mat-label>{{property}}</mat-label>
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
                     *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.salts">
@@ -344,7 +343,7 @@
           </div>
         </mat-card-content>
         <mat-card-content *ngIf="showRdf" style="min-height: 400px">
-          <p fxLayout="row" fxLayoutAlign="center center">
+          <p fxLayout="row" fxLayoutAlign="center center" style="white-space: pre">
             {{foodRdfPicked.rdfOutput}}
           </p>
         </mat-card-content>

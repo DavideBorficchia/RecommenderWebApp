@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { Food } from 'src/app/model/food';
+import { FoodRecommenderService } from 'src/app/services/food-recommender.service';
 
 @Component({
   selector: 'app-food-recommender',
@@ -8,10 +10,24 @@ import { Router } from '@angular/router';
 })
 export class FoodRecommenderComponent implements OnInit {
   @Output() historyClicked = new EventEmitter<boolean>();
-    constructor() { }
+  foodAdded: Food;
+  currentFoodSuggestions:Food[];  
+  constructor(private foodRecommender: FoodRecommenderService) { }
 
- 
+
   ngOnInit() {
+    this.foodRecommender.getAddedFoodObservable()
+      .subscribe(fAdded => {
+        console.log(fAdded)
+        if(fAdded){
+          console.log(fAdded)
+          this.foodRecommender.getRecommendationsGoodWiths(fAdded)
+            .subscribe(response=> {
+              console.log(response)
+            });
+        }
+        
+      });
   }
 
 }

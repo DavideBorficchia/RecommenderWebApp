@@ -8,8 +8,9 @@ import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatSlideToggleChange, MatSnackBar } from '@angular/material';
 import * as $ from 'jquery';
-import { timeout } from 'q';
+import * as vkbeautify from 'vkbeautify';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Guid } from 'guid-typescript';
 @Component({
   selector: 'app-food-rdf-creator',
   templateUrl: './food-rdf-creator.component.html',
@@ -20,9 +21,9 @@ export class FoodRdfCreatorComponent implements OnInit {
 
   private foodCategory: FoodCategory;
   private foodRdfs: FoodRdf[];
-  private allFoodRdfs: FoodRdf[];
+  allFoodRdfs: FoodRdf[];
   private nameIsChanging: boolean;
-  private foodRdfPicked: FoodRdf;
+  foodRdfPicked: FoodRdf;
   foodRdfsProperties = ["Salts", "Calories per 100 g", "Vitamins", "Fats", "Proteins", "Carbohydrates"]
   mealTypes = ["Breakfast", "Morning Break", "Lunch", "Afternoon Break", "Dinner"];
   private statementControl = new FormControl()
@@ -32,6 +33,7 @@ export class FoodRdfCreatorComponent implements OnInit {
   private tempFoodBeforePosting: FoodRdf = new FoodRdf();
   private isUpdating: Boolean = false;
   filteredPhysicalActivities: Observable<string[]>;
+  pickImage: boolean = false;
   filteredMealTypes: Observable<string[]>
   allPhysicalActivities: string[];
   showRdf: boolean;
@@ -52,8 +54,9 @@ export class FoodRdfCreatorComponent implements OnInit {
     var random = Math.random();
     return "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png";
   }
-  getCategoryPicture() {
-
+  onMouseEnter() {
+    console.log(this.pickImage)
+    this.pickImage = !this.pickImage
   }
   getFoodRdfPickedPropertyValue(property: string) {
     return this.getValueByProperty(property);
@@ -83,9 +86,9 @@ export class FoodRdfCreatorComponent implements OnInit {
     this.nameIsChanging = false;
     this.descriptionIsChanging = false;
     this.compare();
-    if (this.tempFoodBeforePosting.name !== 'Insert Name' && this.isSend) {
+    if (!this.tempFoodBeforePosting.name.includes('Create') && this.isSend) {
       this.isUpdating = true
-      this.foodRecommenderService.updateFood(this.foodRdfPicked)
+      this.foodRecommenderService.updateFood(this.foodRdfPicked, this.foodRdfPicked.id)
         .subscribe(response => {
           console.log(response)
           this.isUpdating = false;
@@ -99,21 +102,36 @@ export class FoodRdfCreatorComponent implements OnInit {
 
           }
           this.foodRecommenderService.setNewFoodRdf(this.allFoodRdfs)
+          var food = new FoodRdf()
+          food.type = response["type"]
+          food.bestEatenAt = response["bestEatenAt"]
+          food.name = response["name"]
+          food.description = response["description"]
+          food.fats = response["fats"]
+          food.proteins = response["proteins"]
+          food.salts = response["salts"]
+          food.rdfOutput = response["rdfOutput"]
+          food.imageUrl = response["imageUrl"]
+          food.vitamins = response["vitamins"]
+          food.goodSinergyWith = response["goodSinergyWith"]
+          food.goodWith = response["goodWith"]
+          food.caloriesPer100 = response["caloriesPer100"]
+          food.carbs = response["carbs"]
+          food.timeStamp = response["timeStamp"]
+          food.id = response["id"]
+          this.foodRdfPicked = food;
           this.deepCopyFoodRDFPicked();
+          console.log(response["rdfOutput"])
+
           // console.log(response)
-        }, error => {
+        }, (error:HttpErrorResponse) => {
+          this.snackBar.open("Error","OK",{duration:2000})
           this.isUpdating = false;
+          this.deepCopyFoodRDFPicked();
         })
     } else if (!this.isSend) {
       // this.foodRdfPicked = this.foodRecommenderService.getMostRecentAddedRdfFood(this.foodCategory.categoryName.toString());
     }
-    // console.log(this.allFoodRdfs)
-    // var temp = this.foodRecommenderService.getTempFoodPicked()
-
-
-
-
-
 
   }
 
@@ -153,6 +171,7 @@ export class FoodRdfCreatorComponent implements OnInit {
     defaultFoodPicked.bestEatenAt = [];
     defaultFoodPicked.goodSinergyWith = [];
     defaultFoodPicked.goodWith = [];
+    defaultFoodPicked.id = Guid.create().toString();
 
 
     this.allPhysicalActivities = ["Treadmill", "Box", "Jogging"]
@@ -160,26 +179,29 @@ export class FoodRdfCreatorComponent implements OnInit {
     this.foodRecommenderService.getObservableFoodBehavior().subscribe(event => {
       this.allFoodRdfs = event;
 
-      if (this.allFoodRdfs) {
-        this.foodRdfs = this.allFoodRdfs.filter(foodRdf => foodRdf.type === categoryName);
-        this.filteredFoodRdf = this.statementControl.valueChanges.pipe(
-          startWith(''),
-          map(value => this._filter(value))
-        )
-        this.filteredPhysicalActivities = this.statementGoodSynergyGroupControl.valueChanges.pipe(
-          startWith(''),
-          map(value => this._filterPhysical(value))
-        )
-        this.filteredMealTypes = this.statementBestEatenAtControl.valueChanges.pipe(
-          startWith(''),
-          map(value => this._filterMealTypes(value))
-        )
-      }
+
       if (!this.foodRdfPicked) {
         this.foodRdfPicked = defaultFoodPicked;
       }
+      if (!this.allFoodRdfs) {
+        this.allFoodRdfs = []
+      }
       this.deepCopyFoodRDFPicked();
 
+      this.foodRdfs = this.allFoodRdfs.filter(foodRdf => foodRdf.type.replace(/ /g, "") === categoryName);
+
+      this.filteredFoodRdf = this.statementControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      )
+      this.filteredPhysicalActivities = this.statementGoodSynergyGroupControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterPhysical(value))
+      )
+      this.filteredMealTypes = this.statementBestEatenAtControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterMealTypes(value))
+      )
     })
 
 
@@ -224,7 +246,6 @@ export class FoodRdfCreatorComponent implements OnInit {
   onOptionSynergySelected(event: MatAutocompleteSelectedEvent) {
     var physicalActivity = this.allPhysicalActivities.find(pA => pA === event.option.value);
     const index = this.foodRdfPicked.goodSinergyWith.indexOf(physicalActivity);
-    console.log(index)
     if (index < 0) {
       this.foodRdfPicked.goodSinergyWith.push(physicalActivity);
       this.onTextAreaDeselect();
@@ -276,9 +297,9 @@ export class FoodRdfCreatorComponent implements OnInit {
   onNewFoodClicked() {
     var categoryName = this.foodCategory.categoryName.toString();
     this.foodRdfPicked = {
-      bestEatenAt: [], caloriesPer100: 0, salts: 0, rdfOutput: "", timeStamp: null, carbs: 0, description: "No description yet!",
+      bestEatenAt: [], caloriesPer100: 0, salts: 0, rdfOutput: "", timeStamp: null, carbs: 0, description: "Start creating your new cool RDF semantic food",
       fats: 0, goodSinergyWith: [], goodWith: [], imageUrl: "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png",
-      name: "Insert Name", proteins: 0, type: categoryName, vitamins: 0
+      name: "Create new " + this.foodCategory.categoryName, proteins: 0, type: categoryName, vitamins: 0, id: Guid.create().toString()
     }
     this.deepCopyFoodRDFPicked();
     this.isSend = true;
@@ -287,44 +308,63 @@ export class FoodRdfCreatorComponent implements OnInit {
   }
   onNewFoodPosted() {
     var foodToSend = this.foodRdfPicked;
-    foodToSend.imageUrl = "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png";
-    foodToSend.type = this.foodCategory.categoryName.toString();
-    foodToSend.timeStamp = Date.now();
-    console.log(foodToSend)
-    this.foodRecommenderService.postFood(foodToSend)
-      .subscribe(response => {
-        console.log(response)
-        var food = new FoodRdf()
-        food.type = response["type"]
-        food.bestEatenAt = response["bestEatenAt"]
-        food.name = response["name"]
-        food.description = response["description"]
-        food.fats = response["fats"]
-        food.proteins = response["proteins"]
-        food.salts = response["salts"]
-        food.rdfOutput = response["rdfOutput"]
-        food.imageUrl = response["imageUrl"]
-        food.vitamins = response["vitamins"]
-        food.goodSinergyWith = response["goodSinergyWith"]
-        food.goodWith = response["goodWith"]
-        food.caloriesPer100 = response["caloriesPer100"]
-        food.carbs = response["carbs"]
-        food.timeStamp = response["timeStamp"]
-        this.allFoodRdfs.push(food)
-        this.foodRecommenderService.setAllFood(this.allFoodRdfs)
-        this.foodRecommenderService.setNewFoodRdf(this.allFoodRdfs)
-        this.isSend = false;
+    if (foodToSend.name.includes("Create")) {
+      this.snackBar.open("Change name before confirming creation")
+    }
+    else {
+      foodToSend.imageUrl = "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png";
+      foodToSend.type = this.foodCategory.categoryName.toString();
+      foodToSend.timeStamp = Date.now();
+      console.log(foodToSend)
+      this.foodRecommenderService.postFood(foodToSend)
+        .subscribe(response => {
+          console.log(response)
+          var food = new FoodRdf()
+          food.type = response["type"]
+          food.bestEatenAt = response["bestEatenAt"]
+          food.name = response["name"]
+          food.description = response["description"]
+          food.fats = response["fats"]
+          food.proteins = response["proteins"]
+          food.salts = response["salts"]
+          food.rdfOutput = response["rdfOutput"]
+          food.imageUrl = response["imageUrl"]
+          food.vitamins = response["vitamins"]
+          food.goodSinergyWith = response["goodSinergyWith"]
+          food.goodWith = response["goodWith"]
+          food.caloriesPer100 = response["caloriesPer100"]
+          food.carbs = response["carbs"]
+          food.timeStamp = response["timeStamp"]
+          food.id = response["id"]
+          this.foodRdfPicked = food;
+          this.isUpdating = false;
+          this.isSend = false;
+          const index = this.allFoodRdfs.indexOf(this.tempFoodBeforePosting);
+
+          if (index >= 0) {
+            this.foodRdfPicked.goodWith.splice(index, 1);
+            this.foodListSameHeight()
+            this.allFoodRdfs.push(this.foodRdfPicked)
+
+          }
+          else {
+            this.allFoodRdfs.push(food)
+          }
+          this.foodRecommenderService.setNewFoodRdf(this.allFoodRdfs)
+          this.deepCopyFoodRDFPicked();
 
 
-      }, (error: HttpErrorResponse) => {
-        if (error.status >= 500) {
-          this.snackBar.open("Server error, try later", "OK", { duration: 3000 })
-        }
-        else {
-          this.snackBar.open(error.message, "OK", { duration: 3000 })
-        }
-      })
-    this.foodListSameHeight();
+        }, (error: HttpErrorResponse) => {
+          if (error.status >= 500) {
+            this.snackBar.open("Server error, try later", "OK", { duration: 3000 })
+          }
+          else {
+            this.snackBar.open(error.message, "OK", { duration: 3000 })
+          }
+        })
+      this.foodListSameHeight();
+    }
+
 
   }
   onItemClicked(foodRdf: FoodRdf) {
@@ -375,22 +415,32 @@ export class FoodRdfCreatorComponent implements OnInit {
     }
   }
 
-  private compare() { 
-    for(var f of this.foodRdfPicked.goodWith){
+  private compare() {
+    if (this.foodRdfPicked.goodWith.length !== this.tempFoodBeforePosting.goodWith.length) {
+      this.isSend = true;
+      return
+    } if (this.foodRdfPicked.bestEatenAt.length !== this.tempFoodBeforePosting.bestEatenAt.length) {
+      this.isSend = true;
+      return
+    } if (this.foodRdfPicked.goodSinergyWith.length !== this.tempFoodBeforePosting.goodSinergyWith.length) {
+      this.isSend = true;
+      return
+    }
+    for (var f of this.foodRdfPicked.goodWith) {
       var foodCheck = this.tempFoodBeforePosting.goodWith.find(food => food === f)
       if (!foodCheck) {
         this.isSend = true;
         return
       }
     }
-    for(var f of this.foodRdfPicked.goodSinergyWith){
+    for (var f of this.foodRdfPicked.goodSinergyWith) {
       var foodCheck = this.tempFoodBeforePosting.goodSinergyWith.find(food => food === f)
       if (!foodCheck) {
         this.isSend = true;
         return
       }
     }
-    for(var f of this.foodRdfPicked.bestEatenAt){
+    for (var f of this.foodRdfPicked.bestEatenAt) {
       var foodCheck = this.tempFoodBeforePosting.bestEatenAt.find(food => food === f)
       if (!foodCheck) {
         this.isSend = true;

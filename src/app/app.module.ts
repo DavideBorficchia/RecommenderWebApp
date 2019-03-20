@@ -43,6 +43,8 @@ import { FoodRdfCreatorComponent } from './components/food-rdf-creator/food-rdf-
 import { FoodListComponent } from './components/food-list/food-list.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
 
@@ -143,7 +145,8 @@ const appRoutes: Routes = [
     MatAutocompleteModule,
     RouterModule.forRoot(
       appRoutes
-    )
+    ),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent],

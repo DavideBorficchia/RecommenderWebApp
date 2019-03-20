@@ -29,6 +29,7 @@ export class MealComponent implements OnInit {
   isOver: boolean
   foodToDisplayForOptions: Food[] = [];
   foodToDisplay: Food[];
+  foodAdded:Food;
 
   constructor(private dietService: DietService, public snackBar: MatSnackBar, private foodRecommenderService: FoodRecommenderService) { }
 
@@ -42,7 +43,8 @@ export class MealComponent implements OnInit {
           this.dietService.updateMealHandler(foodToAdd, this.mealType, this.day);
           this.snackBar.open(foodToAdd.name + " has been added!", "OK", {
             duration: 2000
-          })
+          });
+          this.foodRecommenderService.setNewFoodAdded(foodToAdd);
         }, (error: HttpErrorResponse) => {
           if (error.status == 400) {
             console.log("bad request")
@@ -76,8 +78,13 @@ export class MealComponent implements OnInit {
             duration: 2000
           })
       }
-      else {
-
+      
+    },(error:HttpErrorResponse)=>{
+      if(error.status< 500){
+        this.snackBar.open("Error in deleting food "+food.name,"OK",{duration:3000})
+      }
+      else{
+        this.snackBar.open("Error with server, try later","OK",{duration:3000})
       }
     })
 
@@ -89,16 +96,12 @@ export class MealComponent implements OnInit {
 
     this.dietService.getObservableDiet().subscribe(diet => {
       this.meal = diet.dailyFood.get(this.day).find(m => m.mealType == this.mealType.toString())
-      console.log(this.meal + " " + diet.name)
       this.foodToDisplay = this.meal.allFoodEntries;
     })
 
     this.foodRecommenderService.getObservableFoodBehavior()
       .subscribe(allFood => {
         if (allFood) {
-          console.log(allFood)
-          console.log(this.mealType.toString())
-
           allFood.filter(f=>f.bestEatenAt.includes(this.mealType.toString())).forEach(f => {
             var food = new Food();
             food.name = f.name;
@@ -106,19 +109,20 @@ export class MealComponent implements OnInit {
             food.quantity = 100;
             food.caloriesPer100 = f.caloriesPer100;
             food.vitamins = f.vitamins;
-            food.fat = f.fats;
+            food.fats = f.fats;
             food.carbs = f.carbs;
             food.salts = f.salts;
             food.type = f.type;
             food.calories = 100 *f.caloriesPer100
-            var mealTypes =  [];
-            f.bestEatenAt.forEach(mealName=>mealTypes.push(mealName))
-            food.mealTypes = mealTypes;
+            food.id = f.id
+            // var mealTypes =  [];
+            // f.bestEatenAt.forEach(mealName=>mealTypes.push(mealName))
+            // food.mealTypes = mealTypes;
+            console.log(food.salts)
             this.foodToDisplayForOptions.push(food)
           })
         }
       })
-    // this.foodToDisplayForOptions = this.dietService.getAllFood().filter(f => f.mealTypes.find(type => type == this.mealType.toString()));
   }
 
 }

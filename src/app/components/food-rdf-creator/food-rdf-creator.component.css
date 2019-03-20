@@ -9,8 +9,19 @@ mat-card {
 }
 
 .food_picked_avatar {
-    border-radius: 50%
+    border-radius: 50%;
+    transition: opacity .5s linear;
+    cursor: pointer;
+    max-width: 120px;
+    height: auto;
+    
 }
+
+/* .food_picked_avatar:hover {
+    opacity: 0;
+} */
+
+
 
 .category-paragraph {
     max-width: 400px;
@@ -61,7 +72,7 @@ mat-card {
     background: #555;
 }
 
-@media screen and (max-width:350px) {
+@media screen and (max-width:375px) {
     .form-card {
         max-width: 250px;
     }
@@ -72,9 +83,8 @@ mat-card {
         bottom: 30px;
         right: 40px;
     }
-    .food-name{
+    .food-name {
         font-size: 30px;
-
     }
 }
 
@@ -89,8 +99,7 @@ mat-card {
         bottom: 30px;
         right: 40px;
     }
-    .food-name{
+    .food-name {
         font-size: 30px;
-
     }
 }

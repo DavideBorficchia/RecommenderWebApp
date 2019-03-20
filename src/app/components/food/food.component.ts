@@ -34,6 +34,7 @@ export class FoodComponent implements OnInit {
     console.log("updating food quantity " + this.food.quantity)
     this.food.calories = this.food.caloriesPer100 * this.food.quantity / 100
     clearTimeout(this.timeout)
+    console.log(this.food.calories)
     this.timeout = setTimeout(() => {
       this.dietService.updateFoodAndQuantityAndCaloriesRequest(this.food,this.day,this.mealType).subscribe(response=>{
         if(response.ok){
@@ -50,7 +51,7 @@ export class FoodComponent implements OnInit {
           })
         }
       })
-    }, 10000);
+    }, 5000);
     return this.food.calories;
 
 
@@ -60,6 +61,7 @@ export class FoodComponent implements OnInit {
     if (innerWidth <= 500) {
       this.isOver = true;
     }
+
   }
 
 }
