@@ -1,0 +1,20 @@
+.category-header-image {
+    /* background-image: url('../../../assets/bread_avatar.svg'); */
+    background-size: cover;
+    /* background-color: #FACBB4; */
+    height: 50px;
+    width: 50px;
+}
+
+mat-card {
+    /* height: 380px !important; */
+    height: auto;
+    width: auto;
+}
+
+@media only screen and (max-width:1200px) {
+    /* mat-card {
+        height: 40px;
+
+    } */
+}

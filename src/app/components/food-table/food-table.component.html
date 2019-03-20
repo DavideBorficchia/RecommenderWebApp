@@ -1,0 +1,17 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="section_header">
+  <h1 class="section_title" *ngIf="foodCategorySelected==null">Food</h1>
+  <h1 class="section_title" *ngIf="foodCategorySelected!=null">{{foodCategorySelected.categoryName}}</h1>
+
+</div>
+<div style=" background-color: white" fxLayout="column" fxLayoutAlign="center center">
+
+
+  <mat-grid-list [cols]="numberOfCols" [rowHeight]="rowHeight" gutterSize="10px" *ngIf="foodCategorySelected==null">
+    <mat-grid-tile *ngFor="let foodCategory of foodCategories">
+      <app-foodcategory [foodCategory]=foodCategory (foodCategorySelected)="onFoodCategorySelected($event)">
+      </app-foodcategory>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <router-outlet></router-outlet>
+
+</div>

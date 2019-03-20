@@ -11,9 +11,7 @@ export class Meal {
         if (foodIndex < 0) {
             this.allFoodEntries.push(food)
         }
-        else {
-            throw new FoodAlreadyAddedException("Food already added!");
-        }
+
 
     }
     removeFood(food: Food) {

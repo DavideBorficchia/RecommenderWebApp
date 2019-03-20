@@ -10,6 +10,7 @@ import { Food } from 'src/app/model/food';
 import { Router } from '@angular/router';
 import { DietHistory } from 'src/app/model/diethistory';
 import { RegisterService } from 'src/app/services/register.service';
+import { FoodRecommenderService } from 'src/app/services/food-recommender.service';
 
 
 
@@ -36,7 +37,8 @@ export class DietComponent implements OnInit {
   constructor(private dietService: DietService,
     private registerService: RegisterService,
     private router: Router,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar,
+    private foodService:FoodRecommenderService) { }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -180,13 +182,16 @@ export class DietComponent implements OnInit {
               food.calories = value["calories"];
               food.caloriesPer100 = value["caloriesPer100"]
               food.carbs = value["carbs"]
-              food.fat = value["fat"]
-              food.healthy = value["healthy"]
-              food.mealTypes = value["mealTypes"]
+              food.fats = value["fats"]
+              // food.mealTypes = value["mealTypes"]
               food.name = value["name"]
               food.proteins = value["proteins"]
               food.quantity = value["quantity"]
+              food.vitamins = value["vitamins"];
+              food.salts = value["salts"]
               food.type = value["type"]
+              food.id = value["id"]
+              console.log(value)
               meal.addFood(food);
             })
             meal.mealType = mealValue["mealType"];
@@ -235,7 +240,9 @@ export class DietComponent implements OnInit {
           this.currentDietName = this.diet.name;
         }
       })
+      this.foodService.getAllFoodFromServer();
     })
+
 
 
   }

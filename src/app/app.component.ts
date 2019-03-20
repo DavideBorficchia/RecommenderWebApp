@@ -3,6 +3,7 @@ import { User } from './components/register/model/user';
 import { Router, NavigationStart, RouterOutlet } from '@angular/router';
 import { slideInAnimation } from '../animations';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,7 +14,7 @@ export class AppComponent implements OnInit {
 
 
   private sidebarComponent: SidebarComponent;
-
+  observer = Subscription.EMPTY;
   showWelcome: boolean;
   userIsLoggedIn: boolean;
   constructor(private router: Router) { }
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
       this.showWelcome = true;
       this.router.navigate(["/registration/login"])
     }
-    var observer = this.router.events.subscribe((event: NavigationStart) => {
+    this.observer = this.router.events.subscribe((event: NavigationStart) => {
       this.userIsLoggedIn = sessionStorage["user"] != undefined;
       if (event.url == "/" && this.userIsLoggedIn) {
         this.showWelcome = false;
@@ -50,6 +51,8 @@ export class AppComponent implements OnInit {
       }
     })
   }
-
+  ngOnDestroy(){
+    this.observer.unsubscribe();
+  }
 
 }

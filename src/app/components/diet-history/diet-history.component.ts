@@ -24,6 +24,7 @@ export class DietHistoryComponent implements OnInit {
   private dietHistories: DietHistory[] = []
   private dietHistory2018: DietHistory[] = []
   private dietHistory2017: DietHistory[] = []
+  dietFromHistoryIsLoading: boolean;
   constructor(private dietService: DietService,
     private registerService: RegisterService,
     public snack: MatSnackBar) { }
@@ -39,6 +40,7 @@ export class DietHistoryComponent implements OnInit {
   }
   loadOlderDietHistory(dietName: String) {
     var userId = JSON.parse(sessionStorage["user"]) as User
+    this.dietFromHistoryIsLoading = true;
     this.dietService.getDietByName(dietName).subscribe(response => {
       var map: Map<DayOfWeek, Meal[]> = new Map();
 
@@ -52,9 +54,8 @@ export class DietHistoryComponent implements OnInit {
             food.calories = value["calories"];
             food.caloriesPer100 = value["caloriesPer100"]
             food.carbs = value["carbs"]
-            food.fat = value["fat"]
-            food.healthy = value["healthy"]
-            food.mealTypes = value["mealTypes"]
+            food.fats = value["fat"]
+            // food.mealTypes = value["mealTypes"]
             food.name = value["name"]
             food.proteins = value["proteins"]
             food.quantity = value["quantity"]
@@ -77,6 +78,7 @@ export class DietHistoryComponent implements OnInit {
       // this.currentDietName = diet.name;
 
       this.dietService.setDiet(diet);
+      this.dietFromHistoryIsLoading = false
 
     }, (error: HttpErrorResponse) => {
       if (error.status < 500) {
@@ -116,14 +118,34 @@ export class DietHistoryComponent implements OnInit {
           })
           this.dietService.setObservableDietHistory(dietHistoryFromServer)
           this.dietService.getObservableDietHistory().subscribe(dietHistoriesChange => {
+            console.log(dietHistoriesChange)
             this.dietHistories = dietHistoriesChange
           })
 
         }
       })
-      this.dietService.getDietHistoriesByYear(new Date().getFullYear().toString()).subscribe(response => {
-        if (response.ok) {
+      // this.dietService.getDietHistoriesByYear(new Date().getFullYear().toString()).subscribe(response => {
+      //   if (response.ok) {
           
+      //     console.log(response.body)
+         
+      //     Object.values(response.body).forEach(dietObject => {
+      //       console.log(dietObject)
+      //       var timestamp:String = dietObject["timeStamp"];
+      //       var month = timestamp.toString().substring(1,2);
+      //       var name = dietObject["name"];
+      //       var totalCalories = dietObject["totalCalories"]
+      //       this.dietHistories.push(new DietHistory(name, timestamp,totalCalories))
+
+      //     })
+          
+
+
+      //   }
+
+      // })
+      this.dietService.getDietHistoriesByYear("2018").subscribe(response => {
+        if (response.ok) {
          
           Object.values(response.body).forEach(dietObject => {
             var timestamp:String = dietObject["timeStamp"];
@@ -150,6 +172,7 @@ export class DietHistoryComponent implements OnInit {
             this.dietHistory2018.push(new DietHistory(name, timestamp,totalCalories))
 
           })
+          
 
 
         }

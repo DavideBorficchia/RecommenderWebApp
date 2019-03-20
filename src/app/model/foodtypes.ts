@@ -1,11 +1,13 @@
 export enum FoodType{
-    Breakfast = "Breakfast",
-    Appetizer = "Appetizer",
-    MainCourse="Main Course",
-    SecondaryCourse="Secondary Course",
+    // Breakfast = "Breakfast",
+    // Appetizer = "Appetizer",
+    // MainCourse="Main Course",
+    // SecondaryCourse="Secondary Course",
+    Bakery = "Carbs",
+    Meat = "Meat",
     Vegetable="Vegetable",
     Fruit="Fruit",
-    Dessert="Dessert",
+    Fat="Fat",
     Beverage="Beverage"
     
 }

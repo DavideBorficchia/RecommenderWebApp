@@ -1,0 +1,367 @@
+<div fxLayout="row" fxLayout.lt-md="row wrap" fxLayoutAlign="space-evenly start"
+  style="width: 90vw; margin-top: 60px; margin-bottom: 100px" *ngIf="allFoodRdfs">
+  <div fxLayout="column" fxLayoutAlign=" start start" fxLayoutAlign.lt-md="center center" id="side_content">
+    <div fxLayout="row" fxLayout.lt-md="row wrap" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center">
+      <img [src]="getCategoryPresentationImage()" (load)="foodListSameHeight()" style="width: 150px; height: auto;">
+      <p class="category-paragraph">
+        {{foodCategory.description}}
+      </p>
+    </div>
+
+
+    <div fxLayout="column" fxLayoutAlign="start center" fxShow.lt-md="true" fxShow="false">
+      <div>
+        <mat-card class="form-card" id="card_mobile">
+          <mat-card-header style="width: inherit">
+            <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%">
+              <h1 class="food-name" (click)="nameIsChanging=!nameIsChanging" *ngIf="!nameIsChanging">
+                {{foodRdfPicked.name}}</h1>
+              <mat-form-field *ngIf="nameIsChanging" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+                <mat-label>Name</mat-label>
+                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="3" [(ngModel)]="foodRdfPicked.name"></textarea>
+              </mat-form-field>
+              <mat-slide-toggle [disabled]="foodRdfPicked.rdfOutput === ''" (change)="onToggleChange($event)"
+                fxHide="false" fxHide.xs="true" style="text-overflow:ellipsis">
+                Show RDF </mat-slide-toggle>
+              <mat-slide-toggle [disabled]="foodRdfPicked.rdfOutput === ''" (change)="onToggleChange($event)"
+                fxHide="true" fxHide.xs="false">
+              </mat-slide-toggle>
+            </div>
+          </mat-card-header>
+
+
+          <mat-card-content *ngIf="!showRdf">
+            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="30px">
+              <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl">
+              <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
+                {{foodRdfPicked.description}}
+
+              </p>
+              <mat-form-field *ngIf="descriptionIsChanging" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+                <mat-label>Description</mat-label>
+                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="3" [(ngModel)]="foodRdfPicked.description"></textarea>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="start center">
+              <h3>Nutritions</h3>
+              <div fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+                <div fxLayout="column" fxLayoutAlign="center center" *ngFor="let property of foodRdfsProperties;"
+                  [ngSwitch]="property">
+
+                  <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+                    <mat-label>{{property}}</mat-label>
+                    <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                      *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.salts">
+                    <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                      *ngSwitchCase="'Calories per 100 g'" [(ngModel)]="foodRdfPicked.caloriesPer100">
+                    <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                      *ngSwitchCase="'Vitamins'" [(ngModel)]="foodRdfPicked.vitamins">
+                    <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                      *ngSwitchCase="'Carbohydrates'" [(ngModel)]="foodRdfPicked.carbs">
+                    <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                      *ngSwitchCase="'Fats'" [(ngModel)]="foodRdfPicked.fats">
+                    <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                      *ngSwitchCase="'Proteins'" [(ngModel)]="foodRdfPicked.proteins">
+                    <span matSuffix *ngIf="property === 'Calories per 100 g'">kcal</span>
+                    <span matSuffix *ngIf="property !== 'Calories per 100 g'">g</span>
+                  </mat-form-field>
+                </div>
+              </div>
+              <h3>Statements</h3>
+              <div fxLayout="row wrap" fxLayoutAlign="space-evenly center" style="min-width: 100%; margin-bottom: 20px">
+                <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
+                  <mat-chip-list style="margin-bottom: 15px; min-height: 32px;">
+                    <mat-chip *ngFor="let foodName of foodRdfPicked.goodWith" [selectable]="false" [removable]="true"
+                      (removed)="onChipRemoved(foodName)">
+                      {{foodName}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                  </mat-chip-list>
+                  <mat-form-field   (focusin)="isSend = true">
+                    <mat-label>Good With</mat-label>
+                    <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementGroup"
+                      [formControl]="statementControl" placeholder="Click to select">
+                    <mat-autocomplete #statementGroup="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                      <mat-option *ngFor="let foodRdf of filteredFoodRdf | async" [value]="foodRdf.name">
+                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                          <img src="{{foodRdf.imageUrl}}" style="border-radius: 50%; width:30px; height: auto">
+                          <span>{{foodRdf.name}}</span>
+                        </div>
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-hint>Select other types of {{foodCategory.categoryName.toLowerCase()}} {{foodRdfPicked.name}}
+                      is good with!
+                    </mat-hint>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
+                  <mat-chip-list style="margin-bottom: 15px; min-height: 32px;" >
+                    <mat-chip *ngFor="let physicalActivity of foodRdfPicked.goodSinergyWith" [selectable]="false"
+                      [removable]="true" (removed)="onChipSynergyRemoved(physicalActivity)">
+                      {{physicalActivity}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                  </mat-chip-list>
+                  <mat-form-field   (focusin)="isSend = true">
+                    <mat-label>Good Synergy With</mat-label>
+                    <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementGoodSynergyGroup"
+                      [formControl]="statementGoodSynergyGroupControl" placeholder="Click to select">
+                    <mat-autocomplete #statementGoodSynergyGroup="matAutocomplete"
+                      (optionSelected)="onOptionSynergySelected($event)">
+                      <mat-option *ngFor="let physicalActivityName of filteredPhysicalActivities | async"
+                        [value]="physicalActivityName">
+                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                          <img src="https://api.adorable.io/avatars/120/123.png"
+                            style="border-radius: 50%; width:30px; height: auto">
+                          <span>{{physicalActivityName}}</span>
+                        </div>
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-hint>Select other types of physical activities {{foodRdfPicked.name}} is helthy with!
+                    </mat-hint>
+                  </mat-form-field>
+
+                </div>
+                <!-- TEST -->
+                <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
+                  <mat-chip-list style="margin-bottom: 15px;min-height: 32px;" >
+                    <mat-chip *ngFor="let mealType of foodRdfPicked.bestEatenAt" [selectable]="false" [removable]="true"
+                      (removed)="onChipMealTypeRemoved(mealType)">
+                      {{mealType}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                  </mat-chip-list>
+                  <mat-form-field   (focusin)="isSend = true">
+                    <mat-label>Best Eaten At</mat-label>
+                    <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementBestEatenAt"
+                      [formControl]="statementBestEatenAtControl" placeholder="Click to select">
+                    <mat-autocomplete #statementBestEatenAt="matAutocomplete"
+                      (optionSelected)="onOptionstatementBestEatenAtSelected($event)">
+                      <mat-option *ngFor="let mealType of filteredMealTypes | async" [value]="mealType">
+                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                          <img src="https://api.adorable.io/avatars/120/123.png"
+                            style="border-radius: 50%; width:30px; height: auto">
+                          <span>{{mealType}}</span>
+                        </div>
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-hint>Select other types of meal {{foodRdfPicked.name}} is best eaten at!
+                    </mat-hint>
+                  </mat-form-field>
+                </div>
+                <!-- TEST -->
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-content *ngIf="showRdf" style="min-height: 400px">
+            <p fxLayout="row" fxLayoutAlign="center center" >
+              {{foodRdfPicked.rdfOutput}}
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+    </div>
+
+
+
+    <mat-list style="margin-top: 60px; min-width:100%; max-width:400px;overflow-y: auto; overflow-x: hidden;"
+      id="food_list" *ngIf="foodRdfs">
+      <mat-list-item mat-ripple *ngFor="let foodRdf of foodRdfs;last as last" (click)="onItemClicked(foodRdf)">
+        <!-- <img matListAvatar src="{{foodCategory.avatarAssetPath}}"> -->
+        <img matListAvatar [src]="foodRdf.imageUrl" (load)="foodListSameHeight()">
+        <h3 matLine> {{foodRdf.name}} </h3>
+        <div matLine fxLayout="row" fxLayoutAlign="space-between center">
+          <p style="  white-space: nowrap; 
+          overflow: hidden;
+          text-overflow: ellipsis; width: 150px !important">
+            {{foodRdf.description}}
+          </p>
+          <span>
+            <mat-icon>edit</mat-icon>
+          </span>
+        </div>
+        <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+
+
+
+
+
+
+
+
+  <div fxLayout="column" fxLayoutAlign="start center" style="height: inherit; margin-left: 10px;" fxHide.lt-md="true">
+    <div>
+      <mat-card class="form-card" id="card">
+        <mat-card-header style="min-width: 250px">
+          <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutAlign.xs="space-between center"
+            style="min-width: 100%;">
+            <h1 class="food-name" (click)="nameIsChanging=!nameIsChanging" *ngIf="!nameIsChanging">
+              {{foodRdfPicked.name}}</h1>
+            <mat-form-field *ngIf="nameIsChanging" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+              <mat-label>Name</mat-label>
+              <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="3" [(ngModel)]="foodRdfPicked.name"></textarea>
+            </mat-form-field>
+            <mat-slide-toggle (change)="onToggleChange($event)" fxHide="false" fxHide.xs="true"
+              [disabled]="foodRdfPicked.rdfOutput === '' ">
+              Show RDF</mat-slide-toggle>
+
+          </div>
+        </mat-card-header>
+
+
+        <mat-card-content *ngIf="!showRdf">
+          <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="30px">
+                <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl"   *ngIf="!pickImage">
+            <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
+              {{foodRdfPicked.description}}
+
+            </p>
+            <mat-form-field *ngIf="descriptionIsChanging" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+              <mat-label>Description</mat-label>
+              <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="3" [(ngModel)]="foodRdfPicked.description"></textarea>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="start center">
+            <h3>Nutritions</h3>
+            <div fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+              <div fxLayout="column" fxLayoutAlign="center center" *ngFor="let property of foodRdfsProperties;"
+                [ngSwitch]="property">
+
+                <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+                  <mat-label>{{property}}</mat-label>
+                  <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                    *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.salts">
+                  <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                    *ngSwitchCase="'Calories per 100 g'" [(ngModel)]="foodRdfPicked.caloriesPer100">
+                  <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                    *ngSwitchCase="'Vitamins'" [(ngModel)]="foodRdfPicked.vitamins">
+                  <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                    *ngSwitchCase="'Carbohydrates'" [(ngModel)]="foodRdfPicked.carbs">
+                  <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                    *ngSwitchCase="'Fats'" [(ngModel)]="foodRdfPicked.fats">
+                  <input matInput [value]="property" placeholder="Insert new value for {{property}}"
+                    *ngSwitchCase="'Proteins'" [(ngModel)]="foodRdfPicked.proteins">
+                  <span matSuffix *ngIf="property === 'Calories per 100 g'">kcal</span>
+                  <span matSuffix *ngIf="property !== 'Calories per 100 g'">g</span>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <h3>Statements</h3>
+            <div fxLayout="row wrap" fxLayoutAlign="space-evenly center" style="min-width: 100%; margin-bottom: 20px">
+              <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
+                <mat-chip-list style="margin-bottom: 15px;  min-height: 32px;">
+                  <mat-chip *ngFor="let foodName of foodRdfPicked.goodWith" [selectable]="false" [removable]="true"
+                    (removed)="onChipRemoved(foodName)">
+                    {{foodName}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+                <mat-form-field (focusin)="isSend = true">
+                  <mat-label>Good With</mat-label>
+                  <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementGroup"
+                    [formControl]="statementControl" placeholder="Click to select">
+                  <mat-autocomplete #statementGroup="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                    <mat-option *ngFor="let foodRdf of filteredFoodRdf | async" [value]="foodRdf.name">
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                        <img src="{{foodRdf.imageUrl}}" style="border-radius: 50%; width:30px; height: auto">
+                        <span>{{foodRdf.name}}</span>
+                      </div>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-hint>Select other types of {{foodCategory.categoryName.toLowerCase()}} {{foodRdfPicked.name}}
+                    is good with!
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
+                <mat-chip-list style="margin-bottom: 15px; min-height: 32px;" >
+                  <mat-chip *ngFor="let physicalActivity of foodRdfPicked.goodSinergyWith" [selectable]="false"
+                    [removable]="true" (removed)="onChipSynergyRemoved(physicalActivity)">
+                    {{physicalActivity}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+                <mat-form-field (focusin)="isSend = true">
+                  <mat-label>Good Synergy With</mat-label>
+                  <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementGoodSynergyGroup"
+                    [formControl]="statementGoodSynergyGroupControl" placeholder="Click to select">
+                  <mat-autocomplete #statementGoodSynergyGroup="matAutocomplete"
+                    (optionSelected)="onOptionSynergySelected($event)">
+                    <mat-option *ngFor="let physicalActivityName of filteredPhysicalActivities | async"
+                      [value]="physicalActivityName">
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                        <img src="https://api.adorable.io/avatars/120/123.png"
+                          style="border-radius: 50%; width:30px; height: auto">
+                        <span>{{physicalActivityName}}</span>
+                      </div>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-hint>Select other types of physical activities {{foodRdfPicked.name}} is helthy with!
+                  </mat-hint>
+                </mat-form-field>
+
+              </div>
+              <!-- TEST -->
+              <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
+                <mat-chip-list style="margin-bottom: 15px; min-height: 32px;" >
+                  <mat-chip *ngFor="let mealType of foodRdfPicked.bestEatenAt" [selectable]="false" [removable]="true"
+                    (removed)="onChipMealTypeRemoved(mealType)">
+                    {{mealType}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+                <mat-form-field  (focusin)="isSend = true">
+                  <mat-label>Best Eaten At</mat-label>
+                  <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementBestEatenAt"
+                    [formControl]="statementBestEatenAtControl" placeholder="Click to select">
+                  <mat-autocomplete #statementBestEatenAt="matAutocomplete"
+                    (optionSelected)="onOptionstatementBestEatenAtSelected($event)">
+                    <mat-option *ngFor="let mealType of filteredMealTypes | async" [value]="mealType">
+                      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                        <img src="https://api.adorable.io/avatars/120/123.png"
+                          style="border-radius: 50%; width:30px; height: auto">
+                        <span>{{mealType}}</span>
+                      </div>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-hint>Select other types of meal {{foodRdfPicked.name}} is best eaten at!
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+              <!-- TEST -->
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-content *ngIf="showRdf" style="min-height: 400px">
+          <p fxLayout="row" fxLayoutAlign="center center" style="white-space: pre">
+            {{foodRdfPicked.rdfOutput}}
+          </p>
+        </mat-card-content>
+
+      </mat-card>
+    </div>
+
+  </div>
+
+  <button mat-fab class="add-food" (click)="onNewFoodClicked()" *ngIf="!isSend">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button mat-fab class="add-food" (click)="onNewFoodPosted()" *ngIf="isSend" [disabled]="isUpdating">
+    <mat-icon>send</mat-icon>
+  </button>
+
+</div>
+<div *ngIf="foodRdfPicked">
+
+
+</div>

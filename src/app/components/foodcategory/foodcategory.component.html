@@ -1,0 +1,15 @@
+<mat-card class="food-tile"  mat-elevetion-z8>
+    <mat-card-header>
+      <div mat-card-avatar class="category-header-image" [ngStyle]="{'background-color':foodCategory.avatarAssetColor,'background-image' : 'url('+foodCategory.avatarAssetPath+')'}"></div>
+      <mat-card-title>{{foodCategory.categoryName}}</mat-card-title>
+      <mat-card-subtitle>{{foodCategory.categorySubTitle}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="foodCategory.categoryAssetPath" alt="Fruits and Vegetables">
+    <mat-card-actions class = "last-child" fxLayout="row" fxLayoutAlign = "center center">
+        <button mat-mini-fab  (click)="foodCategorySelected.emit(foodCategory)">
+            <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+          </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- routerLink="/home/food/{{foodCategory.categoryName}}" -->

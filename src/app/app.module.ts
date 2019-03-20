@@ -37,7 +37,14 @@ import { DayComponent } from './components/day/day.component';
 import { MealComponent } from './components/meal/meal.component';
 import { DietHistoryComponent } from './components/diet-history/diet-history.component';
 import { FoodRecommenderComponent } from './components/food-recommender/food-recommender.component';
-
+import { FoodTableComponent } from './components/food-table/food-table.component';
+import { FoodcategoryComponent } from './components/foodcategory/foodcategory.component';
+import { FoodRdfCreatorComponent } from './components/food-rdf-creator/food-rdf-creator.component';
+import { FoodListComponent } from './components/food-list/food-list.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
 
@@ -65,6 +72,12 @@ const appRoutes: Routes = [
                 path: "suggestions",component:FoodRecommenderComponent
               }
             ]
+        },
+        {
+          path:"food",component:FoodTableComponent, children:
+          [{
+            path:":foodCategoryName", component:FoodRdfCreatorComponent
+          }]
         }
       ]
   }
@@ -86,13 +99,18 @@ const appRoutes: Routes = [
     DayComponent,
     MealComponent,
     DietHistoryComponent,
-    FoodRecommenderComponent
+    FoodRecommenderComponent,
+    FoodTableComponent,
+    FoodcategoryComponent,
+    FoodRdfCreatorComponent,
+    FoodListComponent
 
   ],
   imports: [
     MatSelectModule,
     MatSliderModule,
     MatChipsModule,
+    MatSlideToggleModule,
     MatExpansionModule,
     MatTableModule,
     MatSortModule,
@@ -123,9 +141,12 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     MatRippleModule,
     LayoutModule,
+    MatChipsModule,
+    MatAutocompleteModule,
     RouterModule.forRoot(
       appRoutes
-    )
+    ),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent],
