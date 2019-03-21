@@ -56,7 +56,7 @@ export class DietService {
 
 
   }
-  updateMealHandler(food: Food, mealType: MealType, dayOfWeek: DayOfWeek) {
+  updateMealHandler(food: Food, mealType: string, dayOfWeek: DayOfWeek) {
     var dayMeals = this.diet.dailyFood.get(dayOfWeek);
     var meal = dayMeals.find(m => m.mealType == mealType);
     console.log(meal.allFoodEntries);
@@ -68,23 +68,19 @@ export class DietService {
     this.diet.updateCaloriesPerDay(dayOfWeek, foodToUpdate);
     this.dietBehaviour.next(this.diet)
   }
-  updateMealRequest(food: Food, mealType: MealType, dayOfWeek: DayOfWeek) {
+  updateMealRequest(food: Food, mealType: string, dayOfWeek: DayOfWeek) {
 
     //update in server
 
     var user = JSON.parse(sessionStorage["user"]) as User
 
-    const dietParams = new HttpParams();
-
-
     //by default httclient expects a json
-    return this.httpClient.put<Food>(this.baseUrl.concat("/" + this.diet.name + "/days/" + dayOfWeek.toString() + "/meals/" + mealType.toString()), food,
+    return this.httpClient.put<Food>(this.baseUrl.concat("/" + this.diet.name + "/days/" + dayOfWeek.toString() + "/meals/" + mealType), food,
       {
         observe: 'response',
         params:
         {
-          userId: user.id
-
+          userId: user.id,
         }
       }
     )
@@ -126,6 +122,7 @@ export class DietService {
     foodToUpdate = food;
 
     this.diet.updateCaloriesPerDay(day, foodToUpdate);
+    this.dietBehaviour.next(this.diet)
 
   }
 

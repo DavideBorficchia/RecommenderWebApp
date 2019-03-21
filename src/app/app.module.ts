@@ -45,7 +45,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-
+import {MatDialogModule} from '@angular/material/dialog';
+import { InformationDialogComponent } from './components/information-dialog/information-dialog.component';
 const appRoutes: Routes = [
 
   // { path: "signup", component: SignUpComponent, outlet:"registration" },
@@ -103,12 +104,13 @@ const appRoutes: Routes = [
     FoodTableComponent,
     FoodcategoryComponent,
     FoodRdfCreatorComponent,
-    FoodListComponent
-
+    FoodListComponent,
+    InformationDialogComponent
   ],
   imports: [
     MatSelectModule,
     MatSliderModule,
+    MatDialogModule,
     MatChipsModule,
     MatSlideToggleModule,
     MatExpansionModule,
@@ -123,6 +125,7 @@ const appRoutes: Routes = [
     MatDatepickerModule,
     MatMenuModule,
     MatSidenavModule,
+    MatDialogModule,
     BrowserAnimationsModule,
     FormsModule,
     MatStepperModule,
@@ -149,6 +152,7 @@ const appRoutes: Routes = [
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
+  entryComponents:[InformationDialogComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

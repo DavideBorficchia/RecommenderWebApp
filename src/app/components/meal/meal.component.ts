@@ -4,7 +4,7 @@ import { MealType } from 'src/app/model/mealtypes';
 import { createMeta } from '@angular/platform-browser/src/browser/meta';
 import { FoodType } from 'src/app/model/foodtypes';
 import { Food } from 'src/app/model/food';
-import { MatSelectChange, MatSnackBar, MatSelect } from '@angular/material';
+import { MatSelectChange, MatSnackBar, MatSelect, MatDialog } from '@angular/material';
 import { DietService } from 'src/app/services/diet.service';
 import { DayOfWeek } from 'src/app/model/daysofweek';
 import { from } from 'rxjs/internal/observable/from';
@@ -13,6 +13,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FoodAlreadyAddedException } from 'src/app/model/foodalreadyaddedexception';
 import { Meal } from 'src/app/model/abstarctmeal';
 import { FoodRecommenderService } from 'src/app/services/food-recommender.service';
+import { Diet } from 'src/app/model/diet';
+import { User } from '../register/model/user';
+import { InformationDialogComponent } from '../information-dialog/information-dialog.component';
 
 @Component({
   selector: 'app-meal',
@@ -29,18 +32,42 @@ export class MealComponent implements OnInit {
   isOver: boolean
   foodToDisplayForOptions: Food[] = [];
   foodToDisplay: Food[];
-  foodAdded:Food;
+  diet: Diet;
+  user = JSON.parse(sessionStorage["user"]) as User
 
-  constructor(private dietService: DietService, public snackBar: MatSnackBar, private foodRecommenderService: FoodRecommenderService) { }
+  constructor(private dietService: DietService,
+    public snackBar: MatSnackBar,
+    private foodRecommenderService: FoodRecommenderService,
+    public dialog: MatDialog) { }
 
   addFoodComponent(event: MatSelectChange) {
     var value = event.value;
     var foodToAdd = this.foodToDisplayForOptions.find(food => food.name == value);
-    try {
-      this.dietService.updateMealRequest(foodToAdd, this.mealType, this.day)
-        .subscribe(response => {
 
+    if (this.meal.allFoodEntries.find(food => food.name === foodToAdd.name)) {
+      this.snackBar.open("Food " + foodToAdd.name + " already present!", "OK", { duration: 3000 });
+      return;
+
+    }
+    try {
+      this.dietService.updateMealRequest(foodToAdd, this.mealType.toString(), this.day)
+        .subscribe(response => {
           this.dietService.updateMealHandler(foodToAdd, this.mealType, this.day);
+
+          var caloriesCount = this.diet.caloriesPerDay.get(this.day);
+          console.log(caloriesCount)
+          if (caloriesCount > this.user.basicMetabolicRate) {
+            var user = JSON.parse(sessionStorage["user"]) as User
+            this.dialog.open(InformationDialogComponent,
+              {
+                width: "350px",
+                data: {
+                  bmr: user.basicMetabolicRate, userName: user.userName,
+                  dietName: this.diet.name, foodAdded: foodToAdd,
+                  day: this.day.toString(), calories: caloriesCount
+                }
+              })
+          }
           this.snackBar.open(foodToAdd.name + " has been added!", "OK", {
             duration: 2000
           });
@@ -78,31 +105,35 @@ export class MealComponent implements OnInit {
             duration: 2000
           })
       }
-      
-    },(error:HttpErrorResponse)=>{
-      if(error.status< 500){
-        this.snackBar.open("Error in deleting food "+food.name,"OK",{duration:3000})
+
+    }, (error: HttpErrorResponse) => {
+      if (error.status < 500) {
+        this.snackBar.open("Error in deleting food " + food.name, "OK", { duration: 3000 })
       }
-      else{
-        this.snackBar.open("Error with server, try later","OK",{duration:3000})
+      else {
+        this.snackBar.open("Error with server, try later", "OK", { duration: 3000 })
       }
     })
 
   }
+
   ngOnInit() {
 
 
     this.foodToDisplay = []
 
     this.dietService.getObservableDiet().subscribe(diet => {
-      this.meal = diet.dailyFood.get(this.day).find(m => m.mealType == this.mealType.toString())
-      this.foodToDisplay = this.meal.allFoodEntries;
+      if (diet) {
+        this.diet = diet;
+        this.meal = diet.dailyFood.get(this.day).find(m => m.mealType == this.mealType.toString())
+        this.foodToDisplay = this.meal.allFoodEntries;
+      }
     })
 
     this.foodRecommenderService.getObservableFoodBehavior()
       .subscribe(allFood => {
         if (allFood) {
-          allFood.filter(f=>f.bestEatenAt.includes(this.mealType.toString())).forEach(f => {
+          allFood.filter(f => f.bestEatenAt.includes(this.mealType.toString())).forEach(f => {
             var food = new Food();
             food.name = f.name;
             food.proteins = f.proteins;
@@ -113,12 +144,8 @@ export class MealComponent implements OnInit {
             food.carbs = f.carbs;
             food.salts = f.salts;
             food.type = f.type;
-            food.calories = 100 *f.caloriesPer100
+            food.calories = f.caloriesPer100
             food.id = f.id
-            // var mealTypes =  [];
-            // f.bestEatenAt.forEach(mealName=>mealTypes.push(mealName))
-            // food.mealTypes = mealTypes;
-            console.log(food.salts)
             this.foodToDisplayForOptions.push(food)
           })
         }

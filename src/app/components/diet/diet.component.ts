@@ -164,9 +164,9 @@ export class DietComponent implements OnInit {
     }
 
     // this.diet = new Diet()
-    this.registerService.getUserObservable().subscribe(userIdChange => {
-      console.log("userid has changed "+userIdChange)
-      var userId = userIdChange
+    this.registerService.getUserObservable().subscribe(user => {
+      console.log("userid has changed "+user.id)
+      var userId = user.id
 
       this.dietService.getDiet(userId).subscribe(response => {
 
@@ -191,7 +191,7 @@ export class DietComponent implements OnInit {
               food.salts = value["salts"]
               food.type = value["type"]
               food.id = value["id"]
-              console.log(value)
+              food.calories = food.caloriesPer100*food.quantity/100
               meal.addFood(food);
             })
             meal.mealType = mealValue["mealType"];

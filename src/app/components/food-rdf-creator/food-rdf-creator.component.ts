@@ -39,7 +39,8 @@ export class FoodRdfCreatorComponent implements OnInit {
   showRdf: boolean;
   descriptionIsChanging: boolean;
   isSend = false;
-  constructor(private router: Router, private foodRecommenderService: FoodRecommenderService, public snackBar: MatSnackBar) { }
+  constructor(private router: Router, private foodRecommenderService: FoodRecommenderService,
+    public snackBar: MatSnackBar) { }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     if (event.target.innerWidth > 960) {
@@ -122,15 +123,16 @@ export class FoodRdfCreatorComponent implements OnInit {
           this.foodRdfPicked = food;
           this.deepCopyFoodRDFPicked();
           console.log(response["rdfOutput"])
+          this.snackBar.open("Food " + this.foodRdfPicked.name + " is updated! check your Diary changes", "OK", { duration: 3000 })
 
           // console.log(response)
-        }, (error:HttpErrorResponse) => {
-          this.snackBar.open("Error","OK",{duration:2000})
+        }, (error: HttpErrorResponse) => {
+          this.snackBar.open("Error", "OK", { duration: 2000 })
           this.isUpdating = false;
+          this.snackBar.open("Error: "+error.error, "OK", { duration: 3000 })
+
           this.deepCopyFoodRDFPicked();
         })
-    } else if (!this.isSend) {
-      // this.foodRdfPicked = this.foodRecommenderService.getMostRecentAddedRdfFood(this.foodCategory.categoryName.toString());
     }
 
   }
@@ -352,7 +354,7 @@ export class FoodRdfCreatorComponent implements OnInit {
           }
           this.foodRecommenderService.setNewFoodRdf(this.allFoodRdfs)
           this.deepCopyFoodRDFPicked();
-
+          this.snackBar.open("Food " + this.foodRdfPicked.name + " is created! check your Diary changes", "OK", { duration: 3000 })
 
         }, (error: HttpErrorResponse) => {
           if (error.status >= 500) {

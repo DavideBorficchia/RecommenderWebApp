@@ -48,14 +48,13 @@ export class SidebarComponent implements OnInit {
     }
   }
   updateUserDetails() {
-    console.log(this.currentUser)
     this.isSpinnerShown = true;
     this.service.updateDetails(this.currentUser).subscribe(response => {
       if (response.status == 200) {
         setTimeout(() => {
           this.isSpinnerShown = false;
           this.isUserUpdated = true;
-          sessionStorage["user"] = JSON.stringify(this.currentUser)
+          sessionStorage["user"] = JSON.stringify(response.body)
           this.snackBar.open("Your personal information have been updated", "OK", {
             duration: 3000
           })

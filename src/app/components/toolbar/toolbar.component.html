@@ -1,16 +1,9 @@
 <mat-toolbar color="primary" class="mat-elevation-z8" style="position:fixed; top:0; height: 60px;">
   <!-- <span>Custom Toolbar</span>-->
-  <button mat-icon-button (click)="sidenavToggled.emit(true)">
+  <button mat-icon-button (click)="sidenavToggled.emit(true)" *ngIf="userName!==undefined">
     <mat-icon>menu</mat-icon>
   </button>
-  <button mat-button routerLink="/">
-    <mat-icon>home</mat-icon>
-  </button>
-  <!-- <mat-menu #action_menu>
-    <button mat-menu-item routerLink="/">
-      <mat-icon>home</mat-icon>
-      <span>Home</span>
-    </button></mat-menu> -->
+  
 
   <div *ngIf="!isMobile">
     <a mat-button routerLink="/home/food">Food</a>

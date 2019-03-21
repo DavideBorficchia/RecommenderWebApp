@@ -9,7 +9,7 @@ import { throwError, BehaviorSubject } from 'rxjs';
 export class RegisterService {
 
   baseUrl = "http://localhost:8080/recommender/users/registrations"
-  private userBehavior:BehaviorSubject<String>;
+  private userBehavior:BehaviorSubject<User>;
   constructor(private httpClient: HttpClient) {
 
   }
@@ -39,19 +39,21 @@ export class RegisterService {
         return throwError(error)
       }))
   }
-  public setUserBehavior(userId:String){
-    this.userBehavior = new BehaviorSubject(userId)
-    this.userBehavior.next(userId);
+  public setUserBehavior(user:User){
+    if(!this.userBehavior){
+      this.userBehavior = new BehaviorSubject(user)
+    }
+    this.userBehavior.next(user);
   }
 
   public getUserObservable(){
-    var currentUser = JSON.parse(sessionStorage["user"]) as User
+    var currentUser:User;
+    sessionStorage["user"]?currentUser = JSON.parse(sessionStorage["user"]) as User:null
     if(!this.userBehavior){
-      this.userBehavior = new BehaviorSubject(currentUser.id)
-      this.userBehavior.next(currentUser.id)
-      return this.userBehavior.asObservable();
+      this.userBehavior = new BehaviorSubject(currentUser)
+      return this.userBehavior;
 
     }
-    return this.userBehavior.asObservable()
+    return this.userBehavior
   }
 }

@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Hi {{data.userName}}</h1>
+<div mat-dialog-content>
+  <p>Adding food {{data.foodAdded.name}} to your diet {{data.dietName}} will increase your total calories for {{data.day}} to {{data.calories}},
+    breaking your Basic Metabolic Rate (BMR) of {{data.bmr}}.
+    It would be healthier to remove some high caloric food or increase physical activity. 
+  </p>
+<div mat-dialog-actions>
+  <button mat-button cdkFocusInitial (click)="onGotItClicked()">Got it!</button>
+</div>

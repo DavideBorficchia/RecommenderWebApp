@@ -13,6 +13,7 @@ export class User {
     weight: number;
     height: number;
     olderPhysicalActivities: Goal[];
+    basicMetabolicRate:number;
     // constructor(id: string, userName: string, email: string, password: string) {
     //     this.id = id;
     //     this.userName = userName;

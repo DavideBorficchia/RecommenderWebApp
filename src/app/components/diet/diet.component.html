@@ -1,4 +1,4 @@
-<div fxLayout="row " fxLayoutAlign="start start" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center" 
+<div fxLayout="row " fxLayoutAlign="start start" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center"
   style="overflow:hidden; min-height: 500px; background-color: white">
 
 
@@ -10,154 +10,168 @@
 
   </div>
 
-  <app-diet-history *ngIf="isSmall && !isDietSelected && !isSuggestionsSelected" ></app-diet-history>
+  <app-diet-history *ngIf="isSmall && !isDietSelected && !isSuggestionsSelected"></app-diet-history>
 
-  <app-food-recommender *ngIf="isSmall && !isDietSelected && !isHistorySelected" ></app-food-recommender>
+  <app-food-recommender *ngIf="isSmall && !isDietSelected && !isHistorySelected"></app-food-recommender>
 
-  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutAlign.lt-lg="start center" id="diet-component-container" *ngIf="isSmall && !isHistorySelected && !isSuggestionsSelected">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutAlign.lt-lg="start center" id="diet-component-container"
+    *ngIf="isSmall && !isHistorySelected && !isSuggestionsSelected">
 
-    
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.lt-lg="space-around center" fxLayoutAlign="start start" id="titlecontainer">
-  
-        <div fxFlex="80%" fxLayout="row">
-          <h2 style="font-weight: 300; " *ngIf="isReady">Current Diet: </h2>
-          <div fxLayout.xs="row" fxLayoutAlign="start center">
-            <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isReady">Loading diet...</h2>
-  
-            <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isNameChanging && isReady && diet">{{diet.name}} </h2>
-  
-            <mat-form-field *ngIf="isNameChanging" class="responsive-form">
-              <input matInput #height placeholder="Change your diet name" [(ngModel)]="diet.name">
-            </mat-form-field>
-  
-            <mat-icon matSuffix style="margin-left: 30px" (click)="isNameChanging = true" *ngIf="!isNameChanging && isReady">mode_edit</mat-icon>
-            <mat-icon matSuffix style="margin-left: 30px" (click)="createNewDiet()" *ngIf="isNameChanging && isReady">check_circle</mat-icon>
-          </div>
+
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.lt-lg="space-around center" fxLayoutAlign="start start"
+      id="titlecontainer">
+
+      <div fxFlex="80%" fxLayout="row">
+        <h2 style="font-weight: 300; " *ngIf="isReady">Current Diet: </h2>
+        <div fxLayout.xs="row" fxLayoutAlign="start center">
+          <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isReady">Loading diet...</h2>
+
+          <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isNameChanging && isReady && diet">{{diet.name}}
+          </h2>
+
+          <mat-form-field *ngIf="isNameChanging" class="responsive-form">
+            <input matInput #height placeholder="Change your diet name" [(ngModel)]="diet.name">
+          </mat-form-field>
+
+          <mat-icon matSuffix style="margin-left: 30px" (click)="isNameChanging = true"
+            *ngIf="!isNameChanging && isReady">mode_edit</mat-icon>
+          <mat-icon matSuffix style="margin-left: 30px" (click)="createNewDiet()" *ngIf="isNameChanging && isReady">
+            check_circle</mat-icon>
         </div>
-  
-  
-  
       </div>
-      <div *ngIf="isSpinnerShown" style="margin-top: 10px; margin-left: 50px">
-        <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
-      </div>
-  
-  
-      <mat-horizontal-stepper labelPosition="bottom" #stepper class="responsive-stepper" style="margin-top: 20px; max-width: inherit !important;"
-        *ngIf="!isVerySmall && isDietEditable">
-        <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
-          <ng-template matStepLabel>{{day.substring(0,3)}}</ng-template>
-          <div style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; "
-            fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.xs="center center">
-            <h3 style="font-weight: 300; margin-left: 30px; margin-bottom: 20px;">{{day}}</h3>
-          </div>
-          <app-day [day]="day"></app-day>
-  
-        </mat-step>
-  
-      </mat-horizontal-stepper>
-      <mat-horizontal-stepper labelPosition="bottom" class="responsive-stepper" #stepper style="margin-top: 20px; max-width: inherit !important;"
-        *ngIf="isVerySmall && isDietEditable">
-        <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
-          <ng-template matStepLabel *ngIf="day.day2">{{day.day1.substring(0,3)}} - {{day.day2.substring(0,3)}}</ng-template>
-          <ng-template matStepLabel *ngIf="day.day2==null">{{day.day1.substring(0,3)}}</ng-template>
-  
-          <div style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; margin-top: 20px;"
-            fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.lt-md="center center">
-            <h3 style="font-weight: 300; margin-bottom: 20px;">{{day.day1}}</h3>
-          </div>
-          <app-day [day]="day.day1"></app-day>
-          <div style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; margin-top: 20px;"
-            fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.lt-md="center center" *ngIf="day.day2!=null">
-            <h3 style="font-weight: 300;  margin-bottom: 20px;">{{day.day2}}</h3>
-          </div>
-          <app-day *ngIf="day.day2!=null" [day]="day.day2"></app-day>
-        </mat-step>
-  
-      </mat-horizontal-stepper>
+
+
+
+    </div>
+    <div *ngIf="isSpinnerShown" style="margin-top: 10px; margin-left: 50px">
+      <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
     </div>
 
 
-
-
-
-
-
-
-
-
-
-
-  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutAlign.lt-lg="start center" id="diet-component-container" *ngIf="!isSmall">
-
-    
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.lt-lg="space-around center" fxLayoutAlign="start start" id="titlecontainer">
-  
-        <div fxFlex="80%" fxLayout="row">
-          <h2 style="font-weight: 300; " *ngIf="isReady">Current Diet: </h2>
-          <div fxLayout.xs="row" fxLayoutAlign="start center">
-            <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isReady">Loading diet...</h2>
-  
-            <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isNameChanging && isReady">{{diet.name}} </h2>
-  
-            <mat-form-field *ngIf="isNameChanging" class="responsive-form">
-              <input matInput #height placeholder="Change your diet name" [(ngModel)]="diet.name">
-            </mat-form-field>
-  
-            <mat-icon matSuffix style="margin-left: 30px" (click)="isNameChanging = true" *ngIf="!isNameChanging && isReady">mode_edit</mat-icon>
-            <mat-icon matSuffix style="margin-left: 30px" (click)="createNewDiet()" *ngIf="isNameChanging && isReady">check_circle</mat-icon>
-          </div>
+    <mat-horizontal-stepper labelPosition="bottom" #stepper class="responsive-stepper"
+      style="margin-top: 20px; max-width: inherit !important;" *ngIf="!isVerySmall && isDietEditable">
+      <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
+        <ng-template matStepLabel>{{day.substring(0,3)}}</ng-template>
+        <div
+          style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; "
+          fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.xs="center center">
+          <h3 style="font-weight: 300; margin-left: 30px; margin-bottom: 20px;">{{day}}</h3>
         </div>
-  
-  
-  
-      </div>
-      <div *ngIf="isSpinnerShown" style="margin-top: 10px; margin-left: 50px">
-        <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
-      </div>
-  
-  
-      <mat-horizontal-stepper labelPosition="bottom" #stepper class="responsive-stepper" style="margin-top: 20px; max-width: inherit !important;"
-        *ngIf="!isVerySmall && isDietEditable">
-        <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
-          <ng-template matStepLabel>{{day.substring(0,3)}}</ng-template>
-          <div style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; "
-            fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.xs="center center">
-            <h3 style="font-weight: 300; margin-left: 30px; margin-bottom: 20px;">{{day}}</h3>
-          </div>
-          <app-day [day]="day"></app-day>
-  
-        </mat-step>
-  
-      </mat-horizontal-stepper>
-      <mat-horizontal-stepper labelPosition="bottom" class="responsive-stepper" #stepper style="margin-top: 20px; max-width: inherit !important;"
-        *ngIf="isVerySmall && isDietEditable">
-        <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
-          <ng-template matStepLabel *ngIf="day.day2">{{day.day1.substring(0,3)}} - {{day.day2.substring(0,3)}}</ng-template>
-          <ng-template matStepLabel *ngIf="day.day2==null">{{day.day1.substring(0,3)}}</ng-template>
-  
-          <div style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; margin-top: 20px;"
-            fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.lt-md="center center">
-            <h3 style="font-weight: 300; margin-bottom: 20px;">{{day.day1}}</h3>
-          </div>
-          <app-day [day]="day.day1"></app-day>
-          <div style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; margin-top: 20px;"
-            fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.lt-md="center center" *ngIf="day.day2!=null">
-            <h3 style="font-weight: 300;  margin-bottom: 20px;">{{day.day2}}</h3>
-          </div>
-          <app-day *ngIf="day.day2!=null" [day]="day.day2"></app-day>
-        </mat-step>
-  
-      </mat-horizontal-stepper>
-    </div>
+        <app-day [day]="day"></app-day>
 
+      </mat-step>
 
-    <div fxLayout="column" fxLayoutAlign="start end" id="diet-component-container" fxHide.lt-lg>
+    </mat-horizontal-stepper>
+    <mat-horizontal-stepper labelPosition="bottom" class="responsive-stepper" #stepper
+      style="margin-top: 20px; max-width: inherit !important;" *ngIf="isVerySmall && isDietEditable">
+      <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
+        <ng-template matStepLabel *ngIf="day.day2">{{day.day1.substring(0,3)}} - {{day.day2.substring(0,3)}}
+        </ng-template>
+        <ng-template matStepLabel *ngIf="day.day2==null">{{day.day1.substring(0,3)}}</ng-template>
 
-        <app-food-recommender ></app-food-recommender>
-    
-    
-      </div>
+        <div
+          style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; margin-top: 20px;"
+          fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.lt-md="center center">
+          <h3 style="font-weight: 300; margin-bottom: 20px;">{{day.day1}}</h3>
+        </div>
+        <app-day [day]="day.day1"></app-day>
+        <div
+          style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; margin-top: 20px;"
+          fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.lt-md="center center" *ngIf="day.day2!=null">
+          <h3 style="font-weight: 300;  margin-bottom: 20px;">{{day.day2}}</h3>
+        </div>
+        <app-day *ngIf="day.day2!=null" [day]="day.day2"></app-day>
+      </mat-step>
 
+    </mat-horizontal-stepper>
   </div>
-  
+
+
+
+
+
+
+
+
+
+
+
+
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutAlign.lt-lg="start center" id="diet-component-container"
+    *ngIf="!isSmall">
+
+
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.lt-lg="space-around center" fxLayoutAlign="start start"
+      id="titlecontainer">
+
+      <div fxFlex="80%" fxLayout="row">
+        <h2 style="font-weight: 300; " *ngIf="isReady">Current Diet: </h2>
+        <div fxLayout.xs="row" fxLayoutAlign="start center">
+          <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isReady">Loading diet...</h2>
+
+          <h2 style="font-weight: 300; margin-left: 10px;" *ngIf="!isNameChanging && isReady">{{diet.name}} </h2>
+
+          <mat-form-field *ngIf="isNameChanging" class="responsive-form">
+            <input matInput #height placeholder="Change your diet name" [(ngModel)]="diet.name">
+          </mat-form-field>
+
+          <mat-icon matSuffix style="margin-left: 30px" (click)="isNameChanging = true"
+            *ngIf="!isNameChanging && isReady">mode_edit</mat-icon>
+          <mat-icon matSuffix style="margin-left: 30px" (click)="createNewDiet()" *ngIf="isNameChanging && isReady">
+            check_circle</mat-icon>
+        </div>
+      </div>
+
+
+
+    </div>
+    <div *ngIf="isSpinnerShown" style="margin-top: 10px; margin-left: 50px">
+      <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
+    </div>
+
+
+    <mat-horizontal-stepper labelPosition="bottom" #stepper class="responsive-stepper"
+      style="margin-top: 20px; max-width: inherit !important;" *ngIf="!isVerySmall && isDietEditable">
+      <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
+        <ng-template matStepLabel>{{day.substring(0,3)}}</ng-template>
+        <div
+          style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; "
+          fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.xs="center center">
+          <h3 style="font-weight: 300; margin-left: 30px; margin-bottom: 20px;">{{day}}</h3>
+        </div>
+        <app-day [day]="day"></app-day>
+
+      </mat-step>
+
+    </mat-horizontal-stepper>
+    <mat-horizontal-stepper labelPosition="bottom" class="responsive-stepper" #stepper
+      style="margin-top: 20px; max-width: inherit !important;" *ngIf="isVerySmall && isDietEditable">
+      <mat-step *ngFor="let day of daysOfTheWeek() " [stepControl]="'day'">
+        <ng-template matStepLabel *ngIf="day.day2">{{day.day1.substring(0,3)}} - {{day.day2.substring(0,3)}}
+        </ng-template>
+        <ng-template matStepLabel *ngIf="day.day2==null">{{day.day1.substring(0,3)}}</ng-template>
+
+        <div
+          style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; margin-top: 20px;"
+          fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.lt-md="center center">
+          <h3 style="font-weight: 300; margin-bottom: 20px;">{{day.day1}}</h3>
+        </div>
+        <app-day [day]="day.day1"></app-day>
+        <div
+          style="background-color: #3f51b5; color:white; border-top-left-radius: 5px; border-top-right-radius: 5px; min-height: 50px; margin-top: 20px;"
+          fxLayout="column" fxLayoutAlign="center start" fxLayoutAlign.lt-md="center center" *ngIf="day.day2!=null">
+          <h3 style="font-weight: 300;  margin-bottom: 20px;">{{day.day2}}</h3>
+        </div>
+        <app-day *ngIf="day.day2!=null" [day]="day.day2"></app-day>
+      </mat-step>
+
+    </mat-horizontal-stepper>
+  </div>
+
+
+
+  <app-food-recommender></app-food-recommender>
+
+
+
+</div>

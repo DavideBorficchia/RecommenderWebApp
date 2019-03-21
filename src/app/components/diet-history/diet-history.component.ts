@@ -103,8 +103,8 @@ export class DietHistoryComponent implements OnInit {
 
   ngOnInit() {
 
-    this.registerService.getUserObservable().subscribe(userIdChange => {
-      this.dietService.getDietHistoryRecent(userIdChange).subscribe(response => {
+    this.registerService.getUserObservable().subscribe(user => {
+      this.dietService.getDietHistoryRecent(user.id).subscribe(response => {
 
         if (response.ok) {
           var dietHistoryFromServer: DietHistory[] = []

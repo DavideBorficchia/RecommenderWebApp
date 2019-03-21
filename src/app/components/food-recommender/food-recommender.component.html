@@ -1,7 +1,31 @@
-<div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="50px  " style="margin-top:20px">
-  <div>
+<div fxLayout="column" fxLayoutAlign="start center" fxHide.md="true" style="min-width: 350px">
+
+  <div fxLayout="column" fxLayoutAlign="start center" style="margin-top:20px;">
     <h2 style="font-weight: 300; margin-bottom: 5px">Your Food suggestions!</h2>
     <h4 style="font-weight: 300">Based on your profile</h4>
-  </div>
 
+  </div>
+  <h3 style="font-weight: 300" *ngIf="foodAdded">Food working best with {{foodAdded.name}}</h3>
+  <mat-list style="margin-top: 60px; min-width:100%; max-width:400px;"
+    id="food_list" *ngIf="currentFoodSuggestions">
+    <mat-list-item *ngFor="let foodRdf of currentFoodSuggestions;last as last"
+       [matMenuTriggerFor]="dayMenu">
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+        <img matListAvatar [src]="foodRdf.imageUrl">
+        <h3 style="font-weight: 300"> {{foodRdf.name}} </h3>
+      </div>
+
+      <mat-menu #dayMenu="matMenu">
+        <button mat-menu-item *ngFor="let day of days" 
+         [matMenuTriggerFor]="mealMenu" (click)="dayPicked = day">{{day}}</button>
+      </mat-menu>
+      <mat-menu #mealMenu="matMenu">
+        <button mat-menu-item *ngFor="let meal of foodRdf.bestEatenAt" (click)="onMealButtonClicked(meal,foodRdf)">
+         {{meal}}
+        </button>
+      </mat-menu>
+      <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+      
+    </mat-list-item>
+  </mat-list>
 </div>

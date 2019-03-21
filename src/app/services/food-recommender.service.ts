@@ -76,7 +76,6 @@ export class FoodRecommenderService {
       })
       .subscribe(response => {
         this.allFoodRdf = []
-        console.log(response)
         Object.keys(response).forEach(key => {
           var value = response[key]
           var food = new FoodRdf()
@@ -99,7 +98,6 @@ export class FoodRecommenderService {
           this.allFoodRdf.push(food)
         })
         this.setNewFoodRdf(this.allFoodRdf)
-        console.log(this.allFoodRdf)
       }, (error: HttpErrorResponse) => {
         console.log(error)
 
@@ -259,7 +257,12 @@ export class FoodRecommenderService {
 
   }
   getRecommendationsGoodWiths(food: Food) {
-    return this.httpClient.get<FoodRdf>(this.baseUrl + "/" + food.name + "/recommendations/goodwiths")
+    var user = JSON.parse(sessionStorage["user"]) as User
+    return this.httpClient.get<FoodRdf>(this.baseUrl + "/" + food.id + "/recommendations/goodwiths",{
+      params:{
+        userId:user.id
+      }
+    })
 
   }
 

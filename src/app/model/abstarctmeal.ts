@@ -10,13 +10,22 @@ export class Meal {
         var foodIndex = this.allFoodEntries.findIndex(f => f.name == food.name)
         if (foodIndex < 0) {
             this.allFoodEntries.push(food)
+            return true
+        }
+        else {
+            return false;
         }
 
 
     }
     removeFood(food: Food) {
         var foodIndexToRemove = this.allFoodEntries.findIndex(f => f.name == food.name);
-        this.allFoodEntries.splice(foodIndexToRemove, 1)
+        if (foodIndexToRemove >= 0) {
+            this.allFoodEntries.splice(foodIndexToRemove, 1)
+            return true;
+        } else {
+            return false;
+        }
 
     }
     constructor() {
