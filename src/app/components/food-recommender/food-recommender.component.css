@@ -1,0 +1,16 @@
+.reco-container {
+    min-width: 350px;
+}
+
+.reco-accordion {
+    max-width: 370px;
+}
+
+@media screen and(max-width:768px) {
+    .reco-container {
+        min-width: 100% !important;
+    }
+    .reco-accordion {
+        max-width: 600px !important;
+    }
+}

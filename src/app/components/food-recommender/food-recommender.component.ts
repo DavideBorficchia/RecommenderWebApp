@@ -9,6 +9,7 @@ import { DayOfWeek } from 'src/app/model/daysofweek';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../register/model/user';
 import { InformationDialogComponent } from '../information-dialog/information-dialog.component';
+import { RegisterService } from 'src/app/services/register.service';
 
 @Component({
   selector: 'app-food-recommender',
@@ -24,8 +25,13 @@ export class FoodRecommenderComponent implements OnInit {
   days = ["Monday", "Tuesday", "Wednesday", "Friday", "Saturday", "Sunday"]
   diet: Diet;
   dayPicked: string;
-  hide: boolean
+  hide: boolean;
+  meatSuggestion: boolean;
+  vegsSuggestion: boolean;
+  carbsSuggestion: boolean;
+  user: User;
   constructor(private foodRecommender: FoodRecommenderService, private dietService: DietService,
+    private registrationService: RegisterService,
     public snackBar: MatSnackBar,
     public dialog: MatDialog) { }
 
@@ -41,10 +47,16 @@ export class FoodRecommenderComponent implements OnInit {
     else {
       this.hide = false;
     }
-    console.log(this.hide)
+    this.registrationService.getUserObservable()
+      .subscribe(user => {
+        this.user = user;
+      })
     this.dietService.getObservableDiet().subscribe(diet => {
       if (diet) {
         this.diet = diet;
+        this.computeCarbs();
+        this.computeProteins();
+        this.computeVegetables();
       }
     })
     this.foodRecommender.getAddedFoodObservable()
@@ -56,7 +68,6 @@ export class FoodRecommenderComponent implements OnInit {
               this.currentFoodSuggestions = []
               Object.keys(response).forEach(key => {
                 var value = response[key]
-                console.log(value)
                 var food = new FoodRdf()
                 food.type = value["type"]
                 food.name = value["name"]
@@ -154,8 +165,117 @@ export class FoodRecommenderComponent implements OnInit {
     }
 
   }
-  openDialog() {
+  onAskRecomendationClick() {
+    this.foodAdded = null;
+    this.currentFoodSuggestions = []
+    this.vegsSuggestion = true;
+    this.meatSuggestion = false;
+    this.vegsSuggestion = false;
+    return this.foodRecommender.getGeneralFoodRecommendationFruitsAndVegetables(this.diet.name.toString())
+      .subscribe(response => {
+        if (response) {
+          Object.keys(response).forEach(key => {
+            var value = response[key]
+            var food = new FoodRdf()
+            food.type = value["type"]
+            food.bestEatenAt = value["bestEatenAt"]
+            food.name = value["name"]
+            food.description = value["description"]
+            food.fats = value["fats"]
+            food.proteins = value["proteins"]
+            food.salts = value["salts"]
+            food.rdfOutput = value["rdfOutput"]
+            food.imageUrl = value["imageUrl"]
+            food.vitamins = value["vitamins"]
+            food.goodSinergyWith = value["goodSinergyWith"]
+            food.goodWith = value["goodWith"]
+            food.caloriesPer100 = value["caloriesPer100"]
+            food.carbs = value["carbs"]
+            food.timeStamp = value["timeStamp"]
+            this.currentFoodSuggestions.push(food)
+          })
+        }
 
+      })
+
+  }
+  onAskMeatAndFishRecommendation() {
+    this.foodAdded = null;
+    this.currentFoodSuggestions = [];
+    this.vegsSuggestion = false;
+    this.meatSuggestion = true;
+    this.vegsSuggestion = false;
+
+    var average = this.computeProteins();
+    if (average > this.computeProteinRightAmount()) {
+      this.snackBar.open("Try to remove high protein based food to get suggestions!", "OK", { duration: 4000 })
+    }
+    else {
+      return this.foodRecommender.getGeneralFoodRecommendationMeatAndFish(this.diet.name.toString(), this.computeProteinRightAmount())
+        .subscribe(response => {
+          if (response) {
+            Object.keys(response).forEach(key => {
+              var value = response[key]
+              var food = new FoodRdf()
+              food.type = value["type"]
+              food.bestEatenAt = value["bestEatenAt"]
+              food.name = value["name"]
+              food.description = value["description"]
+              food.fats = value["fats"]
+              food.proteins = value["proteins"]
+              food.salts = value["salts"]
+              food.rdfOutput = value["rdfOutput"]
+              food.imageUrl = value["imageUrl"]
+              food.vitamins = value["vitamins"]
+              food.goodSinergyWith = value["goodSinergyWith"]
+              food.goodWith = value["goodWith"]
+              food.caloriesPer100 = value["caloriesPer100"]
+              food.carbs = value["carbs"]
+              food.timeStamp = value["timeStamp"]
+              this.currentFoodSuggestions.push(food)
+            })
+          }
+
+        })
+    }
+
+
+  }
+  computeProteinRightAmount() {
+    return Math.round(this.user.weight * 0.83*7)
+  }
+  computeProteins() {
+    var totalAmount = 0;
+    this.diet.dailyFood.forEach((meals, day) => {
+      meals.forEach(meal => meal.allFoodEntries.forEach(food => {
+        if (food.type === "Meat" || food.type === "Fish") {
+          totalAmount += food.proteins
+        }
+      }))
+    })
+    return Math.round(totalAmount / 7);
+  }
+  computeVegetables() {
+    var totalAmount = 0;
+    this.diet.dailyFood.forEach((meals, day) => {
+      meals.forEach(meal => meal.allFoodEntries.forEach(food => {
+        if (food.type === "Fruits" || food.type === "Vegetabls") {
+          totalAmount += food.quantity
+        }
+      }))
+    })
+    return totalAmount;
+  }
+  computeCarbs() {
+    var totalAmount = 0;
+    this.diet.dailyFood.forEach((meals, day) => {
+      meals.forEach(meal => meal.allFoodEntries.forEach(food => {
+        if (food.type === "Pasta" || food.type === "Bakery and Cereal") {
+          totalAmount += food.proteins
+        }
+      }))
+    })
+    return totalAmount;
   }
 }
 

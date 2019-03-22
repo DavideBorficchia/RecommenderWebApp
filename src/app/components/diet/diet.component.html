@@ -1,4 +1,4 @@
-<div fxLayout="row " fxLayoutAlign="start start" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center"
+<div fxLayout="row " fxLayoutAlign="space-evenly start" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center"
   style="overflow:hidden; min-height: 500px; background-color: white">
 
 
@@ -170,7 +170,7 @@
 
 
 
-  <app-food-recommender></app-food-recommender>
+  <app-food-recommender *ngIf="!isSmall"></app-food-recommender>
 
 
 

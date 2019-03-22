@@ -12,7 +12,12 @@ export class Food {
   caloriesPer100: number;
   salts: number;
   vitamins: number;
-  id: any;
+  vitaminsPer100:number;
+  saltsPer100:number;
+  fatsPer100:number;
+  carbsPer100:number;
+  proteinsPer100:number;
+  id: string;
 
 
 

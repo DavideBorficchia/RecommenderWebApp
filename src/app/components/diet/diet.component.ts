@@ -191,6 +191,11 @@ export class DietComponent implements OnInit {
               food.salts = value["salts"]
               food.type = value["type"]
               food.id = value["id"]
+              food.saltsPer100 = value["saltsPer100"]
+              food.vitaminsPer100 = value["vitaminsPer100"]
+              food.fatsPer100 = value["fatsPer100"]
+              food.proteinsPer100 = value["proteinsPer100"]
+              food.carbsPer100 = value["carbsPer100"]
               food.calories = food.caloriesPer100*food.quantity/100
               meal.addFood(food);
             })

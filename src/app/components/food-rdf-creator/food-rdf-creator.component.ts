@@ -129,7 +129,7 @@ export class FoodRdfCreatorComponent implements OnInit {
         }, (error: HttpErrorResponse) => {
           this.snackBar.open("Error", "OK", { duration: 2000 })
           this.isUpdating = false;
-          this.snackBar.open("Error: "+error.error, "OK", { duration: 3000 })
+          this.snackBar.open("Error: " + error.error, "OK", { duration: 3000 })
 
           this.deepCopyFoodRDFPicked();
         })
@@ -205,7 +205,7 @@ export class FoodRdfCreatorComponent implements OnInit {
         map(value => this._filterMealTypes(value))
       )
     })
-
+    this.foodListSameHeight();
 
 
 
@@ -264,8 +264,7 @@ export class FoodRdfCreatorComponent implements OnInit {
     else {
       this.showRdf = false
     }
-    console.log(event.checked + " " + this.showRdf)
-
+    this.foodListSameHeight();
   }
   onChipRemoved(foodName: string) {
     const index = this.foodRdfPicked.goodWith.indexOf(foodName);
@@ -370,7 +369,6 @@ export class FoodRdfCreatorComponent implements OnInit {
 
   }
   onItemClicked(foodRdf: FoodRdf) {
-    console.log(this.isUpdating)
     if (this.isUpdating) {
       this.snackBar.open("Updating food " + this.foodRdfPicked.name + ", wait a bit!", "OK", { duration: 3000 })
     }
@@ -381,7 +379,7 @@ export class FoodRdfCreatorComponent implements OnInit {
       this.descriptionIsChanging = false;
       this.deepCopyFoodRDFPicked()
     }
-
+    this.foodListSameHeight()
 
   }
 

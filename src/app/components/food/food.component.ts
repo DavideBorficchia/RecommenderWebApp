@@ -36,11 +36,13 @@ export class FoodComponent implements OnInit {
   onQuantityChange(event) {
 
     this.food.quantity = event
-    console.log("updating food quantity " + this.food.quantity)
-    this.food.calories = (this.food.caloriesPer100 * this.food.quantity) / 100
-
+    this.food.calories = Number.parseFloat(((this.food.caloriesPer100 * this.food.quantity) / 100).toFixed(2))
+    this.food.vitamins = Number.parseFloat(((this.food.vitaminsPer100 * this.food.quantity) / 100).toFixed(2))
+    this.food.fats = Number.parseFloat(((this.food.fatsPer100 * this.food.quantity) / 100).toFixed(2))
+    this.food.carbs = Number.parseFloat(((this.food.carbsPer100 * this.food.quantity) / 100).toFixed(2))
+    this.food.proteins = Number.parseFloat(((this.food.proteinsPer100 * this.food.quantity) / 100).toFixed(2))
+    this.food.salts = Number.parseFloat(((this.food.saltsPer100 * this.food.quantity) / 100).toFixed(2))
     clearTimeout(this.timeout)
-    console.log(this.food.calories)
     this.timeout = setTimeout(() => {
       this.dietService.updateFoodAndQuantityAndCaloriesRequest(this.food, this.day, this.mealType).subscribe(response => {
         if (response.ok) {

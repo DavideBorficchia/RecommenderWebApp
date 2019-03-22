@@ -9,7 +9,7 @@ export class Meal {
     addFood(food: Food) {
         var foodIndex = this.allFoodEntries.findIndex(f => f.name == food.name)
         if (foodIndex < 0) {
-            this.allFoodEntries.push(food)
+            this.allFoodEntries.unshift(food)
             return true
         }
         else {

@@ -43,7 +43,7 @@ export class MealComponent implements OnInit {
   addFoodComponent(event: MatSelectChange) {
     var value = event.value;
     var foodToAdd = this.foodToDisplayForOptions.find(food => food.name == value);
-
+    console.log(foodToAdd)
     if (this.meal.allFoodEntries.find(food => food.name === foodToAdd.name)) {
       this.snackBar.open("Food " + foodToAdd.name + " already present!", "OK", { duration: 3000 });
       return;
@@ -136,15 +136,20 @@ export class MealComponent implements OnInit {
           allFood.filter(f => f.bestEatenAt.includes(this.mealType.toString())).forEach(f => {
             var food = new Food();
             food.name = f.name;
-            food.proteins = f.proteins;
+            food.proteinsPer100 = f.proteins;
             food.quantity = 100;
             food.caloriesPer100 = f.caloriesPer100;
-            food.vitamins = f.vitamins;
-            food.fats = f.fats;
-            food.carbs = f.carbs;
-            food.salts = f.salts;
+            food.vitaminsPer100 = f.vitamins;
+            food.fatsPer100 = f.fats;
+            food.carbsPer100 = f.carbs;
+            food.saltsPer100 = f.salts;
             food.type = f.type;
             food.calories = f.caloriesPer100
+            food.salts = food.saltsPer100
+            food.fats = food.fatsPer100
+            food.vitamins = food.vitaminsPer100
+            food.proteins = food.proteinsPer100
+            food.carbs = food.carbsPer100
             food.id = f.id
             this.foodToDisplayForOptions.push(food)
           })

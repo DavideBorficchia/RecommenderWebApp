@@ -1,31 +1,89 @@
-<div fxLayout="column" fxLayoutAlign="start center" fxHide.md="true" style="min-width: 350px">
+<div fxLayout="column" fxLayoutAlign="start center" fxHide.md="true"
+  class="reco-container">
 
   <div fxLayout="column" fxLayoutAlign="start center" style="margin-top:20px;">
     <h2 style="font-weight: 300; margin-bottom: 5px">Your Food suggestions!</h2>
     <h4 style="font-weight: 300">Based on your profile</h4>
 
   </div>
+
+  <mat-accordion class="reco-accordion">
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Fruits and Vegetables
+        </mat-panel-title>
+        <mat-panel-description>
+          At least 600 g per day
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <img src="./assets/icon_for_refresh.svg" style="max-width: 200px">
+        <button mat-fab (click)="onAskRecomendationClick()" style="margin-top: 20px">
+          <mat-icon aria-label="click to load random suggestions">refresh</mat-icon>
+        </button>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Meat
+        </mat-panel-title>
+        <mat-panel-description>
+          Your best amount of proteins is {{computeProteinRightAmount()}} g per day
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <img src="./assets/icon_for_refresh.svg" style="max-width: 200px">
+        <button mat-fab (click)="onAskMeatAndFishRecommendation()" style="margin-top: 20px">
+          <mat-icon aria-label="click to load random suggestions">refresh</mat-icon>
+        </button>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Carbohydrates
+        </mat-panel-title>
+        <mat-panel-description>
+          No more than 80g of pasta/bread per day!
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <img src="./assets/icon_for_refresh.svg" style="max-width: 200px">
+        <button mat-fab (click)="onAskRecomendationClick()" style="margin-top: 20px">
+          <mat-icon aria-label="click to load random suggestions">refresh</mat-icon>
+        </button>
+      </div>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+
+
   <h3 style="font-weight: 300" *ngIf="foodAdded">Food working best with {{foodAdded.name}}</h3>
-  <mat-list style="margin-top: 60px; min-width:100%; max-width:400px;"
-    id="food_list" *ngIf="currentFoodSuggestions">
-    <mat-list-item *ngFor="let foodRdf of currentFoodSuggestions;last as last"
-       [matMenuTriggerFor]="dayMenu">
+  <h3 style="font-weight: 300" *ngIf="vegsSuggestion">Your current amount of vegetables per day is {{computeVegetables()}} g</h3>
+  <h3 style="font-weight: 300" *ngIf="meatSuggestion">Your weekly amount of proteins is {{computeProteinRightAmount()}} g</h3>
+  <h3 style="font-weight: 300" *ngIf="carbsSuggestion">Your current average amount of carbs per day is {{computeCarbs()}} g</h3>
+  <mat-list style="margin-top: 20px; min-width:100%; max-width:400px;" id="food_list" *ngIf="currentFoodSuggestions">
+    <mat-list-item *ngFor="let foodRdf of currentFoodSuggestions;last as last" [matMenuTriggerFor]="dayMenu">
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
         <img matListAvatar [src]="foodRdf.imageUrl">
         <h3 style="font-weight: 300"> {{foodRdf.name}} </h3>
       </div>
 
       <mat-menu #dayMenu="matMenu">
-        <button mat-menu-item *ngFor="let day of days" 
-         [matMenuTriggerFor]="mealMenu" (click)="dayPicked = day">{{day}}</button>
+        <button mat-menu-item *ngFor="let day of days" [matMenuTriggerFor]="mealMenu"
+          (click)="dayPicked = day">{{day}}</button>
       </mat-menu>
       <mat-menu #mealMenu="matMenu">
         <button mat-menu-item *ngFor="let meal of foodRdf.bestEatenAt" (click)="onMealButtonClicked(meal,foodRdf)">
-         {{meal}}
+          {{meal}}
         </button>
       </mat-menu>
       <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-      
+
     </mat-list-item>
   </mat-list>
+
+
 </div>

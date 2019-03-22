@@ -64,7 +64,7 @@ export class FoodRecommenderService {
     // ]
 
   }
-  getAllFoodFromServer(){
+  getAllFoodFromServer() {
     var user = JSON.parse(sessionStorage["user"]) as User
     this.httpClient.get<FoodRdf[]>(this.baseUrl + "/all",
       {
@@ -107,7 +107,7 @@ export class FoodRecommenderService {
   updateFood(foodRdfPicked: FoodRdf, foodId: string) {
     var user = JSON.parse(sessionStorage["user"]) as User
 
-    return this.httpClient.put<FoodRdf>(this.baseUrl + "/properties/updates", foodRdfPicked, {
+    return this.httpClient.put<FoodRdf[]>(this.baseUrl + "/properties/updates", foodRdfPicked, {
       params: {
         foodId: foodId,
         userId: user.id
@@ -258,12 +258,43 @@ export class FoodRecommenderService {
   }
   getRecommendationsGoodWiths(food: Food) {
     var user = JSON.parse(sessionStorage["user"]) as User
-    return this.httpClient.get<FoodRdf>(this.baseUrl + "/" + food.id + "/recommendations/goodwiths",{
-      params:{
-        userId:user.id
+    return this.httpClient.get<FoodRdf>(this.baseUrl + "/" + food.id + "/recommendations/goodwiths", {
+      params: {
+        userId: user.id
       }
-    })
+    }).pipe(catchError(error => {
+      return throwError(error)
+    }))
 
+  }
+
+  getGeneralFoodRecommendationFruitsAndVegetables(dietName: string) {
+    var user = JSON.parse(sessionStorage["user"]) as User
+
+    return this.httpClient.get<FoodRdf[]>(this.baseUrl + "/" + dietName + "/suggestions/FruitsAndVegetables",
+      {
+        params: {
+          userId: user.id
+        }
+      })
+      .pipe(catchError(error => {
+        return throwError(error)
+      }))
+  }
+  getGeneralFoodRecommendationMeatAndFish(dietName: string, rightAmountOfProteins: number) {
+    var user = JSON.parse(sessionStorage["user"]) as User
+
+    return this.httpClient.get<FoodRdf[]>(this.baseUrl + "/" + dietName + "/suggestions/MeatAndFish",
+      {
+        params: {
+          userId: user.id,
+          rightAmountOfProteins: rightAmountOfProteins.toString()
+
+        }
+      })
+      .pipe(catchError(error => {
+        return throwError(error)
+      }))
   }
 
 
