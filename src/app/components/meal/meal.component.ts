@@ -136,13 +136,13 @@ export class MealComponent implements OnInit {
           allFood.filter(f => f.bestEatenAt.includes(this.mealType.toString())).forEach(f => {
             var food = new Food();
             food.name = f.name;
-            food.proteinsPer100 = f.proteins;
+            food.proteinsPer100 = f.proteinsPer100;
             food.quantity = 100;
             food.caloriesPer100 = f.caloriesPer100;
-            food.vitaminsPer100 = f.vitamins;
-            food.fatsPer100 = f.fats;
-            food.carbsPer100 = f.carbs;
-            food.saltsPer100 = f.salts;
+            food.vitaminsPer100 = f.vitaminsPer100;
+            food.fatsPer100 = f.fatsPer100;
+            food.carbsPer100 = f.carbsPer100;
+            food.saltsPer100 = f.saltsPer100;
             food.type = f.type;
             food.calories = f.caloriesPer100
             food.salts = food.saltsPer100

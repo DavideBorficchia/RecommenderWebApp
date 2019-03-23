@@ -108,16 +108,16 @@ export class FoodRdfCreatorComponent implements OnInit {
           food.bestEatenAt = response["bestEatenAt"]
           food.name = response["name"]
           food.description = response["description"]
-          food.fats = response["fats"]
-          food.proteins = response["proteins"]
-          food.salts = response["salts"]
+          food.fatsPer100 = response["fatsPer100"]
+          food.proteinsPer100 = response["proteinsPer100"]
+          food.saltsPer100 = response["saltsPer100"]
           food.rdfOutput = response["rdfOutput"]
           food.imageUrl = response["imageUrl"]
-          food.vitamins = response["vitamins"]
+          food.vitaminsPer100 = response["vitaminsPer100"]
           food.goodSinergyWith = response["goodSinergyWith"]
           food.goodWith = response["goodWith"]
           food.caloriesPer100 = response["caloriesPer100"]
-          food.carbs = response["carbs"]
+          food.carbsPer100 = response["carbsPer100"]
           food.timeStamp = response["timeStamp"]
           food.id = response["id"]
           this.foodRdfPicked = food;
@@ -130,8 +130,6 @@ export class FoodRdfCreatorComponent implements OnInit {
           this.snackBar.open("Error", "OK", { duration: 2000 })
           this.isUpdating = false;
           this.snackBar.open("Error: " + error.error, "OK", { duration: 3000 })
-
-          this.deepCopyFoodRDFPicked();
         })
     }
 
@@ -164,12 +162,12 @@ export class FoodRdfCreatorComponent implements OnInit {
     defaultFoodPicked.name = "Create new " + this.foodCategory.categoryName;
     defaultFoodPicked.description = "Start creating your new cool RDF semantic food"
     defaultFoodPicked.rdfOutput = ""
-    defaultFoodPicked.salts = 0;
+    defaultFoodPicked.saltsPer100 = 0;
     defaultFoodPicked.caloriesPer100 = 0;
-    defaultFoodPicked.proteins = 0;
-    defaultFoodPicked.vitamins = 0;
-    defaultFoodPicked.carbs = 0;
-    defaultFoodPicked.fats = 0;
+    defaultFoodPicked.proteinsPer100 = 0;
+    defaultFoodPicked.vitaminsPer100 = 0;
+    defaultFoodPicked.carbsPer100 = 0;
+    defaultFoodPicked.fatsPer100 = 0;
     defaultFoodPicked.bestEatenAt = [];
     defaultFoodPicked.goodSinergyWith = [];
     defaultFoodPicked.goodWith = [];
@@ -298,9 +296,9 @@ export class FoodRdfCreatorComponent implements OnInit {
   onNewFoodClicked() {
     var categoryName = this.foodCategory.categoryName.toString();
     this.foodRdfPicked = {
-      bestEatenAt: [], caloriesPer100: 0, salts: 0, rdfOutput: "", timeStamp: null, carbs: 0, description: "Start creating your new cool RDF semantic food",
-      fats: 0, goodSinergyWith: [], goodWith: [], imageUrl: "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png",
-      name: "Create new " + this.foodCategory.categoryName, proteins: 0, type: categoryName, vitamins: 0, id: Guid.create().toString()
+      bestEatenAt: [], caloriesPer100: 0, saltsPer100: 0, rdfOutput: "", timeStamp: null, carbsPer100: 0, description: "Start creating your new cool RDF semantic food",
+      fatsPer100: 0, goodSinergyWith: [], goodWith: [], imageUrl: "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png",
+      name: "Create new " + this.foodCategory.categoryName, proteinsPer100: 0, type: categoryName, vitaminsPer100: 0, id: Guid.create().toString()
     }
     this.deepCopyFoodRDFPicked();
     this.isSend = true;
@@ -325,16 +323,16 @@ export class FoodRdfCreatorComponent implements OnInit {
           food.bestEatenAt = response["bestEatenAt"]
           food.name = response["name"]
           food.description = response["description"]
-          food.fats = response["fats"]
-          food.proteins = response["proteins"]
-          food.salts = response["salts"]
+          food.fatsPer100 = response["fatsPer100"]
+          food.proteinsPer100 = response["proteinsPer100"]
+          food.saltsPer100 = response["saltsPer100"]
           food.rdfOutput = response["rdfOutput"]
           food.imageUrl = response["imageUrl"]
-          food.vitamins = response["vitamins"]
+          food.vitaminsPer100 = response["vitaminsPer100"]
           food.goodSinergyWith = response["goodSinergyWith"]
           food.goodWith = response["goodWith"]
           food.caloriesPer100 = response["caloriesPer100"]
-          food.carbs = response["carbs"]
+          food.carbsPer100 = response["carbsPer100"]
           food.timeStamp = response["timeStamp"]
           food.id = response["id"]
           this.foodRdfPicked = food;
@@ -391,13 +389,13 @@ export class FoodRdfCreatorComponent implements OnInit {
   private getValueByProperty(property: string): any {
     switch (property) {
       case "Proteins":
-        return this.foodRdfPicked.proteins;
+        return this.foodRdfPicked.proteinsPer100;
       case "Carbohydrates":
-        return this.foodRdfPicked.carbs;
+        return this.foodRdfPicked.carbsPer100;
       case "Fats":
-        return this.foodRdfPicked.fats;
+        return this.foodRdfPicked.fatsPer100;
       case "Vitamins":
-        return this.foodRdfPicked.vitamins;
+        return this.foodRdfPicked.vitaminsPer100;
       default:
         return null;
     }
@@ -462,7 +460,7 @@ export class FoodRdfCreatorComponent implements OnInit {
       this.isSend = true;
       return
     }
-    if (this.foodRdfPicked.salts === this.tempFoodBeforePosting.salts) {
+    if (this.foodRdfPicked.saltsPer100 === this.tempFoodBeforePosting.saltsPer100) {
       this.isSend = false;
     }
     else {
@@ -476,28 +474,28 @@ export class FoodRdfCreatorComponent implements OnInit {
       this.isSend = true;
       return
     }
-    if (this.foodRdfPicked.vitamins === this.tempFoodBeforePosting.vitamins) {
+    if (this.foodRdfPicked.vitaminsPer100 === this.tempFoodBeforePosting.vitaminsPer100) {
       this.isSend = false;
     }
     else {
       this.isSend = true;
       return
     }
-    if (this.foodRdfPicked.fats === this.tempFoodBeforePosting.fats) {
+    if (this.foodRdfPicked.fatsPer100 === this.tempFoodBeforePosting.fatsPer100) {
       this.isSend = false;
     }
     else {
       this.isSend = true;
       return
     }
-    if (this.foodRdfPicked.proteins === this.tempFoodBeforePosting.proteins) {
+    if (this.foodRdfPicked.proteinsPer100 === this.tempFoodBeforePosting.proteinsPer100) {
       this.isSend = false;
     }
     else {
       this.isSend = true;
       return
     }
-    if (this.foodRdfPicked.carbs === this.tempFoodBeforePosting.carbs) {
+    if (this.foodRdfPicked.carbsPer100 === this.tempFoodBeforePosting.carbsPer100) {
       this.isSend = false;
     }
     else {

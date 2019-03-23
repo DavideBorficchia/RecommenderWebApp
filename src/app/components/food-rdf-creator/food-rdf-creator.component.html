@@ -53,17 +53,17 @@
                   <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
                     <mat-label>{{property}}</mat-label>
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.salts">
+                      *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.saltsPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
                       *ngSwitchCase="'Calories per 100 g'" [(ngModel)]="foodRdfPicked.caloriesPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Vitamins'" [(ngModel)]="foodRdfPicked.vitamins">
+                      *ngSwitchCase="'Vitamins'" [(ngModel)]="foodRdfPicked.vitaminsPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Carbohydrates'" [(ngModel)]="foodRdfPicked.carbs">
+                      *ngSwitchCase="'Carbohydrates'" [(ngModel)]="foodRdfPicked.carbsPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Fats'" [(ngModel)]="foodRdfPicked.fats">
+                      *ngSwitchCase="'Fats'" [(ngModel)]="foodRdfPicked.fatsPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Proteins'" [(ngModel)]="foodRdfPicked.proteins">
+                      *ngSwitchCase="'Proteins'" [(ngModel)]="foodRdfPicked.proteinsPer100">
                     <span matSuffix *ngIf="property === 'Calories per 100 g'">kcal</span>
                     <span matSuffix *ngIf="property !== 'Calories per 100 g'">g</span>
                   </mat-form-field>
@@ -239,17 +239,17 @@
                 <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
                   <mat-label>{{property}}</mat-label>
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.salts">
+                    *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.saltsPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
                     *ngSwitchCase="'Calories per 100 g'" [(ngModel)]="foodRdfPicked.caloriesPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Vitamins'" [(ngModel)]="foodRdfPicked.vitamins">
+                    *ngSwitchCase="'Vitamins'" [(ngModel)]="foodRdfPicked.vitaminsPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Carbohydrates'" [(ngModel)]="foodRdfPicked.carbs">
+                    *ngSwitchCase="'Carbohydrates'" [(ngModel)]="foodRdfPicked.carbsPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Fats'" [(ngModel)]="foodRdfPicked.fats">
+                    *ngSwitchCase="'Fats'" [(ngModel)]="foodRdfPicked.fatsPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Proteins'" [(ngModel)]="foodRdfPicked.proteins">
+                    *ngSwitchCase="'Proteins'" [(ngModel)]="foodRdfPicked.proteinsPer100">
                   <span matSuffix *ngIf="property === 'Calories per 100 g'">kcal</span>
                   <span matSuffix *ngIf="property !== 'Calories per 100 g'">g</span>
                 </mat-form-field>

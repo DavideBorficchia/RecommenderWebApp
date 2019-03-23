@@ -71,12 +71,12 @@ export class FoodRecommenderComponent implements OnInit {
                 var food = new FoodRdf()
                 food.type = value["type"]
                 food.name = value["name"]
-                food.fats = value["fats"]
-                food.proteins = value["proteins"]
-                food.salts = value["salts"]
-                food.vitamins = value["vitamins"]
+                food.fatsPer100 = value["fats"]
+                food.proteinsPer100 = value["proteins"]
+                food.saltsPer100 = value["salts"]
+                food.vitaminsPer100 = value["vitamins"]
                 food.caloriesPer100 = value["caloriesPer100"]
-                food.carbs = value["carbs"]
+                food.carbsPer100 = value["carbs"]
                 food.id = value["id"]
                 food.imageUrl = value["imageUrl"]
                 food.bestEatenAt = value["bestEatenAt"]
@@ -95,13 +95,13 @@ export class FoodRecommenderComponent implements OnInit {
     }
     var foodForDiet = new Food()
     foodForDiet.name = food.name;
-    foodForDiet.proteins = food.proteins;
+    foodForDiet.proteins = food.proteinsPer100;
     foodForDiet.quantity = 100;
     foodForDiet.caloriesPer100 = food.caloriesPer100;
-    foodForDiet.vitamins = food.vitamins;
-    foodForDiet.fats = food.fats;
-    foodForDiet.carbs = food.carbs;
-    foodForDiet.salts = food.salts;
+    foodForDiet.vitamins = food.vitaminsPer100;
+    foodForDiet.fats = food.fatsPer100;
+    foodForDiet.carbs = food.carbsPer100;
+    foodForDiet.salts = food.saltsPer100;
     foodForDiet.type = food.type;
     foodForDiet.calories = food.caloriesPer100
     foodForDiet.id = food.id
@@ -181,16 +181,16 @@ export class FoodRecommenderComponent implements OnInit {
             food.bestEatenAt = value["bestEatenAt"]
             food.name = value["name"]
             food.description = value["description"]
-            food.fats = value["fats"]
-            food.proteins = value["proteins"]
-            food.salts = value["salts"]
+            food.fatsPer100 = value["fats"]
+            food.proteinsPer100 = value["proteins"]
+            food.saltsPer100 = value["salts"]
             food.rdfOutput = value["rdfOutput"]
             food.imageUrl = value["imageUrl"]
-            food.vitamins = value["vitamins"]
+            food.vitaminsPer100 = value["vitamins"]
             food.goodSinergyWith = value["goodSinergyWith"]
             food.goodWith = value["goodWith"]
             food.caloriesPer100 = value["caloriesPer100"]
-            food.carbs = value["carbs"]
+            food.carbsPer100 = value["carbs"]
             food.timeStamp = value["timeStamp"]
             this.currentFoodSuggestions.push(food)
           })
@@ -221,16 +221,16 @@ export class FoodRecommenderComponent implements OnInit {
               food.bestEatenAt = value["bestEatenAt"]
               food.name = value["name"]
               food.description = value["description"]
-              food.fats = value["fats"]
-              food.proteins = value["proteins"]
-              food.salts = value["salts"]
+              food.fatsPer100 = value["fats"]
+              food.proteinsPer100 = value["proteins"]
+              food.saltsPer100 = value["salts"]
               food.rdfOutput = value["rdfOutput"]
               food.imageUrl = value["imageUrl"]
-              food.vitamins = value["vitamins"]
+              food.vitaminsPer100 = value["vitamins"]
               food.goodSinergyWith = value["goodSinergyWith"]
               food.goodWith = value["goodWith"]
               food.caloriesPer100 = value["caloriesPer100"]
-              food.carbs = value["carbs"]
+              food.carbsPer100 = value["carbs"]
               food.timeStamp = value["timeStamp"]
               this.currentFoodSuggestions.push(food)
             })

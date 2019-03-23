@@ -4,11 +4,11 @@ export class FoodRdf {
 
     name: string;
     description: string;
-    proteins: number;
-    carbs: number;
-    vitamins: number;
-    fats: number;
-    salts: number;
+    proteinsPer100: number;
+    carbsPer100: number;
+    vitaminsPer100: number;
+    fatsPer100: number;
+    saltsPer100: number;
     caloriesPer100: number;
     goodWith: string[];
     goodSinergyWith: string[];
