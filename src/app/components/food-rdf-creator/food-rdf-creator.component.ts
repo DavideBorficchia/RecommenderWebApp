@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatSlideToggleChange, MatSnackBar } from '@angular/material';
 import * as $ from 'jquery';
-import * as vkbeautify from 'vkbeautify';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Guid } from 'guid-typescript';
 @Component({
