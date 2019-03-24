@@ -54,12 +54,22 @@ export class DietHistoryComponent implements OnInit {
             food.calories = value["calories"];
             food.caloriesPer100 = value["caloriesPer100"]
             food.carbs = value["carbs"]
-            food.fats = value["fat"]
+            food.fats = value["fats"]
             // food.mealTypes = value["mealTypes"]
             food.name = value["name"]
             food.proteins = value["proteins"]
             food.quantity = value["quantity"]
+            food.vitamins = value["vitamins"];
+            food.salts = value["salts"]
             food.type = value["type"]
+            food.id = value["id"]
+            food.saltsPer100 = value["saltsPer100"]
+            food.vitaminsPer100 = value["vitaminsPer100"]
+            food.fatsPer100 = value["fatsPer100"]
+            food.proteinsPer100 = value["proteinsPer100"]
+            food.carbsPer100 = value["carbsPer100"]
+            console.log(food.name+" saltsPer100 "+food.saltsPer100)
+            food.calories = value["calories"]
             meal.addFood(food);
           })
           meal.mealType = mealValue["mealType"];

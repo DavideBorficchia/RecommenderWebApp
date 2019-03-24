@@ -1,0 +1,9 @@
+.section_header {
+    background-color: #3f51b5;
+    color: white;
+    margin-top: 60px;
+}
+.section_title {
+    font-weight: 300;
+    margin-left: 30px;
+}

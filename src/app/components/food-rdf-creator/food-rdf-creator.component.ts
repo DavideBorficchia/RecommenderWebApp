@@ -23,7 +23,7 @@ export class FoodRdfCreatorComponent implements OnInit {
   allFoodRdfs: FoodRdf[];
   private nameIsChanging: boolean;
   foodRdfPicked: FoodRdf;
-  foodRdfsProperties = ["Salts", "Calories per 100 g", "Vitamins", "Fats", "Proteins", "Carbohydrates"]
+  foodRdfsProperties = ["Salts per 100 g", "Calories per 100 g", "Vitamins per 100 g", "Fats per 100 g", "Proteins per 100 g", "Carbohydrates per 100 g"]
   mealTypes = ["Breakfast", "Morning Break", "Lunch", "Afternoon Break", "Dinner"];
   private statementControl = new FormControl()
   private statementGoodSynergyGroupControl = new FormControl();
@@ -309,6 +309,52 @@ export class FoodRdfCreatorComponent implements OnInit {
     if (foodToSend.name.includes("Create")) {
       this.snackBar.open("Change name before confirming creation")
     }
+    var food = this.foodRdfs.find(f=>f.id === foodToSend.id)
+    if(food){
+      this.isUpdating = true
+      this.foodRecommenderService.updateFood(this.foodRdfPicked, this.foodRdfPicked.id)
+        .subscribe(response => {
+          console.log(response)
+          this.isUpdating = false;
+          this.isSend = false;
+          const index = this.allFoodRdfs.indexOf(this.tempFoodBeforePosting);
+
+          if (index >= 0) {
+            this.foodRdfPicked.goodWith.splice(index, 1);
+            this.foodListSameHeight()
+            this.allFoodRdfs.push(this.foodRdfPicked)
+
+          }
+          this.foodRecommenderService.setNewFoodRdf(this.allFoodRdfs)
+          var food = new FoodRdf()
+          food.type = response["type"]
+          food.bestEatenAt = response["bestEatenAt"]
+          food.name = response["name"]
+          food.description = response["description"]
+          food.fatsPer100 = response["fatsPer100"]
+          food.proteinsPer100 = response["proteinsPer100"]
+          food.saltsPer100 = response["saltsPer100"]
+          food.rdfOutput = response["rdfOutput"]
+          food.imageUrl = response["imageUrl"]
+          food.vitaminsPer100 = response["vitaminsPer100"]
+          food.goodSinergyWith = response["goodSinergyWith"]
+          food.goodWith = response["goodWith"]
+          food.caloriesPer100 = response["caloriesPer100"]
+          food.carbsPer100 = response["carbsPer100"]
+          food.timeStamp = response["timeStamp"]
+          food.id = response["id"]
+          this.foodRdfPicked = food;
+          this.deepCopyFoodRDFPicked();
+          console.log(response["rdfOutput"])
+          this.snackBar.open("Food " + this.foodRdfPicked.name + " is updated! check your Diary changes", "OK", { duration: 3000 })
+
+          // console.log(response)
+        }, (error: HttpErrorResponse) => {
+          this.snackBar.open("Error", "OK", { duration: 2000 })
+          this.isUpdating = false;
+          this.snackBar.open("Error: " + error.error, "OK", { duration: 3000 })
+        })
+    }
     else {
       foodToSend.imageUrl = "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png";
       foodToSend.type = this.foodCategory.categoryName.toString();
@@ -408,6 +454,7 @@ export class FoodRdfCreatorComponent implements OnInit {
           foodList.style.height = foodCardHeight.toString() + "px";
 
         }
+        console.log(window.innerWidth)
       }, 0)
     }
   }

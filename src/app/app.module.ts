@@ -47,6 +47,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {MatDialogModule} from '@angular/material/dialog';
 import { InformationDialogComponent } from './components/information-dialog/information-dialog.component';
+import { PhysicalActivityCreatorComponent } from './components/physical-activity-creator/physical-activity-creator.component';
 const appRoutes: Routes = [
 
   // { path: "signup", component: SignUpComponent, outlet:"registration" },
@@ -79,6 +80,9 @@ const appRoutes: Routes = [
           [{
             path:":foodCategoryName", component:FoodRdfCreatorComponent
           }]
+        },
+        {
+          path:"physicalactivities", component:PhysicalActivityCreatorComponent
         }
       ]
   }
@@ -105,7 +109,8 @@ const appRoutes: Routes = [
     FoodcategoryComponent,
     FoodRdfCreatorComponent,
     FoodListComponent,
-    InformationDialogComponent
+    InformationDialogComponent,
+    PhysicalActivityCreatorComponent
   ],
   imports: [
     MatSelectModule,

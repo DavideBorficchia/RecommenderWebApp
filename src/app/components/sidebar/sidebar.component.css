@@ -5,14 +5,15 @@
     -webkit-overflow-scrolling: touch;
     display: block;
     overflow: hidden;
+    background-color: white
     
 }
 .sidenav-content{
     position: relative;
     z-index: 1;
     display: block;
-    height: 100%;
-    overflow: hidden;
+    height: 100vh;
+    overflow: auto;
 }
 
 #sidenavheader {

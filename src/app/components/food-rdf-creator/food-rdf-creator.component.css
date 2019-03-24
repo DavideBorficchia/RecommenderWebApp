@@ -2,7 +2,9 @@ mat-card {
     width: 70vw;
     height: 60vh;
 }
-
+mat-form-field{
+    max-width: 200px
+}
 .mat-card-image {
     height: 300px;
     width: auto;
@@ -16,6 +18,7 @@ mat-card {
     height: auto;
     
 }
+
 
 /* .food_picked_avatar:hover {
     opacity: 0;
@@ -101,5 +104,8 @@ mat-card {
     }
     .food-name {
         font-size: 30px;
+    }
+    mat-form-field{
+        max-width: 120px;
     }
 }

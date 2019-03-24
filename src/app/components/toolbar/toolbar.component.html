@@ -7,8 +7,8 @@
 
   <div *ngIf="!isMobile">
     <a mat-button routerLink="/home/food">Food</a>
-    <a mat-button routerLink=".">Physical Activities</a>
-    <a mat-button routerLink=".">Diary</a>
+    <a mat-button routerLink="/home/physicalactivities">Physical Activities</a>
+    <a mat-button routerLink="/home/diary">Diary</a>
   </div>
   <span class="spacer"></span>
   <img mat-button [matMenuTriggerFor]="account_menu" src="./assets/man.svg" class="toolbar-icon">
@@ -16,9 +16,9 @@
 
     <button mat-menu-item routerLink="/registration/signup">Sign Up</button>
     <button mat-menu-item routerLink="/registration/login">Log In</button>
-    <button mat-menu-item routerLink="." *ngIf="isMobile">Food</button>
-    <button mat-menu-item routerLink="." *ngIf="isMobile">Physical Activities</button>
-    <button mat-menu-item routerLink="." *ngIf="isMobile">Diary</button>
+    <button mat-menu-item routerLink="/home/food" *ngIf="isMobile">Food</button>
+    <button mat-menu-item routerLink="/home/physicalactivities" *ngIf="isMobile">Physical Activities</button>
+    <button mat-menu-item routerLink="/home/diary" *ngIf="isMobile">Diary</button>
 
   </mat-menu>
 

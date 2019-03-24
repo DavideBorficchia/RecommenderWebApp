@@ -53,17 +53,17 @@
                   <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
                     <mat-label>{{property}}</mat-label>
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.saltsPer100">
+                      *ngSwitchCase="'Salts per 100 g'" [(ngModel)]="foodRdfPicked.saltsPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
                       *ngSwitchCase="'Calories per 100 g'" [(ngModel)]="foodRdfPicked.caloriesPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Vitamins'" [(ngModel)]="foodRdfPicked.vitaminsPer100">
+                      *ngSwitchCase="'Vitamins per 100 g'" [(ngModel)]="foodRdfPicked.vitaminsPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Carbohydrates'" [(ngModel)]="foodRdfPicked.carbsPer100">
+                      *ngSwitchCase="'Carbohydrates per 100 g'" [(ngModel)]="foodRdfPicked.carbsPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Fats'" [(ngModel)]="foodRdfPicked.fatsPer100">
+                      *ngSwitchCase="'Fats per 100 g'" [(ngModel)]="foodRdfPicked.fatsPer100">
                     <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                      *ngSwitchCase="'Proteins'" [(ngModel)]="foodRdfPicked.proteinsPer100">
+                      *ngSwitchCase="'Proteins per 100 g'" [(ngModel)]="foodRdfPicked.proteinsPer100">
                     <span matSuffix *ngIf="property === 'Calories per 100 g'">kcal</span>
                     <span matSuffix *ngIf="property !== 'Calories per 100 g'">g</span>
                   </mat-form-field>
@@ -162,13 +162,31 @@
           </mat-card-content>
         </mat-card>
       </div>
-
+      <mat-list style="margin-top: 60px; min-width:100%;min-height: 100%; max-width:400px;overflow-y: auto; overflow-x: hidden;"
+       *ngIf="foodRdfs" >
+      <mat-list-item mat-ripple *ngFor="let foodRdf of foodRdfs;last as last" (click)="onItemClicked(foodRdf)">
+        <!-- <img matListAvatar src="{{foodCategory.avatarAssetPath}}"> -->
+        <img matListAvatar [src]="foodRdf.imageUrl" (load)="foodListSameHeight()">
+        <h3 matLine> {{foodRdf.name}} </h3>
+        <div matLine fxLayout="row" fxLayoutAlign="space-between center">
+          <p style="  white-space: nowrap; 
+          overflow: hidden;
+          text-overflow: ellipsis; width: 150px !important">
+            {{foodRdf.description}}
+          </p>
+          <span>
+            <mat-icon>edit</mat-icon>
+          </span>
+        </div>
+        <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+      </mat-list-item>
+    </mat-list>
     </div>
 
 
 
     <mat-list style="margin-top: 60px; min-width:100%; max-width:400px;overflow-y: auto; overflow-x: hidden;"
-      id="food_list" *ngIf="foodRdfs">
+      id="food_list" *ngIf="foodRdfs" fxHide.lt-md="true">
       <mat-list-item mat-ripple *ngFor="let foodRdf of foodRdfs;last as last" (click)="onItemClicked(foodRdf)">
         <!-- <img matListAvatar src="{{foodCategory.avatarAssetPath}}"> -->
         <img matListAvatar [src]="foodRdf.imageUrl" (load)="foodListSameHeight()">
@@ -239,17 +257,17 @@
                 <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
                   <mat-label>{{property}}</mat-label>
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Salts'" [(ngModel)]="foodRdfPicked.saltsPer100">
+                    *ngSwitchCase="'Salts per 100 g'" [(ngModel)]="foodRdfPicked.saltsPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
                     *ngSwitchCase="'Calories per 100 g'" [(ngModel)]="foodRdfPicked.caloriesPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Vitamins'" [(ngModel)]="foodRdfPicked.vitaminsPer100">
+                    *ngSwitchCase="'Vitamins per 100 g'" [(ngModel)]="foodRdfPicked.vitaminsPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Carbohydrates'" [(ngModel)]="foodRdfPicked.carbsPer100">
+                    *ngSwitchCase="'Carbohydrates per 100 g'" [(ngModel)]="foodRdfPicked.carbsPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Fats'" [(ngModel)]="foodRdfPicked.fatsPer100">
+                    *ngSwitchCase="'Fats per 100 g'" [(ngModel)]="foodRdfPicked.fatsPer100">
                   <input matInput [value]="property" placeholder="Insert new value for {{property}}"
-                    *ngSwitchCase="'Proteins'" [(ngModel)]="foodRdfPicked.proteinsPer100">
+                    *ngSwitchCase="'Proteins per 100 g'" [(ngModel)]="foodRdfPicked.proteinsPer100">
                   <span matSuffix *ngIf="property === 'Calories per 100 g'">kcal</span>
                   <span matSuffix *ngIf="property !== 'Calories per 100 g'">g</span>
                 </mat-form-field>
