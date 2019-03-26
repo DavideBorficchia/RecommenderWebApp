@@ -39,7 +39,13 @@ export class AppComponent implements OnInit {
       this.userIsLoggedIn = sessionStorage["user"] != undefined;
       if (event.url == "/" && this.userIsLoggedIn) {
         this.showWelcome = false;
-        this.router.navigate(["/home/diary"]);
+        var user = JSON.parse(sessionStorage["user"]) as User
+        if (user.email.includes("nutrizionista")) {
+          this.router.navigate(["/home/food"])
+        } else {
+          this.router.navigate(["/home/diary"]);
+
+        }
       }
       if (event.url == "/" && !this.userIsLoggedIn) {
         this.router.navigate(["/registration/login"])
@@ -51,7 +57,7 @@ export class AppComponent implements OnInit {
       }
     })
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.observer.unsubscribe();
   }
 

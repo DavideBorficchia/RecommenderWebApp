@@ -1,8 +1,330 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="section_header">
   <h1 class="section_title">Physical Activities</h1>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="space-evenly start" style="margin-bottom: 100px;" fxHide.lt-lg="true">
+  <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 40px; "
+    *ngIf="currentDiet && currentGoal" id="left_content">
+    <!-- first column -->
+    <div fxLayout="row" fxLayout="space-evenly center" fxLayoutGap="40px">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <img src="./assets/scale.svg" style=" max-height: 150px" (load)="onImageLoad()">
+      </div>
+      <div fxLayout="column" fxLayoutAlign="center start">
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+          <h2 style="font-weight: 300">Current Diet:</h2>
+          <p>{{currentDiet.name}}</p>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+          <h2 style="font-weight: 300">Total calories:</h2>
+          <p>{{currentDiet.totalCalories}}</p>
+          <span>kcal</span>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+          <h2 style="font-weight: 300">Weekly goal:</h2>
+          <div fxLayout="row" fxLayoutAlign="space-between center" style="width:150px" *ngIf="!currentGoalIsChanging">
+            <p *ngIf="!currentGoalIsChanging" (click)="currentGoalIsChanging = true">{{currentGoal.weeklyGoal}}</p>
+            <mat-icon (click)="currentGoalIsChanging = true" matSuffix>edit</mat-icon>
+          </div>
+          <mat-form-field *ngIf="currentGoalIsChanging" (focusin)="currentGoalIsChanging=true"
+            (focusout)="onGoalDeselect()">
+            <mat-label>Goal</mat-label>
+            <input [(ngModel)]="currentGoal.weeklyGoal " matInput placeholder="Insert new goal">
+            <span matSuffix>kcal</span>
+          </mat-form-field>
+
+        </div>
+      </div>
+    </div>
+    <h2 style="font-weight: 300; margin-top: 20px; ">Recent activity records</h2>
+    <mat-list
+      style="margin-top:5px; min-width:100%; max-height:100%;max-width:400px;overflow-y: auto; overflow-x: hidden;"
+      *ngIf="allPhysicalActivityRecords">
+      <mat-list-item mat-ripple *ngFor="let record of records; lastRecord as last" (click)="onRecordClicked()">
+        <img matListAvatar [src]="getRecordImage('record')" (load)="columnsSameHeight()">
+        <h3 matLine *ngIf="!isToday(record)"> Date: {{record.date.toLocaleDateString()}} at
+          {{record.date.getHours()}}:{{record.date.getMinutes()}} </h3>
+        <h3 matLine *ngIf="isToday(record)"> Date: Today at
+          {{record.date.getHours()}}:{{record.date.getMinutes()}} </h3>
+        <div matLine fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+          <p style="  white-space: nowrap; 
+         width: 150px !important">
+            Burnt calories: {{record.burntCalories.toFixed(2)}} kcal
+          </p>
+          <p style="  white-space: nowrap; 
+          width: 150px !important">
+            {{currentPhysicalActivity.name}}
+          </p>
+        </div>
+        <mat-divider [inset]="true" *ngIf="!lastRecord"></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="center center" style="margin-top: 40px;" *ngIf="currentPhysicalActivity"
+    id="right_content">
+    <!-- second column -->
+    <mat-card>
+      <mat-card-header style="width: inherit" class="form-card">
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" style="width: 100%">
+          <h1 class="pa-name" (click)="nameIsChanging=!nameIsChanging" *ngIf="!nameIsChanging">
+            {{currentPhysicalActivity.name}}</h1>
+          <mat-form-field *ngIf="nameIsChanging" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true"
+            appearance="outline">
+            <mat-label>Name</mat-label>
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="3" [(ngModel)]="currentPhysicalActivity.name"></textarea>
+          </mat-form-field>
+          <mat-slide-toggle [disabled]="currentPhysicalActivity.rdfOutput === ''" (change)="onToggleChange($event)"
+            fxHide="false" fxHide.xs="true" style="text-overflow:ellipsis">
+            Show RDF </mat-slide-toggle>
+          <mat-slide-toggle [disabled]="currentPhysicalActivity.rdfOutput === ''" (change)="onToggleChange($event)"
+            fxHide="true" fxHide.xs="false">
+          </mat-slide-toggle>
+        </div>
+      </mat-card-header>
+      <mat-card-content *ngIf="!showRdf">
+        <div fxLayout="row" fxLayoutAlign="space-evenly center">
+          <img class="physical-activity-image" [src]="currentPhysicalActivity.imageUrl" *ngIf="!imageIsClicked"
+            (click)="imageIsClicked = true" (load)="onImageLoad()">
+          <mat-form-field (focusout)="onTextAreaDeselect()" (focusin)="isSend = true" appearance="outline"
+            *ngIf="imageIsClicked">
+            <mat-label>Image Local Url</mat-label>
+            <input matInput [(ngModel)]="currentPhysicalActivity.imageUrl">
+          </mat-form-field>
+          <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
+            {{currentPhysicalActivity.description}}
+
+          </p>
+          <mat-form-field *ngIf="descriptionIsChanging" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true"
+            appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="3" [(ngModel)]="currentPhysicalActivity.description"></textarea>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row " fxLayoutAlign="space-evenly center" style="margin-top: 50px" fxLayoutGap="15px">
+          <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startDate" placeholder="Start date" [formControl]="serializedStartDate">
+            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker #startDate></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endDate" placeholder="End date" [formControl]="serializedEndDate">
+            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+            <mat-label>Calories per hour</mat-label>
+            <input type="number" matInput [(ngModel)]="currentPhysicalActivity.caloriesPerHour">
+            <span matSuffix>kcal</span>
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center center" *ngIf="isSend">
+          <mat-divider [inset]="true"></mat-divider>
+          <h2 style="font-weight: 300">Ask for suggestions</h2>
+          <button mat-fab (click)="onSuggestionAsked()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+
+
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+    <h2 style="font-weight: 300; margin-top: 20px; ">Physical Activities</h2>
+    <mat-list
+      style="margin-top:5px; min-width:100%; max-height:300px;max-width:400px;overflow-y: auto; overflow-x: hidden;"
+      *ngIf="allPhysicalActivities">
+      <mat-list-item mat-ripple *ngFor="let pa of allPhysicalActivities; lastPa as last" (click)="onPaClicked(pa)">
+        <img matListAvatar [src]="pa.imageUrl" (load)="columnsSameHeight()">
+        <h3 matLine>{{pa.name}}</h3>
+
+        <div matLine fxLayout="row" fxLayoutAlign="start center">
+          <p style="  white-space: nowrap; 
+         width: 150px !important">
+            Calories per hour: {{pa.caloriesPerHour.toFixed(2)}} kcal
+          </p>
+
+        </div>
+        <mat-divider [inset]="true" *ngIf="!lastRecord"></mat-divider>
+      </mat-list-item>
+    </mat-list>
+
+
+  </div>
 
 </div>
-<div fxLayout="row" fxLayout.lt-md="row wrap" fxLayoutAlign="space-evenly start"
-  style="width: 90vw; margin-top: 60px; margin-bottom: 100px" *ngIf="allFoodRdfs">
-  
-</div>
+<!-- <div fxHide.gt-md="true" fxLayout="row" fxLayoutAlign="space-evenly start"> -->
+<mat-tab-group dynamicHeight mat-align-tabs="center" fxHide.gt-md="true">
+  <mat-tab label="Current Diet">
+    <ng-template matTabContent>
+      <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 40px;"
+        *ngIf="currentDiet && currentGoal" id="mat">
+        <!-- first column -->
+        <div fxLayout="row" fxLayout="space-evenly center" fxLayoutGap="40px">
+          <div fxLayout="column" fxLayoutAlign="center center">
+            <img src="./assets/scale.svg" style=" max-height: 150px" (load)="onImageLoad()">
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center start">
+            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+              <h2 style="font-weight: 300">Current Diet:</h2>
+              <p>{{currentDiet.name}}</p>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+              <h2 style="font-weight: 300">Total calories:</h2>
+              <p>{{currentDiet.totalCalories}}</p>
+              <span>kcal</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+              <h2 style="font-weight: 300">Weekly goal:</h2>
+              <div fxLayout="row" fxLayoutAlign="space-between center" style="width:150px"
+                *ngIf="!currentGoalIsChanging">
+                <p *ngIf="!currentGoalIsChanging" (click)="currentGoalIsChanging = true">{{currentGoal.weeklyGoal}}
+                </p>
+                <mat-icon (click)="currentGoalIsChanging = true" matSuffix>edit</mat-icon>
+              </div>
+              <mat-form-field *ngIf="currentGoalIsChanging" (focusin)="currentGoalIsChanging=true"
+                (focusout)="onGoalDeselect()">
+                <mat-label>Goal</mat-label>
+                <input [(ngModel)]="currentGoal.weeklyGoal " matInput placeholder="Insert new goal">
+                <span matSuffix>kcal</span>
+              </mat-form-field>
+
+            </div>
+          </div>
+        </div>
+        <h2 style="font-weight: 300; margin-top: 20px; ">Recent activity records</h2>
+        <mat-list
+          style="margin:25px; min-width:100%; max-height:300px;max-width:400px;overflow-y: auto; overflow-x: hidden;"
+          *ngIf="allPhysicalActivityRecords">
+          <mat-list-item mat-ripple *ngFor="let record of records; lastRecord as last" (click)="onRecordClicked()">
+            <img matListAvatar [src]="getRecordImage('record')" (load)="columnsSameHeight()">
+            <h3 matLine *ngIf="!isToday(record)"> Date: {{record.date.toLocaleDateString()}} at
+              {{record.date.getHours()}}:{{record.date.getMinutes()}} </h3>
+            <h3 matLine *ngIf="isToday(record)"> Date: Today at
+              {{record.date.getHours()}}:{{record.date.getMinutes()}} </h3>
+            <div matLine fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+              <p style="  white-space: nowrap; 
+             width: 150px !important">
+                Burnt calories: {{record.burntCalories.toFixed(2)}} kcal
+              </p>
+              <p style="  white-space: nowrap; 
+              width: 150px !important">
+                {{currentPhysicalActivity.name}}
+              </p>
+            </div>
+            <mat-divider [inset]="true" *ngIf="!lastRecord"></mat-divider>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Physica Activities">
+    <ng-template matTabContent>
+      <div fxLayout="column" fxLayoutAlign="center center" style="margin-top: 40px;" *ngIf="currentPhysicalActivity"
+        id="right_content">
+        <!-- second column -->
+        <mat-card class="form-card">
+          <mat-card-header style="width: inherit" >
+            <div fxLayout="row" fxLayoutAlign="space-evenly center" style="width: 100%">
+              <h1 class="pa-name" (click)="nameIsChanging=!nameIsChanging" *ngIf="!nameIsChanging">
+                {{currentPhysicalActivity.name}}</h1>
+              <mat-form-field *ngIf="nameIsChanging" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true"
+                appearance="outline">
+                <mat-label>Name</mat-label>
+                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="3" [(ngModel)]="currentPhysicalActivity.name"></textarea>
+              </mat-form-field>
+              <mat-slide-toggle [disabled]="currentPhysicalActivity.rdfOutput === ''" (change)="onToggleChange($event)"
+                fxHide="false" fxHide.xs="true" style="text-overflow:ellipsis">
+                Show RDF </mat-slide-toggle>
+              <mat-slide-toggle [disabled]="currentPhysicalActivity.rdfOutput === ''" (change)="onToggleChange($event)"
+                fxHide="true" fxHide.xs="false">
+              </mat-slide-toggle>
+            </div>
+          </mat-card-header>
+          <mat-card-content *ngIf="!showRdf">
+            <div fxLayout="row" fxLayoutAlign="space-evenly center">
+              <img class="physical-activity-image" [src]="currentPhysicalActivity.imageUrl" *ngIf="!imageIsClicked"
+                (click)="imageIsClicked = true" (load)="onImageLoad()">
+              <mat-form-field (focusout)="onTextAreaDeselect()" (focusin)="isSend = true" appearance="outline"
+                *ngIf="imageIsClicked">
+                <mat-label>Image Local Url</mat-label>
+                <input matInput [(ngModel)]="currentPhysicalActivity.imageUrl">
+              </mat-form-field>
+              <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
+                {{currentPhysicalActivity.description}}
+
+              </p>
+              <mat-form-field *ngIf="descriptionIsChanging" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true"
+                appearance="outline">
+                <mat-label>Description</mat-label>
+                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="3" [(ngModel)]="currentPhysicalActivity.description"></textarea>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row " fxLayoutAlign="space-evenly center" style="margin-top: 50px" fxLayoutGap="15px">
+              <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="startDate" placeholder="Start date"
+                  [formControl]="serializedStartDate">
+                <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                <mat-datepicker #startDate></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+                <mat-label>End Date</mat-label>
+                <input matInput [matDatepicker]="endDate" placeholder="End date" [formControl]="serializedEndDate">
+                <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                <mat-datepicker #endDate></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
+                <mat-label>Calories per hour</mat-label>
+                <input type="number" matInput [(ngModel)]="currentPhysicalActivity.caloriesPerHour">
+                <span matSuffix>kcal</span>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center" *ngIf="isSend">
+              <mat-divider [inset]="true"></mat-divider>
+              <h2 style="font-weight: 300">Ask for suggestions</h2>
+              <button mat-fab (click)="onSuggestionAsked()">
+                <mat-icon>refresh</mat-icon>
+              </button>
+
+
+            </div>
+
+          </mat-card-content>
+        </mat-card>
+        <h2 style="font-weight: 300; margin-top: 20px; ">Physical Activities</h2>
+        <mat-list
+          style="margin-top:5px; min-width:100%; max-height:300px;max-width:400px;overflow-y: auto; overflow-x: hidden;"
+          *ngIf="allPhysicalActivities">
+          <mat-list-item mat-ripple *ngFor="let pa of allPhysicalActivities; lastPa as last" (click)="onPaClicked(pa)">
+            <img matListAvatar [src]="pa.imageUrl" (load)="columnsSameHeight()">
+            <h3 matLine>{{pa.name}}</h3>
+
+            <div matLine fxLayout="row" fxLayoutAlign="start center">
+              <p style="  white-space: nowrap; 
+           width: 150px !important">
+                Calories per hour: {{pa.caloriesPerHour.toFixed(2)}} kcal
+              </p>
+
+            </div>
+            <mat-divider [inset]="true" *ngIf="!lastRecord"></mat-divider>
+          </mat-list-item>
+        </mat-list>
+
+
+      </div>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+<!-- </div> -->
+<button mat-fab class="add-pa" (click)="onNewPAClicked()" *ngIf="!isSend">
+  <mat-icon>add</mat-icon>
+</button>
+<button mat-fab class="add-pa" (click)="onNewPAPosted()" *ngIf="isSend" [disabled]="isUpdating">
+  <mat-icon>send</mat-icon>
+</button>

@@ -10,6 +10,8 @@ import { MatAutocompleteSelectedEvent, MatSlideToggleChange, MatSnackBar } from 
 import * as $ from 'jquery';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Guid } from 'guid-typescript';
+import { PatientsService } from 'src/app/services/patients.service';
+import { DietService } from 'src/app/services/diet.service';
 @Component({
   selector: 'app-food-rdf-creator',
   templateUrl: './food-rdf-creator.component.html',
@@ -39,7 +41,9 @@ export class FoodRdfCreatorComponent implements OnInit {
   descriptionIsChanging: boolean;
   isSend = false;
   constructor(private router: Router, private foodRecommenderService: FoodRecommenderService,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar,
+    public dietService:DietService,
+    private patientService:PatientsService) { }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     if (event.target.innerWidth > 960) {
@@ -55,7 +59,6 @@ export class FoodRdfCreatorComponent implements OnInit {
     return "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png";
   }
   onMouseEnter() {
-    console.log(this.pickImage)
     this.pickImage = !this.pickImage
   }
   getFoodRdfPickedPropertyValue(property: string) {
@@ -90,7 +93,6 @@ export class FoodRdfCreatorComponent implements OnInit {
       this.isUpdating = true
       this.foodRecommenderService.updateFood(this.foodRdfPicked, this.foodRdfPicked.id)
         .subscribe(response => {
-          console.log(response)
           this.isUpdating = false;
           this.isSend = false;
           const index = this.allFoodRdfs.indexOf(this.tempFoodBeforePosting);
@@ -121,10 +123,8 @@ export class FoodRdfCreatorComponent implements OnInit {
           food.id = response["id"]
           this.foodRdfPicked = food;
           this.deepCopyFoodRDFPicked();
-          console.log(response["rdfOutput"])
           this.snackBar.open("Food " + this.foodRdfPicked.name + " is updated! check your Diary changes", "OK", { duration: 3000 })
 
-          // console.log(response)
         }, (error: HttpErrorResponse) => {
           this.snackBar.open("Error", "OK", { duration: 2000 })
           this.isUpdating = false;
@@ -174,7 +174,15 @@ export class FoodRdfCreatorComponent implements OnInit {
 
 
     this.allPhysicalActivities = ["Treadmill", "Box", "Jogging"]
-
+    this.patientService.getSelectedPatientObservable().subscribe(selectedUser=>{
+      if(selectedUser){
+        
+        this.allFoodRdfs =  [];
+        this.foodRecommenderService.setNewFoodRdf(this.allFoodRdfs);
+        this.foodListSameHeight();
+        this.foodRecommenderService.getAllFoodFromServer();
+      }
+    })
     this.foodRecommenderService.getObservableFoodBehavior().subscribe(event => {
       this.allFoodRdfs = event;
 
@@ -238,7 +246,6 @@ export class FoodRdfCreatorComponent implements OnInit {
       this.onTextAreaDeselect();
 
     }
-    console.log(this.foodRdfPicked.bestEatenAt)
     this.foodListSameHeight()
 
   }
@@ -308,13 +315,13 @@ export class FoodRdfCreatorComponent implements OnInit {
     var foodToSend = this.foodRdfPicked;
     if (foodToSend.name.includes("Create")) {
       this.snackBar.open("Change name before confirming creation")
+      return;
     }
     var food = this.foodRdfs.find(f=>f.id === foodToSend.id)
     if(food){
       this.isUpdating = true
       this.foodRecommenderService.updateFood(this.foodRdfPicked, this.foodRdfPicked.id)
         .subscribe(response => {
-          console.log(response)
           this.isUpdating = false;
           this.isSend = false;
           const index = this.allFoodRdfs.indexOf(this.tempFoodBeforePosting);
@@ -345,10 +352,8 @@ export class FoodRdfCreatorComponent implements OnInit {
           food.id = response["id"]
           this.foodRdfPicked = food;
           this.deepCopyFoodRDFPicked();
-          console.log(response["rdfOutput"])
           this.snackBar.open("Food " + this.foodRdfPicked.name + " is updated! check your Diary changes", "OK", { duration: 3000 })
 
-          // console.log(response)
         }, (error: HttpErrorResponse) => {
           this.snackBar.open("Error", "OK", { duration: 2000 })
           this.isUpdating = false;
@@ -359,10 +364,8 @@ export class FoodRdfCreatorComponent implements OnInit {
       foodToSend.imageUrl = "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png";
       foodToSend.type = this.foodCategory.categoryName.toString();
       foodToSend.timeStamp = Date.now();
-      console.log(foodToSend)
       this.foodRecommenderService.postFood(foodToSend)
         .subscribe(response => {
-          console.log(response)
           var food = new FoodRdf()
           food.type = response["type"]
           food.bestEatenAt = response["bestEatenAt"]
@@ -454,7 +457,6 @@ export class FoodRdfCreatorComponent implements OnInit {
           foodList.style.height = foodCardHeight.toString() + "px";
 
         }
-        console.log(window.innerWidth)
       }, 0)
     }
   }

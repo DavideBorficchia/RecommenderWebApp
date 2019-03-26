@@ -2,24 +2,26 @@ import { DayOfWeek } from "./daysofweek";
 import { Food } from "./food";
 import { Meal } from "./abstarctmeal";
 import { Guid } from "guid-typescript";
+import { Identifiers } from "@angular/compiler";
 
 export class Diet {
-    private id: String;
+    id: String;
     name: String;
     dailyFood: Map<DayOfWeek, Meal[]>;
     userId: String;
     caloriesPerDay: Map<DayOfWeek, number>;
-    timeStamp : Date;
-    totalCalories:number;
+    timeStamp: Date;
+    totalCalories: number;
+    physicalActivity: string;
+
 
     constructor(dailyFood: Map<DayOfWeek, Meal[]>, caloriesPerDay: Map<DayOfWeek, number>, name: String, id: String) {
         this.dailyFood = dailyFood;
         this.caloriesPerDay = caloriesPerDay;
         this.name = name ? this.name = name : this.name = "No name yet"
         this.userId = id;
-        this.id = Guid.create().toString();
         this.totalCalories = 0;
-        
+
     }
 
 
@@ -37,16 +39,16 @@ export class Diet {
 
     }
 
-    private updateTotalCalories(){
-    
-        this.dailyFood.forEach((value,key)=>{
-            value.forEach(meal=>{
-                meal.allFoodEntries.forEach(food=>{
-                    this.totalCalories+=food.calories;
+    private updateTotalCalories() {
+
+        this.dailyFood.forEach((value, key) => {
+            value.forEach(meal => {
+                meal.allFoodEntries.forEach(food => {
+                    this.totalCalories += food.calories;
                 })
             })
         })
     }
-    
+
 
 }

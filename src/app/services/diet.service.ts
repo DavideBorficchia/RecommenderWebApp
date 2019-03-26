@@ -144,12 +144,7 @@ export class DietService {
       }))
   }
 
-  getAllFood() {
-    return this.allFood;
-  }
-  setAllFood(allFood: Food[]) {
-    this.allFood = allFood;
-  }
+
   setDiet(diet: Diet) {
 
     this.diet = diet;

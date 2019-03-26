@@ -66,6 +66,9 @@ export class FoodRecommenderService {
   }
   getAllFoodFromServer() {
     var user = JSON.parse(sessionStorage["user"]) as User
+    console.log(user)
+    if(!user.email.includes("nutrizionista")){
+
     this.httpClient.get<FoodRdf[]>(this.baseUrl + "/all",
       {
         params: {
@@ -102,21 +105,76 @@ export class FoodRecommenderService {
         console.log(error)
 
       })
+    }
+    else{
+      console.log("ciao")
+      this.httpClient.get<FoodRdf[]>(this.baseUrl + "/all",
+      {
+        params: {
+
+          userId: user.currentPatient.id
+
+        }
+      })
+      .subscribe(response => {
+        this.allFoodRdf = []
+        Object.keys(response).forEach(key => {
+          var value = response[key]
+          var food = new FoodRdf()
+          food.type = value["type"]
+          food.bestEatenAt = value["bestEatenAt"]
+          food.name = value["name"]
+          food.description = value["description"]
+          food.fatsPer100 = value["fatsPer100"]
+          food.proteinsPer100 = value["proteinsPer100"]
+          food.saltsPer100 = value["saltsPer100"]
+          food.rdfOutput = value["rdfOutput"]
+          food.imageUrl = value["imageUrl"]
+          food.vitaminsPer100 = value["vitaminsPer100"]
+          food.goodSinergyWith = value["goodSinergyWith"]
+          food.goodWith = value["goodWith"]
+          food.caloriesPer100 = value["caloriesPer100"]
+          food.carbsPer100 = value["carbsPer100"]
+          food.timeStamp = value["timeStamp"]
+          food.id = value["id"]
+          this.allFoodRdf.push(food)
+        })
+        this.setNewFoodRdf(this.allFoodRdf)
+      }, (error: HttpErrorResponse) => {
+        console.log(error)
+
+      })
+    }
 
   }
   updateFood(foodRdfPicked: FoodRdf, foodId: string) {
     var user = JSON.parse(sessionStorage["user"]) as User
-
+    if(user.email.includes("nutrizionista")){
+      return this.httpClient.put<FoodRdf[]>(this.baseUrl + "/properties/updates", foodRdfPicked, {
+        params: {
+          foodId: foodId,
+          userId: user.currentPatient.id
+        }
+      }).pipe(catchError(error => throwError(error)))
+    }
     return this.httpClient.put<FoodRdf[]>(this.baseUrl + "/properties/updates", foodRdfPicked, {
       params: {
         foodId: foodId,
         userId: user.id
       }
-    })
-      .pipe(catchError(error => throwError(error)))
+    }).pipe(catchError(error => throwError(error)))
   }
   postFood(foodRdfPicked: FoodRdf) {
     var user = JSON.parse(sessionStorage["user"]) as User
+    if(user.email.includes("nutrizionista")){
+      return this.httpClient.post<FoodRdf>(this.baseUrl + "/creations", foodRdfPicked, {
+        params: {
+  
+          userId: user.currentPatient.id
+  
+        }
+      }).pipe(catchError(error => throwError(error)))
+    }
 
     return this.httpClient.post<FoodRdf>(this.baseUrl + "/creations", foodRdfPicked, {
       params: {
@@ -219,9 +277,6 @@ export class FoodRecommenderService {
       return this.allFoodRdf;
     }
     return null;
-  }
-  setAllFood(allFoodRdfs: FoodRdf[]) {
-    this.allFoodRdf = allFoodRdfs
   }
 
   getFoodRdfByCategoryName(categoryName: String): FoodRdf[] {

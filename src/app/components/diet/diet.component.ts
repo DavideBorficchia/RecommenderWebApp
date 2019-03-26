@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { DietHistory } from 'src/app/model/diethistory';
 import { RegisterService } from 'src/app/services/register.service';
 import { FoodRecommenderService } from 'src/app/services/food-recommender.service';
+import { Guid } from 'guid-typescript';
 
 
 
@@ -62,6 +63,7 @@ export class DietComponent implements OnInit {
   createNewDiet() {
     this.isNameChanging = false;
     this.isSpinnerShown = true;
+    this.diet.id = Guid.create().toString();
     this.dietService.createNewDiet().subscribe(response => {
 
       if (response.status < 400) {
@@ -82,6 +84,7 @@ export class DietComponent implements OnInit {
 
           this.diet = new Diet(map, new Map(), response.body.name, response.body.userId)
           this.diet.timeStamp = response.body.timeStamp
+          this.diet. id = response.body.id;
           this.isReady = true;
           this.isDietEditable = true;
           this.isSpinnerShown = false;
@@ -196,7 +199,6 @@ export class DietComponent implements OnInit {
               food.fatsPer100 = value["fatsPer100"]
               food.proteinsPer100 = value["proteinsPer100"]
               food.carbsPer100 = value["carbsPer100"]
-              console.log(food.name+" saltsPer100 "+food.saltsPer100)
               food.calories = value["calories"]
               meal.addFood(food);
             })
@@ -213,7 +215,8 @@ export class DietComponent implements OnInit {
         })
 
         var diet = new Diet(map, caloriesPerDay, response.body.name, response.body.userId)
-        // this.currentDietName = diet.name;
+        diet.totalCalories = response.body.totalCalories
+        diet.id = response.body.id
         this.isReady = true;
         this.isDietEditable = true;
         this.dietService.setDiet(diet);

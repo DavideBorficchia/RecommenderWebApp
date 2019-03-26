@@ -86,6 +86,8 @@ export class DietHistoryComponent implements OnInit {
 
       var diet = new Diet(map, caloriesPerDay, response.body.name, response.body.userId)
       // this.currentDietName = diet.name;
+      diet.totalCalories = response.body.totalCalories;
+      diet.id = response.body.id
 
       this.dietService.setDiet(diet);
       this.dietFromHistoryIsLoading = false

@@ -2,9 +2,11 @@ mat-card {
     width: 70vw;
     height: 60vh;
 }
-mat-form-field{
+
+mat-form-field {
     max-width: 200px
 }
+
 .mat-card-image {
     height: 300px;
     width: auto;
@@ -16,15 +18,11 @@ mat-form-field{
     cursor: pointer;
     max-width: 120px;
     height: auto;
-    
 }
-
 
 /* .food_picked_avatar:hover {
     opacity: 0;
 } */
-
-
 
 .category-paragraph {
     max-width: 400px;
@@ -36,6 +34,7 @@ mat-form-field{
     width: auto;
     height: auto;
     overflow: hidden;
+    min-width: 500px;
     /* max-height: 550px; */
 }
 
@@ -75,9 +74,10 @@ mat-form-field{
     background: #555;
 }
 
-@media screen and (max-width:375px) {
+@media screen and (max-width:400px) {
     .form-card {
         max-width: 250px;
+        min-width: auto;
     }
     .category-paragraph {
         margin: 20px 0 20px 0;
@@ -88,24 +88,38 @@ mat-form-field{
     }
     .food-name {
         font-size: 30px;
+    }
+    mat-form-field {
+        max-width: 120px;
+    }
+}
+
+@media screen and (min-width:401px) and (max-width:500px) {
+    .form-card {
+        max-width: 350px !important;
+        min-width: auto;
+    }
+    .category-paragraph {
+        margin: 20px 0 20px 0;
+    }
+    .food-name {
+        font-size: 30px;
+    }
+    mat-form-field {
+        max-width: 120px;
+    }
+}
+
+@media screen and (max-width:400px) {
+    .add-food {
+        bottom: 50px;
+        right: 40px;
     }
 }
 
 @media screen and (min-width:400px) and (max-width:500px) {
-    .form-card {
-        max-width: 350px;
-    }
-    .category-paragraph {
-        margin: 20px 0 20px 0;
-    }
     .add-food {
-        bottom: 30px;
+        bottom: 50px;
         right: 40px;
-    }
-    .food-name {
-        font-size: 30px;
-    }
-    mat-form-field{
-        max-width: 120px;
     }
 }

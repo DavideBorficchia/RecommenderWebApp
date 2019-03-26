@@ -16,6 +16,7 @@ export class ToolbarComponent implements OnInit {
 
   isMobile = false;
   userName: string;
+  isNutritionist = false;
   constructor(private registerService: RegisterService) { }
 
   @HostListener('window:resize', ['$event'])
@@ -39,9 +40,16 @@ export class ToolbarComponent implements OnInit {
       .subscribe(user => {
         if (user) {
           this.userName = user.id;
-          console.log(this.userName)
+          this.isNutritionist = false;
         }
-        console.log(user)
+      
+      })
+      this.registerService.getNutritionistObservable()
+      .subscribe(nutritionist=>{
+        if(nutritionist){
+          this.userName = nutritionist.userName
+          this.isNutritionist = true;
+        }
       })
 
   }

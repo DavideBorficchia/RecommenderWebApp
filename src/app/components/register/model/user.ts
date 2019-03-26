@@ -1,4 +1,3 @@
-import { Goal } from "src/app/goal";
 
 
 
@@ -7,13 +6,14 @@ export class User {
     userName: string;
     email: string;
     password: string;
-    goal: Goal;
     birthDate: Date;
     gender: string;
     weight: number;
     height: number;
-    olderPhysicalActivities: Goal[];
-    basicMetabolicRate:number;
+    basicMetabolicRate: number;
+    imageUrl: string;
+    patients: User[];
+  currentPatient: User;
     // constructor(id: string, userName: string, email: string, password: string) {
     //     this.id = id;
     //     this.userName = userName;

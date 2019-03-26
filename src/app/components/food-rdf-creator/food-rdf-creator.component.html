@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayout.lt-md="row wrap" fxLayoutAlign="space-evenly start"
-  style="width: 90vw; margin-top: 60px; margin-bottom: 100px" *ngIf="allFoodRdfs">
+  style="width: 90vw; margin-top: 60px; margin-bottom: 100px; height: fit-content" *ngIf="allFoodRdfs">
   <div fxLayout="column" fxLayoutAlign=" start start" fxLayoutAlign.lt-md="center center" id="side_content">
     <div fxLayout="row" fxLayout.lt-md="row wrap" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center">
       <img [src]="getCategoryPresentationImage()" (load)="foodListSameHeight()" style="width: 150px; height: auto;">
@@ -79,7 +79,7 @@
                       <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>
                   </mat-chip-list>
-                  <mat-form-field   (focusin)="isSend = true">
+                  <mat-form-field (focusin)="isSend = true">
                     <mat-label>Good With</mat-label>
                     <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementGroup"
                       [formControl]="statementControl" placeholder="Click to select">
@@ -97,14 +97,14 @@
                   </mat-form-field>
                 </div>
                 <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
-                  <mat-chip-list style="margin-bottom: 15px; min-height: 32px;" >
+                  <mat-chip-list style="margin-bottom: 15px; min-height: 32px;">
                     <mat-chip *ngFor="let physicalActivity of foodRdfPicked.goodSinergyWith" [selectable]="false"
                       [removable]="true" (removed)="onChipSynergyRemoved(physicalActivity)">
                       {{physicalActivity}}
                       <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>
                   </mat-chip-list>
-                  <mat-form-field   (focusin)="isSend = true">
+                  <mat-form-field (focusin)="isSend = true">
                     <mat-label>Good Synergy With</mat-label>
                     <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementGoodSynergyGroup"
                       [formControl]="statementGoodSynergyGroupControl" placeholder="Click to select">
@@ -126,14 +126,14 @@
                 </div>
                 <!-- TEST -->
                 <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
-                  <mat-chip-list style="margin-bottom: 15px;min-height: 32px;" >
+                  <mat-chip-list style="margin-bottom: 15px;min-height: 32px;">
                     <mat-chip *ngFor="let mealType of foodRdfPicked.bestEatenAt" [selectable]="false" [removable]="true"
                       (removed)="onChipMealTypeRemoved(mealType)">
                       {{mealType}}
                       <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>
                   </mat-chip-list>
-                  <mat-form-field   (focusin)="isSend = true">
+                  <mat-form-field (focusin)="isSend = true">
                     <mat-label>Best Eaten At</mat-label>
                     <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementBestEatenAt"
                       [formControl]="statementBestEatenAtControl" placeholder="Click to select">
@@ -156,31 +156,32 @@
             </div>
           </mat-card-content>
           <mat-card-content *ngIf="showRdf" style="min-height: 400px">
-            <p fxLayout="row" fxLayoutAlign="center center" >
+            <p fxLayout="row" fxLayoutAlign="center center">
               {{foodRdfPicked.rdfOutput}}
             </p>
           </mat-card-content>
         </mat-card>
       </div>
-      <mat-list style="margin-top: 60px; min-width:100%;min-height: 100%; max-width:400px;overflow-y: auto; overflow-x: hidden;"
-       *ngIf="foodRdfs" >
-      <mat-list-item mat-ripple *ngFor="let foodRdf of foodRdfs;last as last" (click)="onItemClicked(foodRdf)">
-        <!-- <img matListAvatar src="{{foodCategory.avatarAssetPath}}"> -->
-        <img matListAvatar [src]="foodRdf.imageUrl" (load)="foodListSameHeight()">
-        <h3 matLine> {{foodRdf.name}} </h3>
-        <div matLine fxLayout="row" fxLayoutAlign="space-between center">
-          <p style="  white-space: nowrap; 
+      <mat-list
+        style="margin-top: 60px; min-width:100%;min-height: 100%; max-height:100%;max-width:400px;overflow-y: auto; overflow-x: hidden;"
+        *ngIf="foodRdfs">
+        <mat-list-item mat-ripple *ngFor="let foodRdf of foodRdfs;last as last" (click)="onItemClicked(foodRdf)">
+          <!-- <img matListAvatar src="{{foodCategory.avatarAssetPath}}"> -->
+          <img matListAvatar [src]="foodRdf.imageUrl" (load)="foodListSameHeight()">
+          <h3 matLine> {{foodRdf.name}} </h3>
+          <div matLine fxLayout="row" fxLayoutAlign="space-between center">
+            <p style="  white-space: nowrap; 
           overflow: hidden;
           text-overflow: ellipsis; width: 150px !important">
-            {{foodRdf.description}}
-          </p>
-          <span>
-            <mat-icon>edit</mat-icon>
-          </span>
-        </div>
-        <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-list>
+              {{foodRdf.description}}
+            </p>
+            <span>
+              <mat-icon>edit</mat-icon>
+            </span>
+          </div>
+          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+        </mat-list-item>
+      </mat-list>
     </div>
 
 
@@ -237,7 +238,7 @@
 
         <mat-card-content *ngIf="!showRdf">
           <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="30px">
-                <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl"   *ngIf="!pickImage">
+            <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl" *ngIf="!pickImage">
             <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
               {{foodRdfPicked.description}}
 
@@ -302,7 +303,7 @@
                 </mat-form-field>
               </div>
               <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
-                <mat-chip-list style="margin-bottom: 15px; min-height: 32px;" >
+                <mat-chip-list style="margin-bottom: 15px; min-height: 32px;">
                   <mat-chip *ngFor="let physicalActivity of foodRdfPicked.goodSinergyWith" [selectable]="false"
                     [removable]="true" (removed)="onChipSynergyRemoved(physicalActivity)">
                     {{physicalActivity}}
@@ -331,14 +332,14 @@
               </div>
               <!-- TEST -->
               <div fxLayout="column" fxLayoutAlign="space-evenly center" style="margin-top: 30px">
-                <mat-chip-list style="margin-bottom: 15px; min-height: 32px;" >
+                <mat-chip-list style="margin-bottom: 15px; min-height: 32px;">
                   <mat-chip *ngFor="let mealType of foodRdfPicked.bestEatenAt" [selectable]="false" [removable]="true"
                     (removed)="onChipMealTypeRemoved(mealType)">
                     {{mealType}}
                     <mat-icon matChipRemove>cancel</mat-icon>
                   </mat-chip>
                 </mat-chip-list>
-                <mat-form-field  (focusin)="isSend = true">
+                <mat-form-field (focusin)="isSend = true">
                   <mat-label>Best Eaten At</mat-label>
                   <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementBestEatenAt"
                     [formControl]="statementBestEatenAtControl" placeholder="Click to select">
@@ -377,9 +378,5 @@
   <button mat-fab class="add-food" (click)="onNewFoodPosted()" *ngIf="isSend" [disabled]="isUpdating">
     <mat-icon>send</mat-icon>
   </button>
-
-</div>
-<div *ngIf="foodRdfPicked">
-
 
 </div>
