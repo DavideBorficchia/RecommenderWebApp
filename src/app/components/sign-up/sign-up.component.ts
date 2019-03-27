@@ -10,7 +10,7 @@ import { Nutritionist } from 'src/app/model/nutritionist';
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.css', '../register/register.component.css']
+  styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
   // @Output('onNeedRegister') linkClicked = new EventEmitter<boolean>();

@@ -72,38 +72,40 @@ export class RegisterService {
     var currentUser: Nutritionist;
     sessionStorage["user"] ? currentUser = JSON.parse(sessionStorage["user"]) as Nutritionist : null
     var nutritionist = new Nutritionist();
-    nutritionist.email = currentUser["email"];
-    nutritionist.id = currentUser["id"];
-    nutritionist.patients = []
-    Object.values(currentUser["patients"]).forEach(value => {
-      var patient = new User();
-      patient.id = value["id"]
-      patient.basicMetabolicRate = value["basicMetabolicRate"]
-      patient.birthDate = new Date(value["birthDate"])
-      patient.email = value["email"]
-      patient.gender = value["gender"]
-      patient.height = value["height"]
-      patient.userName = value["userName"]
-      patient.weight = value["weight"]
-      patient.imageUrl = value["imageUrl"]
-      nutritionist.patients.push(patient)
-    })
-    var currentPatient = currentUser["currentPatient"]
-    if (currentPatient) {
-      nutritionist.currentPatient = new User();
-
-      nutritionist.currentPatient.id = currentPatient["id"]
-      nutritionist.currentPatient.basicMetabolicRate = currentPatient["basicMetabolicRate"]
-      nutritionist.currentPatient.birthDate = new Date(currentPatient["birthDate"])
-      nutritionist.currentPatient.email = currentPatient["email"]
-      nutritionist.currentPatient.gender = currentPatient["gender"]
-      nutritionist.currentPatient.height = currentPatient["height"]
-      nutritionist.currentPatient.userName = currentPatient["userName"]
-      nutritionist.currentPatient.weight = currentPatient["weight"]
-      nutritionist.currentPatient.imageUrl = currentPatient["imageUrl"]
-      nutritionist.userName = currentPatient["userName"];
+    if (currentUser) {
+      nutritionist.email = currentUser["email"];
+      nutritionist.id = currentUser["id"];
+      nutritionist.patients = []
+      Object.values(currentUser["patients"]).forEach(value => {
+        var patient = new User();
+        patient.id = value["id"]
+        patient.basicMetabolicRate = value["basicMetabolicRate"]
+        patient.birthDate = new Date(value["birthDate"])
+        patient.email = value["email"]
+        patient.gender = value["gender"]
+        patient.height = value["height"]
+        patient.userName = value["userName"]
+        patient.weight = value["weight"]
+        patient.imageUrl = value["imageUrl"]
+        nutritionist.patients.push(patient)
+      })
+      var currentPatient = currentUser["currentPatient"]
+      if (currentPatient) {
+        nutritionist.currentPatient = new User();
+  
+        nutritionist.currentPatient.id = currentPatient["id"]
+        nutritionist.currentPatient.basicMetabolicRate = currentPatient["basicMetabolicRate"]
+        nutritionist.currentPatient.birthDate = new Date(currentPatient["birthDate"])
+        nutritionist.currentPatient.email = currentPatient["email"]
+        nutritionist.currentPatient.gender = currentPatient["gender"]
+        nutritionist.currentPatient.height = currentPatient["height"]
+        nutritionist.currentPatient.userName = currentPatient["userName"]
+        nutritionist.currentPatient.weight = currentPatient["weight"]
+        nutritionist.currentPatient.imageUrl = currentPatient["imageUrl"]
+        nutritionist.userName = currentPatient["userName"];
+      }
+      nutritionist.userName = currentUser["userName"]
     }
-    nutritionist.userName = currentUser["userName"]
 
     if (!this.nutritionistBehavior) {
       this.nutritionistBehavior = new BehaviorSubject(nutritionist)

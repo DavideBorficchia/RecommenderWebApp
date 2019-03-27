@@ -318,6 +318,7 @@ export class FoodRdfCreatorComponent implements OnInit {
       return;
     }
     var food = this.foodRdfs.find(f=>f.id === foodToSend.id)
+    // If the food to send is present in the list of all food, it means that i'll make an update
     if(food){
       this.isUpdating = true
       this.foodRecommenderService.updateFood(this.foodRdfPicked, this.foodRdfPicked.id)

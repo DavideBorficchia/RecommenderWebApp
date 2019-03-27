@@ -12,32 +12,50 @@
 .information-field {
     max-width: 200px
 }
-text-area{
+
+text-area {
     width: 100%;
 }
 
-.form-card {
+mat-form-field {
+    max-width: 180px;
+}
+
+/* .form-card {
     max-width: 700px;
     min-width: 550px;
     width: auto;
     height: auto;
     overflow: hidden;
     /* max-height: 550px; */
-}
+
+/*} */
+
 .add-pa {
     position: fixed;
     bottom: 90px;
     right: 150px;
     z-index: 3;
 }
+
 .pa-name {
     font-weight: 300;
     font-size: 40px;
 }
 
+.mat-tab-list {
+    margin-top: 5px;
+    min-width: 80%;
+    max-height: 300px;
+    max-width: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .physical-activity-image {
     max-width: 180px;
 }
+
 /* width */
 
 ::-webkit-scrollbar {
@@ -61,7 +79,8 @@ text-area{
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-@media screen and (max-width:375px) {
+
+/* @media screen and (max-width:375px) {
     .form-card {
         max-width: 250px;
     }
@@ -72,14 +91,28 @@ text-area{
         bottom: 30px;
         right: 40px;
     }
+
+} */
+
+/* @media screen and(max-width:400px){
+    .tab-card{
+        max-width: 250px;
+        min-width: auto;
+    }
+    mat-form-field{
+        max-width: 120px;
+    }
+    mat-form-header{
+        width: inherit;
+    }
     .food-name {
         font-size: 30px;
     }
-}
+} */
 
-@media screen and (min-width:320px) and (max-width:500px) {
-    .form-card {
-        max-width: 350px;
+@media screen and (max-width:350px) {
+    .tab-card {
+        max-width: 250px;
     }
     .category-paragraph {
         margin: 20px 0 20px 0;
@@ -87,19 +120,35 @@ text-area{
     .food-name {
         font-size: 30px;
     }
-    mat-form-field{
-        max-width: 120px;
+    mat-form-field {
+        max-width: 180px;
     }
-}
-@media screen and (max-width:400px){
+    mat-form-header {
+        max-width: inherit;
+    }
+    .physical-activity-image {
+        max-width: 100;
+    }
     .add-food {
         bottom: 50px;
         right: 40px;
     }
 }
-@media screen and (min-width:400px) and (max-width:500px){
+
+
+
+@media screen and (min-width:351px) and (max-width:400px) {
+    .tab-card {
+        max-width: 310px;
+    }
+}
+
+@media screen and (min-width:401px) and (max-width:500px) {
     .add-food {
         bottom: 50px;
         right: 40px;
+    }
+    .tab-card {
+        max-width: 380px;
     }
 }

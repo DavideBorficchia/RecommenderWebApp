@@ -9,11 +9,11 @@
   border-width: 7px;
   /* max-height: 340px; */
   /* max-width: 350px; */
-  margin: 30px;
   max-height: 100%;
   max-width: 600px;
   overflow: hidden;
-  min-width: 300px;
+  min-width: 280px;
+  margin-top: 30px;
 }
 
 /* #matcontent{
@@ -69,64 +69,47 @@
   margin-right: 10px;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 601px) {
   .login-icon {
-    max-width: 150px;
-    max-height: 150px;
+      max-width: 150px;
+      max-height: 150px;
   }
   .large-button {
-    width: 160px;
-    height: 40px;
-    font-size: 17px;
+      width: 160px;
+      height: 40px;
+      font-size: 17px;
   }
   .login-form {
-    margin-right: 20px;
-    margin-top: 0px;
+      margin-right: 20px;
+      margin-top: 0px;
   }
   #form-container {
-    margin-right: 30px;
-    margin-left: 30px;
-    margin-top: 0px;
+      margin-right: 30px;
+      margin-left: 30px;
+      margin-top: 0px;
   }
 }
 
-@media screen and (max-width: 600px) {
-  #leftsection {
-    /* padding: 5px 40px; */
-  }
+@media screen and (max-width:600px) {
   .login-card {
-    max-width: 400px;
-    margin-top: 20px;
-    /* max-height: inherit; */
+      max-width: 250px;
+      margin-top: 30px;
+      max-height: 600px;
   }
   .full-width {
-    max-width: 300px !important;
-    font-size: 13px;
+      max-width: 300px !important;
+      font-size: 13px;
   }
   .login-icon {
-    width: 80px;
-    height: 80px;
-    margin-left: 80px;
+      width: 80px;
+      height: 80px;
+      margin-left: 80px;
   }
   .login-form {
-    max-width: 300px !important;
-    margin: 5px !important;
+      max-width: 300px !important;
+      margin: 5px !important;
   }
-}
-
-@media screen and (max-width: 500px) {
   h1 {
-    font-size: 25px;
-  }
-  .login-card {
-    margin: 10px !important;
-    /* max-height: inherit; */
-  }
-  @media screen and (max-width: 400px) {
-    .login-card {
-      margin-left: 3px !important;
-      margin-right: 3px !important;
-    }
-  
+      font-size: 25px;
   }
 }

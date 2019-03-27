@@ -8,4 +8,5 @@ export class PhysicalActivity {
   endDate:Date;
   caloriesPerHour:number;
   imageUrl:string;
+  userId:string;
 }

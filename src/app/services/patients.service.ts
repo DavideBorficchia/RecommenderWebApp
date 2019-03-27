@@ -22,8 +22,23 @@ export class PatientsService {
 
   public getSelectedPatientObservable() {
 
+    var currentUser = sessionStorage["user"] ? JSON.parse(sessionStorage["user"]) as User : null;
+    var currentPatient: User;
+    if (currentUser && currentUser["currentPatient"]) {
+      currentPatient = new User();
+      var value = currentUser["currentPatient"]
+      currentPatient.id = value["id"]
+      currentPatient.basicMetabolicRate = value["basicMetabolicRate"]
+      currentPatient.birthDate = new Date(value["birthDate"])
+      currentPatient.email = value["email"]
+      currentPatient.gender = value["gender"]
+      currentPatient.height = value["height"]
+      currentPatient.userName = value["userName"]
+      currentPatient.weight = value["weight"]
+      currentPatient.imageUrl = value["imageUrl"]
+    }
     if (!this.patientBehavior) {
-      this.patientBehavior = new BehaviorSubject(null)
+      this.patientBehavior = new BehaviorSubject(currentPatient)
 
       return this.patientBehavior;
 

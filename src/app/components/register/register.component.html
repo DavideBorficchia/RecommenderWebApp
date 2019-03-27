@@ -1,51 +1,57 @@
-<mat-card class="login-card">
-  <!-- <mat-card-header>
+  <mat-card class="login-card">
+    <!-- <mat-card-header>
     <mat-card-title>Log In</mat-card-title>
   </mat-card-header> -->
-  <div fxLayout="row" fxLayout.xs="column wrap" fxLayoutAlign="center center">
+    <div fxLayout="row" fxLayout.xs="column wrap" fxLayoutAlign="center center">
 
-    <div fxLayout="column" fxLayout.xs="row wrap" fxLayoutAlign.xs="start center" fxLayoutAlign="center start" id="leftsection">
+      <div fxLayout="column" fxLayoutAlign="center start" id="leftsection" fxLayoutGap="30px">
+        <div fxLayout="row" fxLayout.xs="row wrap" fxLayoutAlign="space-evenly center" fxLayoutGap="10px" style="min-width: 100%">
 
-      <h2>Log In </h2>
-      <!-- production link: ./assets/login.svg -->
-      <img src="./assets/login.svg" class="login-icon">
-      <p>In order to log in you need to create an account. Click the link on the right if you need to</p>
-    </div>
+          <h2>Log In </h2>
+          <!-- production link: ./assets/login.svg -->
+          <img src="./assets/login.svg" class="login-icon">
+        </div>
+        <div fxLayout.xs="row wrap" fxLayoutAlign.xs="space-evenly center">
 
-    <div fxLayout="column" fxLayoutAlign="center center" id="form-container">
+          <p>In order to log in you need to create an account. Click the link on the right if you need to</p>
+        </div>
+      </div>
 
-      <!--sdkjchksldjvhfdjsklòaskjfh-->
-      <!--  The variable login is now a reference to the NgForm directive that governs the form as a whole -->
-      <form class="login-form" fxLayout="column" fxLayoutAlign="center center" #login="ngForm">
+      <div fxLayout="column" fxLayoutAlign="center center" id="form-container">
 
-        <mat-form-field class="form-group full-width " color="primary">
-          <mat-label>Enter your e-mail</mat-label>
-          <input class="form-control" type="text" matInput placeholder="email@yourprovider.com" name="emailField"
-            required [(ngModel)]="formUser.email" value="{{formUser.email}}">
-          <mat-icon style="font-size: 25px" matSuffix> alternate_email</mat-icon>
-        </mat-form-field>
+        <!--sdkjchksldjvhfdjsklòaskjfh-->
+        <!--  The variable login is now a reference to the NgForm directive that governs the form as a whole -->
+        <form class="login-form" fxLayout="column" fxLayoutAlign="center center" #login="ngForm">
 
-        <mat-form-field class="full-width" color="primary">
-          <mat-label>Enter your password</mat-label>
-          <input class="form-control" type="password" matInput placeholder="Password" #password [type]="hide ? 'password' : 'text'"
-            [(ngModel)]="formUser.password" value="{{formUser.password}}" name="passwordField" required>
-          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </mat-form-field>
+          <mat-form-field class="form-group full-width " color="primary">
+            <mat-label>Enter your e-mail</mat-label>
+            <input class="form-control" type="text" matInput placeholder="email@yourprovider.com" name="emailField"
+              required [(ngModel)]="formUser.email" value="{{formUser.email}}">
+            <mat-icon style="font-size: 25px" matSuffix> alternate_email</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field class="full-width" color="primary">
+            <mat-label>Enter your password</mat-label>
+            <input class="form-control" type="password" matInput placeholder="Password" #password
+              [type]="hide ? 'password' : 'text'" [(ngModel)]="formUser.password" value="{{formUser.password}}"
+              name="passwordField" required>
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
 
 
-      </form>
-      <mat-card-actions fxLayout="column" fxLayoutAlign="center center">
-        <button mat-raised-button color="primary" class="large-button" (click)="onLogIn()">Log
-          In</button>
-   
-        <a id="signup-link" mat-button routerLink="/registration/signup">Don't
-          have an
-          account yet? Sign Up here</a>
+        </form>
+        <mat-card-actions fxLayout="column" fxLayoutAlign="center center">
+          <button mat-raised-button color="primary" class="large-button" (click)="onLogIn()">Log
+            In</button>
 
-      </mat-card-actions>
-      <div *ngIf="isSpinnerShown">
-        <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
+          <a id="signup-link" mat-button routerLink="/registration/signup">Don't
+            have an
+            account yet? Sign Up here</a>
+
+        </mat-card-actions>
+        <div *ngIf="isSpinnerShown">
+          <mat-spinner class="login-spinner" color="primary" [diameter]="30"></mat-spinner>
+        </div>
       </div>
     </div>
-  </div>
-</mat-card>
+  </mat-card>

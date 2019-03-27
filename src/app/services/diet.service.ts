@@ -11,6 +11,7 @@ import { MealType } from '../model/mealtypes';
 import { Meal } from '../model/abstarctmeal';
 import { Diet } from '../model/diet';
 import { DietHistory } from '../model/diethistory';
+import { PhysicalActivity } from '../model/physicalactivity';
 
 @Injectable({
   providedIn: 'root'
@@ -112,6 +113,17 @@ export class DietService {
     this.dietBehaviour.next(this.diet);
 
 
+  }
+  updateCurrentPhysicalActivity(diet:Diet){
+    return this.httpClient.put<Diet>(this.baseUrl+"/"+diet.name+"/updates",diet,{
+      observe:'response',
+      params:{
+        userId:diet.userId.toString()
+      }
+    }).pipe(catchError(error => {
+      console.log(error)
+      return throwError(error)
+    }))
   }
 
   updateQuantityAndCaloriesHandler(food: Food, day: DayOfWeek, mealType: MealType) {

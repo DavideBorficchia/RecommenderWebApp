@@ -23,6 +23,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MatSnackBarModule, MatNativeDateModule, MatListModule, MatDividerModule, MatExpansionModule, MatSortModule, MatTableModule, MatChipsModule, MatSliderModule, MatRipple, MatRippleModule } from '@angular/material';
 import { MatMenuModule } from '@angular/material/menu';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DietComponent } from './components/diet/diet.component'
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -116,6 +117,7 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatSliderModule,
     MatDialogModule,
+    MatTooltipModule,
     MatChipsModule,
     MatSlideToggleModule,
     MatExpansionModule,

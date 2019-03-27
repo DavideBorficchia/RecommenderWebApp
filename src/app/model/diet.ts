@@ -3,6 +3,7 @@ import { Food } from "./food";
 import { Meal } from "./abstarctmeal";
 import { Guid } from "guid-typescript";
 import { Identifiers } from "@angular/compiler";
+import { PhysicalActivity } from "./physicalactivity";
 
 export class Diet {
     id: String;
@@ -12,7 +13,7 @@ export class Diet {
     caloriesPerDay: Map<DayOfWeek, number>;
     timeStamp: Date;
     totalCalories: number;
-    physicalActivity: string;
+    physicalActivity: PhysicalActivity;
 
 
     constructor(dailyFood: Map<DayOfWeek, Meal[]>, caloriesPerDay: Map<DayOfWeek, number>, name: String, id: String) {

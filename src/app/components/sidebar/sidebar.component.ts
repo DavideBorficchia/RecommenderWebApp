@@ -107,8 +107,6 @@ export class SidebarComponent implements OnInit {
         if (nutritionist) {
 
           this.currentNutritionist = nutritionist;
-          console.log("AFTER")
-          console.log(this.currentNutritionist)
           this.currentPatient = this.currentNutritionist.currentPatient;
 
           this.nutritionistPatients = []
