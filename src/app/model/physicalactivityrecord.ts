@@ -1,6 +1,9 @@
 export class PhysicalActivityRecord{
-    dietId:string;
     physicalActivityId:string;
+    userId:string;
+    id:string;
     burntCalories:number;
-    date:Date;
+    sessionTimeStart:Date;
+    sessionTimeEnd:Date;
+
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { PhysicalActivity } from '../model/physicalactivity';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { throwError, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +10,11 @@ import { throwError } from 'rxjs';
 export class PhysicalActivitiesService {
 
   baseUrl = "http://localhost:8080/recommender/activities"
+  physicalActivitiesBehaviour:BehaviorSubject<PhysicalActivity[]>;
   constructor(private httpClient: HttpClient) { }
 
   createNewPhysicalActivity(physicalActivity: PhysicalActivity, userId: string) {
-    return this.httpClient.post<PhysicalActivity>(this.baseUrl + "/creations", physicalActivity, {
+    return this.httpClient.post<PhysicalActivity>(this.baseUrl, physicalActivity, {
       params: {
         userId: userId
       }
@@ -27,10 +28,25 @@ export class PhysicalActivitiesService {
     }).pipe(catchError(error => throwError(error)));
   }
   updatePhysicalActivity(physicalActivity: PhysicalActivity, userId: string) {
-    return this.httpClient.put<PhysicalActivity>(this.baseUrl + "/" + physicalActivity.id + "/updates", physicalActivity, {
+    return this.httpClient.put<PhysicalActivity>(this.baseUrl, physicalActivity, {
       params: {
         userId: userId
       }
     }).pipe(catchError(error => throwError(error)));
   }
+  getObservablePhysicalActivities(){
+    if(!this.physicalActivitiesBehaviour){
+      this.physicalActivitiesBehaviour = new BehaviorSubject(null);
+    }
+    return this.physicalActivitiesBehaviour;
+  }
+  setObservablePhysicalActivities(activities:PhysicalActivity[]){
+    if(!this.physicalActivitiesBehaviour){
+      this.physicalActivitiesBehaviour = new BehaviorSubject(activities);
+    }
+    else{
+      this.physicalActivitiesBehaviour.next(activities)
+    }
+  }
+
 }

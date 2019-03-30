@@ -18,6 +18,7 @@ export class FoodRdf {
     rdfOutput: string;
     bestEatenAt: string[];
     id:string;
+    
     constructor() { }
     // constructor(name:string,description:string, proteins:number,carbs:number,vitamins:number,fats:number,goodWith:string[],
     //     type:string,imageUrl:string,isHealthy:string,timeStamp:number){

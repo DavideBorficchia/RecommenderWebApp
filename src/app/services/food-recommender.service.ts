@@ -268,8 +268,11 @@ export class FoodRecommenderService {
   }
   getObservableFoodBehavior() {
     if (!this.allFoodRdfBehavior) {
+    console.log("hey there")
       this.allFoodRdfBehavior = new BehaviorSubject(this.allFoodRdf)
     }
+    console.log("hey there")
+
     return this.allFoodRdfBehavior;
   }
   getAllFood(): FoodRdf[] {

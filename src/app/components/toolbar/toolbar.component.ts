@@ -39,6 +39,7 @@ export class ToolbarComponent implements OnInit {
     this.registerService.getUserObservable()
       .subscribe(user => {
         if (user) {
+          console.log(user)
           this.userName = user.id;
           this.isNutritionist = false;
         }
@@ -47,6 +48,7 @@ export class ToolbarComponent implements OnInit {
       this.registerService.getNutritionistObservable()
       .subscribe(nutritionist=>{
         if(nutritionist){
+          console.log(nutritionist)
           this.userName = nutritionist.userName
           this.isNutritionist = true;
         }

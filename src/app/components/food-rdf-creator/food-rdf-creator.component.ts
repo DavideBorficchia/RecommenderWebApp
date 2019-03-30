@@ -12,6 +12,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Guid } from 'guid-typescript';
 import { PatientsService } from 'src/app/services/patients.service';
 import { DietService } from 'src/app/services/diet.service';
+import { PhysicalActivitiesService } from 'src/app/services/physical-activities.service';
+import { PhysicalActivity } from 'src/app/model/physicalactivity';
 @Component({
   selector: 'app-food-rdf-creator',
   templateUrl: './food-rdf-creator.component.html',
@@ -33,17 +35,19 @@ export class FoodRdfCreatorComponent implements OnInit {
   private filteredFoodRdf: Observable<FoodRdf[]>;
   private tempFoodBeforePosting: FoodRdf = new FoodRdf();
   private isUpdating: Boolean = false;
-  filteredPhysicalActivities: Observable<string[]>;
+  filteredPhysicalActivities: Observable<PhysicalActivity[]>;
   pickImage: boolean = false;
   filteredMealTypes: Observable<string[]>
-  allPhysicalActivities: string[];
+  allPhysicalActivities: PhysicalActivity[];
   showRdf: boolean;
   descriptionIsChanging: boolean;
   isSend = false;
+  imageIsClicked = false;
   constructor(private router: Router, private foodRecommenderService: FoodRecommenderService,
     public snackBar: MatSnackBar,
-    public dietService:DietService,
-    private patientService:PatientsService) { }
+    public dietService: DietService,
+    private patientService: PatientsService,
+    public physicalActivityService: PhysicalActivitiesService) { }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     if (event.target.innerWidth > 960) {
@@ -88,6 +92,7 @@ export class FoodRdfCreatorComponent implements OnInit {
   onTextAreaDeselect() {
     this.nameIsChanging = false;
     this.descriptionIsChanging = false;
+    this.imageIsClicked = false;
     this.compare();
     if (!this.tempFoodBeforePosting.name.includes('Create') && this.isSend) {
       this.isUpdating = true
@@ -136,26 +141,12 @@ export class FoodRdfCreatorComponent implements OnInit {
 
   ngOnInit() {
 
-    this.foodRecommenderService.getObservableFoodCategory()
-      .subscribe(changeCategory => {
-        this.foodCategory = changeCategory;
-        $(window).on('load', function () {
-          if (window.innerWidth > 960) {
-            var foodCardHeight = $("#card").outerHeight();
-            var foodList = document.getElementById("side_content")
-            if (foodList !== null) {
-              foodList.style.height = foodCardHeight.toString() + "px";
-            }
-          }
-
-        });
-      });
 
 
     const url = this.router.url;
     var parsedUrl = url.split("/home/food/");
     var categoryName = parsedUrl[1];
-    this.foodCategory = this.foodRecommenderService.getCategory(categoryName)
+    this.foodCategory = this.foodRecommenderService.getCategory(categoryName);
     var defaultFoodPicked = new FoodRdf();
     defaultFoodPicked.imageUrl = "https://api.adorable.io/avatars/120/" + Math.random().toString() + ".png"
     defaultFoodPicked.name = "Create new " + this.foodCategory.categoryName;
@@ -173,48 +164,132 @@ export class FoodRdfCreatorComponent implements OnInit {
     defaultFoodPicked.id = Guid.create().toString();
 
 
-    this.allPhysicalActivities = ["Treadmill", "Box", "Jogging"]
-    this.patientService.getSelectedPatientObservable().subscribe(selectedUser=>{
-      if(selectedUser){
-        
-        this.allFoodRdfs =  [];
+
+    this.patientService.getSelectedPatientObservable().subscribe(selectedUser => {
+      if (selectedUser) {
+        this.allFoodRdfs = [];
+        this.allPhysicalActivities = [];
         this.foodRecommenderService.setNewFoodRdf(this.allFoodRdfs);
+        this.physicalActivityService.setObservablePhysicalActivities(this.allPhysicalActivities)
+        this.foodRecommenderService.getObservableFoodCategory()
+          .subscribe(changeCategory => {
+            if (changeCategory) {
+              this.foodCategory = this.foodRecommenderService.getCategory(changeCategory.categoryName.toString());
+            }
+            $(window).on('load', function () {
+              if (window.innerWidth > 960) {
+                var foodCardHeight = $("#card").outerHeight();
+                var foodList = document.getElementById("side_content")
+                if (foodList !== null) {
+                  foodList.style.height = foodCardHeight.toString() + "px";
+                }
+              }
+
+            });
+          });
+          this.physicalActivityService.getAllPhysicalActivities(selectedUser.id).subscribe(response => {
+            console.log(response)
+
+            if (response) {
+              var allPhysicalActivities = [];
+              response.forEach(value => {
+                var physicalActivity = new PhysicalActivity();
+                physicalActivity.name = value["name"];
+                physicalActivity.rdfOutput = value["rdfOutput"];
+                physicalActivity.imageUrl = value["imageUrl"];
+                physicalActivity.description = value["description"]
+                physicalActivity.startDate = new Date(value["startDate"]);
+                physicalActivity.endDate = new Date(value["endDate"]);
+                physicalActivity.caloriesPerHour = value["caloriesPerHour"];
+                physicalActivity.userId = value["userId"]
+                physicalActivity.id = value["id"]
+                allPhysicalActivities.push(physicalActivity)
+              })
+              this.physicalActivityService.setObservablePhysicalActivities(allPhysicalActivities)
+            }
+
+          })
+          this.foodRecommenderService.getAllFoodFromServer();
+          
+
         this.foodListSameHeight();
-        this.foodRecommenderService.getAllFoodFromServer();
+        this.physicalActivityService.getObservablePhysicalActivities().subscribe(activities => {
+          if (activities) {
+            this.allPhysicalActivities = activities;
+            this.foodRecommenderService.getObservableFoodBehavior().subscribe(event => {
+              if (event) {
+                this.allFoodRdfs = event
+                this.foodRdfPicked = defaultFoodPicked;
+                
+
+                if (!this.allFoodRdfs) {
+                  this.allFoodRdfs = []
+                }
+                this.deepCopyFoodRDFPicked();
+
+                this.foodRdfs = this.allFoodRdfs.filter(foodRdf => foodRdf.type.replace(/ /g, "") === categoryName);
+
+                this.filteredFoodRdf = this.statementControl.valueChanges.pipe(
+                  startWith(''),
+                  map(value => this._filter(value))
+                )
+                this.filteredPhysicalActivities = this.statementGoodSynergyGroupControl.valueChanges.pipe(
+                  startWith(''),
+                  map(value => this._filterPhysical(value))
+                )
+                this.filteredMealTypes = this.statementBestEatenAtControl.valueChanges.pipe(
+                  startWith(''),
+                  map(value => this._filterMealTypes(value))
+                )
+              }
+              else {
+               
+
+              }
+
+
+
+
+            })
+          }
+          else {
+            this.physicalActivityService.setObservablePhysicalActivities([])
+            // this.physicalActivityService.getAllPhysicalActivities(selectedUser.id).subscribe(response => {
+              
+            //   console.log(response)
+
+            //   if (response) {
+            //     var allPhysicalActivities = [];
+            //     response.forEach(value => {
+            //       var physicalActivity = new PhysicalActivity();
+            //       physicalActivity.name = value["name"];
+            //       physicalActivity.rdfOutput = value["rdfOutput"];
+            //       physicalActivity.imageUrl = value["imageUrl"];
+            //       physicalActivity.description = value["description"]
+            //       physicalActivity.startDate = new Date(value["startDate"]);
+            //       physicalActivity.endDate = new Date(value["endDate"]);
+            //       physicalActivity.caloriesPerHour = value["caloriesPerHour"];
+            //       physicalActivity.userId = value["userId"]
+            //       physicalActivity.id = value["id"]
+            //       allPhysicalActivities.push(physicalActivity)
+            //     })
+            //     this.physicalActivityService.setObservablePhysicalActivities(allPhysicalActivities)
+            //   }
+
+            // })
+          }
+        })
       }
     })
-    this.foodRecommenderService.getObservableFoodBehavior().subscribe(event => {
-      this.allFoodRdfs = event;
 
-
-      if (!this.foodRdfPicked) {
-        this.foodRdfPicked = defaultFoodPicked;
-      }
-      if (!this.allFoodRdfs) {
-        this.allFoodRdfs = []
-      }
-      this.deepCopyFoodRDFPicked();
-
-      this.foodRdfs = this.allFoodRdfs.filter(foodRdf => foodRdf.type.replace(/ /g, "") === categoryName);
-
-      this.filteredFoodRdf = this.statementControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      )
-      this.filteredPhysicalActivities = this.statementGoodSynergyGroupControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filterPhysical(value))
-      )
-      this.filteredMealTypes = this.statementBestEatenAtControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filterMealTypes(value))
-      )
-    })
     this.foodListSameHeight();
 
 
 
 
+  }
+  checkNewChanges(): any {
+    throw new Error("Method not implemented.");
   }
 
   _filterMealTypes(value: string): string[] {
@@ -222,9 +297,10 @@ export class FoodRdfCreatorComponent implements OnInit {
 
     return this.mealTypes.filter(option => option.toLowerCase().includes(filterValue));
   }
-  _filterPhysical(value: string): string[] {
+  _filterPhysical(value: string): PhysicalActivity[] {
     const filterValue = value.toLowerCase();
-    return this.allPhysicalActivities.filter(option => option.toLowerCase().includes(filterValue));
+    var filteredStuff = this.allPhysicalActivities.filter(option => option.name.toLowerCase().includes(filterValue));
+    return filteredStuff;
   }
   onOptionSelected(event: MatAutocompleteSelectedEvent) {
     var foodRdf = this.allFoodRdfs.find(foodRdf => foodRdf.name === event.option.value);
@@ -250,10 +326,10 @@ export class FoodRdfCreatorComponent implements OnInit {
 
   }
   onOptionSynergySelected(event: MatAutocompleteSelectedEvent) {
-    var physicalActivity = this.allPhysicalActivities.find(pA => pA === event.option.value);
-    const index = this.foodRdfPicked.goodSinergyWith.indexOf(physicalActivity);
+    var physicalActivity = this.allPhysicalActivities.find(pA => pA.name === event.option.value);
+    const index = this.foodRdfPicked.goodSinergyWith.indexOf(physicalActivity.name);
     if (index < 0) {
-      this.foodRdfPicked.goodSinergyWith.push(physicalActivity);
+      this.foodRdfPicked.goodSinergyWith.push(physicalActivity.name);
       this.onTextAreaDeselect();
 
     }
@@ -317,9 +393,9 @@ export class FoodRdfCreatorComponent implements OnInit {
       this.snackBar.open("Change name before confirming creation")
       return;
     }
-    var food = this.foodRdfs.find(f=>f.id === foodToSend.id)
+    var food = this.foodRdfs.find(f => f.id === foodToSend.id)
     // If the food to send is present in the list of all food, it means that i'll make an update
-    if(food){
+    if (food) {
       this.isUpdating = true
       this.foodRecommenderService.updateFood(this.foodRdfPicked, this.foodRdfPicked.id)
         .subscribe(response => {
@@ -545,6 +621,13 @@ export class FoodRdfCreatorComponent implements OnInit {
       return
     }
     if (this.foodRdfPicked.carbsPer100 === this.tempFoodBeforePosting.carbsPer100) {
+      this.isSend = false;
+    }
+    else{
+      this.isSend = true;
+      return ;
+    }
+    if(this.foodRdfPicked.imageUrl === this.tempFoodBeforePosting.imageUrl){
       this.isSend = false;
     }
     else {

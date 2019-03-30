@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayout.lt-md="row wrap" fxLayoutAlign="space-evenly start"
-  style="width: 90vw; margin-top: 60px; margin-bottom: 100px; height: fit-content" *ngIf="allFoodRdfs">
+  style="width: 90vw; margin-top: 60px; margin-bottom: 100px; height: fit-content" *ngIf="allFoodRdfs && foodCategory">
   <div fxLayout="column" fxLayoutAlign=" start start" fxLayoutAlign.lt-md="center center" id="side_content">
     <div fxLayout="row" fxLayout.lt-md="row wrap" fxLayoutAlign="start center" fxLayoutAlign.lt-md="center center">
       <img [src]="getCategoryPresentationImage()" (load)="foodListSameHeight()" style="width: 150px; height: auto;">
@@ -33,7 +33,13 @@
 
           <mat-card-content *ngIf="!showRdf">
             <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="30px">
-              <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl">
+              <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl" *ngIf="!imageIsClicked"
+                (click)="imageIsClicked = true" (load)="foodListSameHeight()">
+              <mat-form-field (focusout)="onTextAreaDeselect()" (focusin)="isSend = true" appearance="outline"
+                *ngIf="imageIsClicked">
+                <mat-label>Image Local Url</mat-label>
+                <input matInput [(ngModel)]="foodRdfPicked.imageUrl">
+              </mat-form-field>
               <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
                 {{foodRdfPicked.description}}
 
@@ -106,16 +112,17 @@
                   </mat-chip-list>
                   <mat-form-field (focusin)="isSend = true">
                     <mat-label>Good Synergy With</mat-label>
-                    <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementGoodSynergyGroup"
-                      [formControl]="statementGoodSynergyGroupControl" placeholder="Click to select">
+                    <input type="text" matInput placeholder="Good Sinergy With"
+                      [matAutocomplete]="statementGoodSynergyGroup" [formControl]="statementGoodSynergyGroupControl"
+                      placeholder="Click to select">
                     <mat-autocomplete #statementGoodSynergyGroup="matAutocomplete"
                       (optionSelected)="onOptionSynergySelected($event)">
                       <mat-option *ngFor="let physicalActivityName of filteredPhysicalActivities | async"
-                        [value]="physicalActivityName">
+                        [value]="physicalActivityName.name">
                         <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-                          <img src="https://api.adorable.io/avatars/120/123.png"
+                          <img [src]="physicalActivityName.imageUrl"
                             style="border-radius: 50%; width:30px; height: auto">
-                          <span>{{physicalActivityName}}</span>
+                          <span>{{physicalActivityName.name}}</span>
                         </div>
                       </mat-option>
                     </mat-autocomplete>
@@ -238,7 +245,13 @@
 
         <mat-card-content *ngIf="!showRdf">
           <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="30px">
-            <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl" *ngIf="!pickImage">
+            <img class="food_picked_avatar" [(src)]="foodRdfPicked.imageUrl" *ngIf="!imageIsClicked"
+              (click)="imageIsClicked = true" (load)="foodListSameHeight()">
+            <mat-form-field (focusout)="onTextAreaDeselect()" (focusin)="isSend = true" appearance="outline"
+              *ngIf="imageIsClicked">
+              <mat-label>Image Local Url</mat-label>
+              <input matInput [(ngModel)]="foodRdfPicked.imageUrl">
+            </mat-form-field>
             <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
               {{foodRdfPicked.description}}
 
@@ -312,16 +325,16 @@
                 </mat-chip-list>
                 <mat-form-field (focusin)="isSend = true">
                   <mat-label>Good Synergy With</mat-label>
-                  <input type="text" matInput placeholder="Good With" [matAutocomplete]="statementGoodSynergyGroup"
-                    [formControl]="statementGoodSynergyGroupControl" placeholder="Click to select">
+                  <input type="text" matInput placeholder="Good Sinergy With"
+                    [matAutocomplete]="statementGoodSynergyGroup" [formControl]="statementGoodSynergyGroupControl"
+                    placeholder="Click to select">
                   <mat-autocomplete #statementGoodSynergyGroup="matAutocomplete"
                     (optionSelected)="onOptionSynergySelected($event)">
                     <mat-option *ngFor="let physicalActivityName of filteredPhysicalActivities | async"
-                      [value]="physicalActivityName">
+                      [value]="physicalActivityName.name">
                       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-                        <img src="https://api.adorable.io/avatars/120/123.png"
-                          style="border-radius: 50%; width:30px; height: auto">
-                        <span>{{physicalActivityName}}</span>
+                        <img [src]="physicalActivityName.imageUrl" style="border-radius: 50%; width:30px; height: auto">
+                        <span>{{physicalActivityName.name}}</span>
                       </div>
                     </mat-option>
                   </mat-autocomplete>

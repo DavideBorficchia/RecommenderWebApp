@@ -1,20 +1,33 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav [mode]="isOver ? 'over' : 'side'" [fixedInViewport]="isOver" [style.marginTop.px]="60" >
+  <mat-sidenav #sidenav [mode]="isOver ? 'over' : 'side'" [fixedInViewport]="isOver" [style.marginTop.px]="60" autosize>
     <div fxLayout="column" fxLayoutAlign="start center" fxLayoutAlign.xs="center center">
 
-      <div fxLayout="column" fxLayoutAlign="start start" id="sidenavheader">
+      <div fxLayout="column" fxLayoutAlign="start start" id="sidenavheader" *ngIf="!isNutritionist">
         <h3>{{currentUser.userName}}</h3>
         <h5>{{currentUser.email}}</h5>
 
       </div>
+      <div fxLayout="column" fxLayoutAlign="start start" id="sidenavheader" *ngIf="isNutritionist">
+          <h3>{{currentNutritionist.userName}}</h3>
+          <h5>{{currentNutritionist.email}}</h5>
+  
+        </div>
       <div *ngIf="!isNutritionist">
         <div fxLayout="column" fxLayoutAlign="center center" id="patientdetailssection">
 
 
+          <img [src]=currentUser.imageUrl style="max-width: 100px;border-radius: 50%;margin-bottom: 50px;"
+            (click)="onClick()" *ngIf="!userImage">
+          <mat-form-field (focusout)="compareForm()" (focusin)="isUserUpdated=false" appearance="outline"
+            *ngIf="userImage">
+            <mat-label>Image Local Url</mat-label>
+            <input matInput [(ngModel)]="currentUser.imageUrl">
+          </mat-form-field>
 
           <mat-form-field>
             <input matInput [matDatepicker]="picker" placeholder="Birthdate " [(ngModel)]="currentUser.birthDate"
-              [value]="currentUser.birthDate" (focus)="isUserUpdated=false" autofocus="off">
+              [value]="currentUser.birthDate" (focusin)="isUserUpdated=false" (focusout)="compareForm()"
+              autofocus="off">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -22,7 +35,7 @@
 
 
           <mat-form-field>
-            <mat-select placeholder="Gender" [(ngModel)]="currentUser.gender" (focus)="isUserUpdated=false">
+            <mat-select placeholder="Gender" [(ngModel)]="currentUser.gender" (focusin)="isUserUpdated=false">
               <mat-option value="Male">Male</mat-option>
               <mat-option value="Female">Female</mat-option>
             </mat-select>
@@ -31,13 +44,13 @@
           <mat-form-field>
             <span matSuffix>cm</span>
             <input matInput #height placeholder="Height" type="number" [(ngModel)]="currentUser.height"
-              (focus)="isUserUpdated=false">
+              (focusin)="isUserUpdated=false" (focusout)="compareForm()">
           </mat-form-field>
 
           <mat-form-field>
             <span matSuffix>kg</span>
             <input matInput #weight placeholder="Weight" type="number" [(ngModel)]="currentUser.weight"
-              (focus)="isUserUpdated=false">
+              (focusin)="isUserUpdated=false" (focusout)="compareForm()">
           </mat-form-field>
 
         </div>
@@ -54,30 +67,30 @@
             <mat-spinner class="login-spinner" color="accent" [diameter]="30"></mat-spinner>
           </div>
         </div>
-        <div fxLayout="column" fxLayoutAlign="center center" *ngIf="!currentUser.goal"
+        <div fxLayout="column" fxLayoutAlign="center center" *ngIf="!currentUserGoal"
           style="min-width: 230px; min-height: 100px;">
           <h4 style="font-weight: normal">No physical activity going on!</h4>
-          <h5 style="margin-top: 0px; font-weight: normal">Please fill the form and add one</h5>
-          <button mat-fab style="margin-bottom:10px;"
-            [disabled]="!currentUser.birthDate || !currentUser.weight || !currentUser.height || !currentUser.gender">
-            <mat-icon>add</mat-icon>
-          </button>
+          
         </div>
-        <mat-card id="goalsection" *ngIf="currentUser.goal">
+        <mat-card id="goalsection" *ngIf="currentUserGoal && allPhysicalActivities">
           <mat-card-header fxLayoutAlign="start">
-            <h4>Current Goal: {{currentUser.goal.type}}</h4>
+            <h3 style="font-weight: 300">Current Goal: {{currentUserGoal.weeklyGoal}} kcal</h3>
           </mat-card-header>
-          <mat-card-content fxLayout="column" fxLayoutAlign="start start">
-            <img src="./assets/man_on_byke.jpg">
+          <mat-card-content >
+            <div fxLayout="row" fxLayoutAlign="space-evenly center">
+                <img [src]="getPhysicalActivityImage()" style="max-width: 100px">
+                <p>Adherence: {{currentUserGoal.adherence}}%</p>
+            </div>
+
           </mat-card-content>
 
           <mat-card-footer fxLayout="column" fxLayoutAlign="start start" style="margin-left: 10px; margin-bottom: 10px">
 
-            <div fxLayout="row">
-              <img src="./assets/bicycle.svg" style="width: 50px; height: 50px; margin-right: 10px;">
+            <!-- <div fxLayout="row">
+              <img [src]="getPhysicalActivityImage()" style="width: 50px; height: 50px; margin-right: 10px;">
               <p>Completed {{currentUser.goal.adherence}} {{currentUser.goal.unitOfMeasure }} of
-                {{currentUser.goal.total}} {{currentUser.goal.unitOfMeasure }}</p>
-            </div>
+                {{currentUser.goal.total}} {{currentUser.goal.unitOfMeasure }}</p> 
+            </div> -->
 
 
           </mat-card-footer>

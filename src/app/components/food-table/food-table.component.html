@@ -3,15 +3,31 @@
   <h1 class="section_title" *ngIf="foodCategorySelected!=null">{{foodCategorySelected.categoryName}}</h1>
 
 </div>
-<div style=" background-color: white" fxLayout="column" fxLayoutAlign="center center">
+<div style=" background-color: white;" fxLayout="column" fxLayoutAlign="center center" >
 
 
-  <mat-grid-list [cols]="numberOfCols" [rowHeight]="rowHeight" gutterSize="10px" *ngIf="foodCategorySelected==null">
-    <mat-grid-tile *ngFor="let foodCategory of foodCategories">
+  <!-- Mobile phones -->
+  <mat-grid-list [cols]="numberOfCols" rowHeight="370" gutterSize="10px" *ngIf="foodCategorySelected==null" role="list" fxShow.xs="true" fxShow="false" style="margin-bottom: 40px">
+    <mat-grid-tile *ngFor="let foodCategory of foodCategories" role="listitem">
+      <app-foodcategory [foodCategory]=foodCategory (foodCategorySelected)="onFoodCategorySelected($event)">
+      </app-foodcategory>
+    </mat-grid-tile>
+  </mat-grid-list>
+<!-- Tablets -->
+  <mat-grid-list [cols]="numberOfCols" rowHeight="500" gutterSize="10px" *ngIf="foodCategorySelected==null" role="list" fxShow.sm="true" fxShow.md="true" fxShow="false" style="margin-bottom: 40px">
+    <mat-grid-tile *ngFor="let foodCategory of foodCategories" role="listitem">
+      <app-foodcategory [foodCategory]=foodCategory (foodCategorySelected)="onFoodCategorySelected($event)">
+      </app-foodcategory>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <!-- Desktop -->
+  <mat-grid-list [cols]="numberOfCols" rowHeight="400" gutterSize="10px" *ngIf="foodCategorySelected==null" role="list"  fxShow.lg="true" fxShow="false" style="margin-bottom: 40px">
+    <mat-grid-tile *ngFor="let foodCategory of foodCategories" role="listitem">
       <app-foodcategory [foodCategory]=foodCategory (foodCategorySelected)="onFoodCategorySelected($event)">
       </app-foodcategory>
     </mat-grid-tile>
   </mat-grid-list>
   <router-outlet></router-outlet>
+
 
 </div>

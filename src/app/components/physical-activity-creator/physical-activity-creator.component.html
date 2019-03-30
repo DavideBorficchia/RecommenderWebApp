@@ -1,48 +1,65 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="section_header">
   <h1 class="section_title">Physical Activities</h1>
- 
+
 </div>
 
 <div fxLayout="row" fxLayoutAlign="space-evenly start" style="margin-bottom: 100px;" fxHide.lt-lg="true"
-  *ngIf="currentDiet && allPhysicalActivities && currentPhysicalActivity">
-  <div fxLayout="column" fxLayoutAlign="start center" style="margin-top: 40px; " *ngIf="currentDiet && currentGoal"
+  *ngIf="currentDiet && currentGoal">
+  <div fxLayout="column" fxLayoutAlign="start center" style="margin-top: 40px; "
     id="left_content">
     <!-- first column -->
     <div fxLayout="row" fxLayout="space-evenly center" fxLayoutGap="40px">
       <div fxLayout="column" fxLayoutAlign="center center">
-        <img src="./assets/scale.svg" style=" max-height: 150px" (load)="onImageLoad()">
+        <img src="./assets/scale.svg" style=" max-height: 200px" (load)="onImageLoad()">
       </div>
       <div fxLayout="column" fxLayoutAlign="center start">
         <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
           <h2 style="font-weight: 300">Current Diet:</h2>
-          <p>{{currentDiet.name}}</p>
+          <p class="important-p">{{currentDiet.name}}</p>
         </div>
         <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
           <h2 style="font-weight: 300">Total calories:</h2>
-          <p>{{currentDiet.totalCalories}}</p>
-          <span>kcal</span>
+          <p class="important-p">{{currentDiet.totalCalories}} kcal</p>
+
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px" *ngIf="!addNewGoal">
           <h2 style="font-weight: 300">Weekly goal:</h2>
           <div fxLayout="row" fxLayoutAlign="space-between center" style="width:150px" *ngIf="!currentGoalIsChanging">
-            <p *ngIf="!currentGoalIsChanging" (click)="currentGoalIsChanging = true">{{currentGoal.weeklyGoal}}</p>
+            <p class="important-p" *ngIf="!currentGoalIsChanging" (click)="currentGoalIsChanging = true">
+              {{currentGoal.weeklyGoal}} kcal</p>
             <mat-icon (click)="currentGoalIsChanging = true" matSuffix>edit</mat-icon>
           </div>
           <mat-form-field *ngIf="currentGoalIsChanging" (focusin)="currentGoalIsChanging=true"
             (focusout)="onGoalDeselect()">
             <mat-label>Goal</mat-label>
-            <input [(ngModel)]="currentGoal.weeklyGoal " matInput placeholder="Insert new goal">
+            <input [(ngModel)]="currentGoal.weeklyGoal" [value]="currentGoal.weeklyGoal" matInput
+              placeholder="Insert new goal">
             <span matSuffix>kcal</span>
           </mat-form-field>
 
         </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" *ngIf="addNewGoal">
+          <h2 style="font-weight: 300">Weekly goal:</h2>
+          <mat-form-field>
+            <mat-label>Goal</mat-label>
+            <input [(ngModel)]="currentGoal.weeklyGoal " matInput placeholder="Insert new goal">
+            <span matSuffix>kcal</span>
+          </mat-form-field>
+          <mat-icon matTooltip="Add a new goal to {{currentPatient.userName}}'s' diet" (click)="onAddNewGoal()">
+            add_circle
+          </mat-icon>
+        </div>
         <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
           <h2 style="font-weight: 300">Activity:</h2>
           <div fxLayout="row" fxLayoutAlign="space-between center" style="width:150px">
-            <p *ngIf="!currentDiet.physicalActivity">Add one!</p>
-            <p *ngIf="currentDiet.physicalActivity">{{currentDiet.physicalActivity.name}}</p>
+            <p class="important-p" *ngIf="!currentDiet.physicalActivity">Add one!</p>
+            <p class="important-p" *ngIf="currentDiet.physicalActivity">{{currentDiet.physicalActivity.name}}</p>
 
           </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+          <h2 style="font-weight: 300">Adherence:</h2>
+          <p class="important-p">{{currentGoal.adherence.toFixed(4)}}%</p>
         </div>
       </div>
     </div>
@@ -51,11 +68,11 @@
       style="margin-top:5px; min-width:100%; max-height:100%;max-width:400px;overflow-y: auto; overflow-x: hidden;"
       *ngIf="allPhysicalActivityRecords">
       <mat-list-item mat-ripple *ngFor="let record of records; lastRecord as last" (click)="onRecordClicked()">
-        <img matListAvatar [src]="getRecordImage('record')" (load)="columnsSameHeight()">
-        <h3 matLine *ngIf="!isToday(record)"> Date: {{record.date.toLocaleDateString()}} at
-          {{record.date.getHours()}}:{{record.date.getMinutes()}} </h3>
+        <img matListAvatar [src]="getRecordImage(record)" (load)="columnsSameHeight()">
+        <h3 matLine *ngIf="!isToday(record)"> Date: {{record.sessionTimeStart.toLocaleDateString()}} at
+          {{record.sessionTimeStart.getHours()}}:{{record.sessionTimeStart.getMinutes()}} </h3>
         <h3 matLine *ngIf="isToday(record)"> Date: Today at
-          {{record.date.getHours()}}:{{record.date.getMinutes()}} </h3>
+          {{record.sessionTimeStart.getHours()}}:{{record.sessionTimeStart.getMinutes()}} </h3>
         <div matLine fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
           <p style="  white-space: nowrap; 
          width: 150px !important">
@@ -63,7 +80,7 @@
           </p>
           <p style="  white-space: nowrap; 
           width: 150px !important">
-            {{getPhysicalActivityName(record.physicaActivityId)}}
+            {{getPhysicalActivityName(record.physicalActivityId)}}
           </p>
         </div>
         <mat-divider [inset]="true" *ngIf="!lastRecord"></mat-divider>
@@ -78,7 +95,7 @@
         (click)="onAddNewCurrentPhysicalActivity()" *ngIf="!isAlreadyAdded">add_circle</mat-icon>
       <mat-icon style="position:absolute; right: 25px;"
         matTooltip="Remove {{currentPhysicalActivity.name}} from your diet"
-        (click)="onRemveNewCurrentPhysicalActivity()" *ngIf="isAlreadyAdded">remove_circle</mat-icon>
+        (click)="onRemoveNewCurrentPhysicalActivity()" *ngIf="isAlreadyAdded">remove_circle</mat-icon>
       <mat-card-header style="width: inherit" class="form-card">
         <div fxLayout="row" fxLayoutAlign="space-evenly center" style="width: 100%">
           <h1 class="pa-name" (click)="nameIsChanging=!nameIsChanging" *ngIf="!nameIsChanging">
@@ -106,7 +123,7 @@
             <mat-label>Image Local Url</mat-label>
             <input matInput [(ngModel)]="currentPhysicalActivity.imageUrl">
           </mat-form-field>
-          <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
+          <p class="important-p" *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
             {{currentPhysicalActivity.description}}
 
           </p>
@@ -181,12 +198,8 @@
 
   </div>
 </div>
-<!-- <div fxLayout="column" fxLayoutAlign="start center" style="margin-top: 40px" *ngIf="!currentDiet">
-  <h2 style="font-weight: 300">Current Patient {{currentPatient.userName}} does not have a diet yet!</h2>
-  <img src="./assets/fat.svg" style="max-width: 360px">
-</div> -->
-<!-- <div fxHide.gt-md="true" fxLayout="row" fxLayoutAlign="space-evenly start"> -->
-<mat-tab-group mat-align-tabs="center" fxHide.gt-md="true" *ngIf="currentDiet && allPhysicalActivities">
+
+<mat-tab-group mat-align-tabs="center" fxHide.gt-md="true">
   <mat-tab label="Current Diet">
     <ng-template matTabContent>
       <div fxLayout="column" fxLayoutAlign="start center" style="margin-top: 40px; " *ngIf="currentDiet && currentGoal"
@@ -199,48 +212,64 @@
           <div fxLayout="column" fxLayoutAlign="center start">
             <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
               <h2 style="font-weight: 300">Current Diet:</h2>
-              <p>{{currentDiet.name}}</p>
+              <p class="important-p">{{currentDiet.name}}</p>
             </div>
             <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
               <h2 style="font-weight: 300">Total calories:</h2>
-              <p>{{currentDiet.totalCalories}}</p>
+              <p class="important-p">{{currentDiet.totalCalories}}</p>
               <span>kcal</span>
             </div>
-            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px" *ngIf="!addNewGoal">
               <h2 style="font-weight: 300">Weekly goal:</h2>
               <div fxLayout="row" fxLayoutAlign="space-between center" style="width:150px"
                 *ngIf="!currentGoalIsChanging">
-                <p *ngIf="!currentGoalIsChanging" (click)="currentGoalIsChanging = true">{{currentGoal.weeklyGoal}}</p>
+                <p class="important-p" *ngIf="!currentGoalIsChanging" (click)="currentGoalIsChanging = true">
+                  {{currentGoal.weeklyGoal}}</p>
                 <mat-icon (click)="currentGoalIsChanging = true" matSuffix>edit</mat-icon>
               </div>
               <mat-form-field *ngIf="currentGoalIsChanging" (focusin)="currentGoalIsChanging=true"
                 (focusout)="onGoalDeselect()">
                 <mat-label>Goal</mat-label>
-                <input [(ngModel)]="currentGoal.weeklyGoal " matInput placeholder="Insert new goal">
+                <input [(ngModel)]="currentGoal.weeklyGoal " [value]="currentGoal.weeklyGoal" matInput
+                  placeholder="Insert new goal">
                 <span matSuffix>kcal</span>
               </mat-form-field>
 
             </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" *ngIf="addNewGoal">
+              <h2 style="font-weight: 300">Weekly goal:</h2>
+              <mat-form-field>
+                <mat-label>Goal</mat-label>
+                <input [(ngModel)]="currentGoal.weeklyGoal " matInput placeholder="Insert new goal">
+                <span matSuffix>kcal</span>
+              </mat-form-field>
+              <mat-icon matTooltip="Add a new goal to {{currentPatient.userName}}'s' diet" (click)="onAddNewGoal()">
+                add_circle
+              </mat-icon>
+            </div>
             <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
               <h2 style="font-weight: 300">Activity:</h2>
               <div fxLayout="row" fxLayoutAlign="space-between center" style="width:150px">
-                <p *ngIf="!currentDiet.physicalActivity">Add one!</p>
-                <p *ngIf="currentDiet.physicalActivity">{{currentDiet.physicalActivity.name}}</p>
+                <p class="important-p" *ngIf="!currentDiet.physicalActivity">Add one!</p>
+                <p class="important-p" *ngIf="currentDiet.physicalActivity">{{currentDiet.physicalActivity.name}}</p>
 
               </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
+              <h2 style="font-weight: 300">Adherence:</h2>
+              <p class="important-p">{{currentGoal.adherence.toFixed(4)}}%</p>
             </div>
           </div>
         </div>
         <h2 style="font-weight: 300; margin-top: 20px; ">Recent activity records</h2>
-        <mat-list
-        class=".mat-tab-list"
-          *ngIf="allPhysicalActivityRecords">
+        <mat-list class=".mat-tab-list" *ngIf="allPhysicalActivityRecords">
           <mat-list-item mat-ripple *ngFor="let record of records; lastRecord as last" (click)="onRecordClicked()">
-            <img matListAvatar [src]="getRecordImage('record')" (load)="columnsSameHeight()">
-            <h3 matLine *ngIf="!isToday(record)"> Date: {{record.date.toLocaleDateString()}} at
-              {{record.date.getHours()}}:{{record.date.getMinutes()}} </h3>
+            
+            <img matListAvatar [src]="getRecordImage(record)" (load)="columnsSameHeight()">
+            <h3 matLine *ngIf="!isToday(record)"> Date: {{record.sessionTimeStart.toLocaleDateString()}} at
+              {{record.sessionTimeStart.getHours()}}:{{record.sessionTimeStart.getMinutes()}} </h3>
             <h3 matLine *ngIf="isToday(record)"> Date: Today at
-              {{record.date.getHours()}}:{{record.date.getMinutes()}} </h3>
+              {{record.sessionTimeStart.getHours()}}:{{record.sessionTimeStart.getMinutes()}} </h3>
             <div matLine fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
               <p style="  white-space: nowrap; 
              width: 150px !important">
@@ -248,7 +277,7 @@
               </p>
               <p style="  white-space: nowrap; 
               width: 150px !important">
-                {{getPhysicalActivityName(record.physicaActivityId)}}
+                {{getPhysicalActivityName(record.physicalActivityId)}}
               </p>
             </div>
             <mat-divider [inset]="true" *ngIf="!lastRecord"></mat-divider>
@@ -269,7 +298,7 @@
           <mat-icon style="position:absolute; right: 25px;"
             matTooltip="Remove {{currentPhysicalActivity.name}} from your diet"
             (click)="onRemveNewCurrentPhysicalActivity()" *ngIf="isAlreadyAdded">remove_circle</mat-icon>
-          <mat-card-header  class="form-card">
+          <mat-card-header class="form-card">
             <div fxLayout="row" fxLayoutAlign="space-evenly center" style="width: 100%">
               <h1 class="pa-name" (click)="nameIsChanging=!nameIsChanging" *ngIf="!nameIsChanging">
                 {{currentPhysicalActivity.name}}</h1>
@@ -296,7 +325,8 @@
                 <mat-label>Image Local Url</mat-label>
                 <input matInput [(ngModel)]="currentPhysicalActivity.imageUrl">
               </mat-form-field>
-              <p *ngIf="!descriptionIsChanging" (click)="descriptionIsChanging=!descriptionIsChanging">
+              <p class="important-p" *ngIf="!descriptionIsChanging"
+                (click)="descriptionIsChanging=!descriptionIsChanging">
                 {{currentPhysicalActivity.description}}
 
               </p>
@@ -307,7 +337,8 @@
                   cdkAutosizeMaxRows="3" [(ngModel)]="currentPhysicalActivity.description"></textarea>
               </mat-form-field>
             </div>
-            <div fxLayout="row wrap" fxLayoutAlign="space-evenly center" style="margin-top: 50px" fxLayoutGap.gt-xs="15px">
+            <div fxLayout="row wrap" fxLayoutAlign="space-evenly center" style="margin-top: 50px"
+              fxLayoutGap.gt-xs="15px">
               <mat-form-field appearance="outline" (focusout)="onTextAreaDeselect()" (focusin)="isSend = true">
                 <mat-label>Start Date</mat-label>
                 <input matInput [matDatepicker]="startDate" placeholder="Start date"
@@ -351,9 +382,7 @@
           </mat-card-content>
         </mat-card>
         <h2 style="font-weight: 300; margin-top: 20px; ">Physical Activities</h2>
-        <mat-list
-          class="mat-tab-list"
-          *ngIf="allPhysicalActivities">
+        <mat-list class="mat-tab-list" *ngIf="allPhysicalActivities">
           <mat-list-item mat-ripple *ngFor="let pa of allPhysicalActivities; lastPa as last" (click)="onPaClicked(pa)">
             <img matListAvatar [src]="pa.imageUrl" (load)="columnsSameHeight()">
             <h3 matLine>{{pa.name}}</h3>
@@ -374,7 +403,7 @@
     </ng-template>
   </mat-tab>
 </mat-tab-group>
-<!-- </div> -->
+
 <button mat-fab class="add-pa" (click)="onNewPAClicked()" *ngIf="!isSend">
   <mat-icon>add</mat-icon>
 </button>

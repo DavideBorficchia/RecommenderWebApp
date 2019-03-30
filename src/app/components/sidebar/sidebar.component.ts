@@ -8,6 +8,12 @@ import { FormControl } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Nutritionist } from 'src/app/model/nutritionist';
 import { PatientsService } from 'src/app/services/patients.service';
+import { DatePipe } from '@angular/common';
+import { Goal } from 'src/app/model/goal';
+import { GoalsAndRecordsService } from 'src/app/services/goals-and-records.service';
+import { DietService } from 'src/app/services/diet.service';
+import { PhysicalActivitiesService } from 'src/app/services/physical-activities.service';
+import { PhysicalActivity } from 'src/app/model/physicalactivity';
 
 export interface GenderOption {
   value: string;
@@ -36,16 +42,43 @@ export class SidebarComponent implements OnInit {
   isOver: boolean;
   date = new FormControl(new Date());
   allUsers: User[];
+  userImage = false;
   serializedDate = new FormControl((new Date()).toISOString());
   nutritionistPatients: User[];
   allFilteredUsers: User[];
+  currentUserGoal: Goal;
+  allPhysicalActivities: PhysicalActivity[];
   constructor(
     private service: RegisterService,
     public snackBar: MatSnackBar,
-    private patientService: PatientsService) {
+    private patientService: PatientsService,
+    private datePipe: DatePipe,
+    private goalService: GoalsAndRecordsService,
+    private dietService: DietService,
+    private physicalService: PhysicalActivitiesService) {
 
   }
+  compareForm() {
+    var user = JSON.parse(sessionStorage["user"]) as User;
 
+    if (user.birthDate !== this.currentUser.birthDate
+      || user.gender !== this.currentUser.gender
+      || user.height !== this.currentUser.height
+      || user.weight !== this.currentUser.weight
+      || user.imageUrl !== this.currentUser.imageUrl) {
+
+      this.isUserUpdated = false;
+      this.userImage = false;
+    }
+    else {
+      this.isUserUpdated = true;
+      this.userImage = false;
+    }
+
+  }
+  onClick() {
+    this.userImage = true;
+  }
   toggleSideBar() {
     this.sidenav.toggle()
   }
@@ -57,6 +90,7 @@ export class SidebarComponent implements OnInit {
   }
   updateUserDetails() {
     this.isSpinnerShown = true;
+
     this.service.updateDetails(this.currentUser).subscribe(response => {
       if (response.status == 200) {
         setTimeout(() => {
@@ -70,7 +104,6 @@ export class SidebarComponent implements OnInit {
         })
       }
     }, (error: HttpErrorResponse) => {
-      console.log(error.status)
       if (error.status < 500) {
         setTimeout(() => {
 
@@ -96,50 +129,88 @@ export class SidebarComponent implements OnInit {
     })
   }
   ngOnInit() {
+
     if (innerWidth <= 600) {
       this.isOver = true;
     }
-    this.currentUser = JSON.parse(sessionStorage["user"])
-    if (this.currentUser && this.currentUser.email.includes("nutrizionista")) {
-      this.isNutritionist = true;
-      this.service.getNutritionistObservable().subscribe(nutritionist => {
+    this.service.getUserObservable().subscribe(user => {
+      if (user) {
+        this.currentUser = user;
+        this.dietService.getObservableDiet().subscribe(diet => {
+          if (diet) {
+            this.goalService.getCurrentGoalForDiet(diet.id.toString(), this.currentUser.id).subscribe(goalResponse => {
+              if (goalResponse) {
+                var goal = new Goal()
+                goal.adherence = goalResponse["adherence"]
+                goal.id = goalResponse["id"];
+                goal.physicalActivityId = goalResponse["physicalActivityId"];
+                goal.userId = goalResponse["userId"];
+                goal.weeklyGoal = goalResponse["weeklyGoal"];
+                goal.dietId = goalResponse["dietId"];
+                this.currentUserGoal = goal;
+              }
+              this.physicalService.getAllPhysicalActivities(this.currentUser.id).subscribe(response => {
+                if (response) {
+                  this.allPhysicalActivities = [];
+                  response.forEach(value => {
+                    var physicalActivity = new PhysicalActivity();
+                    physicalActivity.name = value["name"];
+                    physicalActivity.rdfOutput = value["rdfOutput"];
+                    physicalActivity.imageUrl = value["imageUrl"];
+                    physicalActivity.description = value["description"]
+                    physicalActivity.startDate = new Date(value["startDate"]);
+                    physicalActivity.endDate = new Date(value["endDate"]);
+                    physicalActivity.caloriesPerHour = value["caloriesPerHour"];
+                    physicalActivity.userId = value["userId"]
+                    physicalActivity.id = value["id"]
+                    this.allPhysicalActivities.push(physicalActivity)
+                  })
+                }
+              })
 
-        if (nutritionist) {
+            })
+          }
+        })
+      }
+    })
+    this.isNutritionist = true;
+    this.service.getNutritionistObservable().subscribe(nutritionist => {
 
-          this.currentNutritionist = nutritionist;
-          this.currentPatient = this.currentNutritionist.currentPatient;
+      if (nutritionist) {
+        this.isNutritionist = true;
+        this.currentNutritionist = nutritionist;
+        this.currentPatient = this.currentNutritionist.currentPatient;
 
-          this.nutritionistPatients = []
-          Object.assign(this.nutritionistPatients, this.currentNutritionist.patients);
- 
-        }
-      })
-      this.patientService.getAllPatients()
-        .subscribe(response => {
-          this.allUsers = []
-          Object.keys(response).forEach(key => {
-            var userResponse = response[key];
-            var user = new User()
-            user.id = userResponse["id"]
-            user.basicMetabolicRate = userResponse["basicMetabolicRate"]
-            user.birthDate = new Date(userResponse["birthDate"])
-            user.email = userResponse["email"]
-            user.gender = userResponse["gender"]
-            user.height = userResponse["height"]
-            user.userName = userResponse["userName"]
-            user.weight = userResponse["weight"]
-            user.imageUrl = userResponse["imageUrl"]
-            this.allUsers.push(user);
+        this.nutritionistPatients = []
+        Object.assign(this.nutritionistPatients, this.currentNutritionist.patients);
+        this.patientService.getAllPatients()
+          .subscribe(response => {
+            this.allUsers = []
+            Object.keys(response).forEach(key => {
+              var userResponse = response[key];
+              var user = new User()
+              user.id = userResponse["id"]
+              user.basicMetabolicRate = userResponse["basicMetabolicRate"]
+              user.birthDate = new Date(userResponse["birthDate"])
+              user.email = userResponse["email"]
+              user.gender = userResponse["gender"]
+              user.height = userResponse["height"]
+              user.userName = userResponse["userName"]
+              user.weight = userResponse["weight"]
+              user.imageUrl = userResponse["imageUrl"]
+              this.allUsers.push(user);
+
+            })
+            this.allFilteredUsers = this.allUsers.filter(user => !this.nutritionistPatients.includes(user))
 
           })
-          this.allFilteredUsers = this.allUsers.filter(user => !this.nutritionistPatients.includes(user))
 
-        })
-    }
-    else {
-      this.isNutritionist = false;
-    }
-    if (this.currentUser.birthDate && this.currentUser.gender && this.currentUser.height && this.currentUser.weight) {
+      }
+    })
+
+
+
+    if (!this.isNutritionist && this.currentUser.birthDate && this.currentUser.gender && this.currentUser.height && this.currentUser.weight) {
       this.isUserUpdated = true;
     }
 
@@ -202,8 +273,7 @@ export class SidebarComponent implements OnInit {
             nutritionist.userName = currentPatient["userName"];
           }
           nutritionist.userName = responseNutritionist["userName"]
-          console.log("BEFORE")
-          console.log(nutritionist)
+     
           sessionStorage["user"] = JSON.stringify(nutritionist)
           this.service.setNutritionistBehavior(nutritionist)
           this.currentPatient = user;
@@ -218,6 +288,10 @@ export class SidebarComponent implements OnInit {
 
   }
 
+  getPhysicalActivityImage() {
+    return this.allPhysicalActivities.find(pa => pa.id === this.currentUserGoal.physicalActivityId).imageUrl;
+  }
+
   onPatientClicked(patient: User) {
     if (patient) {
 
@@ -225,7 +299,7 @@ export class SidebarComponent implements OnInit {
       //a fake user with only the fields of interest.
       //Later on a nutritionists microservice will be needed
 
-      
+
       if (patient.id === this.currentNutritionist.currentPatient.id) {
         this.snackBar.open("Patient " + patient.userName + " already in exam!", "OK", { duration: 3000 })
         return;

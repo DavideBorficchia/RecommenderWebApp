@@ -17,7 +17,6 @@ export class FoodTableComponent implements OnInit {
    foodCategorySelected: FoodCategory;
   private routerSub = Subscription.EMPTY;
   numberOfCols = 4;
-  rowHeight = "4:5";
   constructor(private foodRecommenderService: FoodRecommenderService, private router: Router, private route: ActivatedRoute) { }
 
   onFoodCategorySelected(foodCategory: FoodCategory) {
@@ -40,11 +39,8 @@ export class FoodTableComponent implements OnInit {
     }
     if (event.target.innerWidth < 380) {
       console.log(event.target.innerWidth)
-      this.rowHeight = "2:3"
     }
-    else {
-      this.rowHeight = "4:5";
-    }
+  
   }
 
   ngOnInit() {
@@ -90,10 +86,7 @@ export class FoodTableComponent implements OnInit {
       this.numberOfCols = 2;
     }
     if (innerWidth < 380) {
-      this.rowHeight = "2:3"
     }
-    else {
-      this.rowHeight = "4:5";
-    }
+
   }
 }
