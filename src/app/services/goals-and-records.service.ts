@@ -12,7 +12,7 @@ export class GoalsAndRecordsService {
 
 
 
-  private baseUrl = "http://localhost:8080/recommender/goals"
+  private baseUrlGoals = "http://localhost:8080/recommender/goals"
   private baseUrlRecords = "http://localhost:8080/recommender/records"
   private goalBehavior: BehaviorSubject<Goal>;
   private recordsBehavior: BehaviorSubject<PhysicalActivityRecord[]>;
@@ -24,12 +24,12 @@ export class GoalsAndRecordsService {
   //     .pipe(catchError(error => throwError(error)));
   // }
   postGoal(goal: Goal) {
-    return this.httpClient.post<Goal>(this.baseUrl + "/", goal)
+    return this.httpClient.post<Goal>(this.baseUrlGoals + "/weekly", goal)
       .pipe(catchError(error => throwError(error)));
 
   }
   getCurrentGoalForDiet(dietId: string, userId: string) {
-    return this.httpClient.get<Goal>(this.baseUrl + "/", {
+    return this.httpClient.get<Goal>(this.baseUrlGoals + "/weekly", {
       params: {
         userId: userId,
         dietId: dietId
@@ -46,8 +46,8 @@ export class GoalsAndRecordsService {
       }
     }).pipe(catchError(error => throwError(error)));
   }
-  postRecord(record: PhysicalActivityRecord) {
-    return this.httpClient.post<PhysicalActivityRecord>(this.baseUrlRecords + "/", record).pipe(catchError(error => throwError(error)));
+  postRecord(record: PhysicalActivityRecord,physicalActivityId:string,userId:string) {
+    return this.httpClient.post<PhysicalActivityRecord>(this.baseUrlRecords + "/"+userId+"/activities/"+physicalActivityId, record).pipe(catchError(error => throwError(error)));
   }
   getObservableGoal() {
     if (!this.goalBehavior) {
@@ -80,12 +80,12 @@ export class GoalsAndRecordsService {
     }
   }
   updateGoal(currentGoal: Goal) {
-    return this.httpClient.put<Goal>(this.baseUrl + "/", currentGoal)
+    return this.httpClient.put<Goal>(this.baseUrlGoals + "/weekly", currentGoal)
       .pipe(catchError(error => throwError(error)));
 
   }
   updateGoalAdherence(records: PhysicalActivityRecord[], goalId: string) {
-    return this.httpClient.put<Goal>(this.baseUrl + "/" + goalId + "/adherence",records)
+    return this.httpClient.put<Goal>(this.baseUrlGoals + "/weekly/" + goalId + "/adherence",records)
       .pipe(catchError(error => throwError(error)));
   }
 

@@ -14,21 +14,21 @@ export class PhysicalActivitiesService {
   constructor(private httpClient: HttpClient) { }
 
   createNewPhysicalActivity(physicalActivity: PhysicalActivity, userId: string) {
-    return this.httpClient.post<PhysicalActivity>(this.baseUrl, physicalActivity, {
+    return this.httpClient.post<PhysicalActivity>(this.baseUrl+"/customizations", physicalActivity, {
       params: {
         userId: userId
       }
     }).pipe(catchError(error => throwError(error)))
   }
   getAllPhysicalActivities(userId: string) {
-    return this.httpClient.get<PhysicalActivity[]>(this.baseUrl + "/all", {
+    return this.httpClient.get<PhysicalActivity[]>(this.baseUrl + "/customizations/all", {
       params: {
         userId: userId
       }
     }).pipe(catchError(error => throwError(error)));
   }
   updatePhysicalActivity(physicalActivity: PhysicalActivity, userId: string) {
-    return this.httpClient.put<PhysicalActivity>(this.baseUrl, physicalActivity, {
+    return this.httpClient.put<PhysicalActivity>(this.baseUrl+"/customizations", physicalActivity, {
       params: {
         userId: userId
       }

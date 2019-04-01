@@ -173,7 +173,6 @@ export class SidebarComponent implements OnInit {
         })
       }
     })
-    this.isNutritionist = true;
     this.service.getNutritionistObservable().subscribe(nutritionist => {
 
       if (nutritionist) {

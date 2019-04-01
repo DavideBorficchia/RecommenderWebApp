@@ -78,8 +78,8 @@
           </mat-card-header>
           <mat-card-content >
             <div fxLayout="row" fxLayoutAlign="space-evenly center">
-                <img [src]="getPhysicalActivityImage()" style="max-width: 100px">
-                <p>Adherence: {{currentUserGoal.adherence}}%</p>
+                <img [src]="getPhysicalActivityImage()" style="max-width: 80px">
+                <p>Adherence: {{currentUserGoal.adherence.toFixed(2)}}%</p>
             </div>
 
           </mat-card-content>
