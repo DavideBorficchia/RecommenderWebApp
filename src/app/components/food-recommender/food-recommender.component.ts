@@ -21,8 +21,8 @@ export class FoodRecommenderComponent implements OnInit {
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   foodAdded: Food;
   currentFoodSuggestions: FoodRdf[];
-  mealTypes = ["Breakfast", "Morning Break", "Lunch", "Afternoon Break", "Dinner"];
-  days = ["Monday", "Tuesday", "Wednesday", "Friday", "Saturday", "Sunday"]
+  mealTypes = ['Breakfast', 'Morning Break', 'Lunch', 'Afternoon Break', 'Dinner'];
+  days = ['Monday', 'Tuesday', 'Wednesday', 'Friday', 'Saturday', 'Sunday'];
   diet: Diet;
   dayPicked: string;
   hide: boolean;
@@ -37,20 +37,18 @@ export class FoodRecommenderComponent implements OnInit {
 
 
   ngOnInit() {
-    var width = window.innerWidth
+    let width = window.innerWidth;
     if (width > 1200) {
       this.hide = false;
-    }
-    else if (width > 768 && width <= 1200) {
-      this.hide = true
-    }
-    else {
+    } else if (width > 768 && width <= 1200) {
+      this.hide = true;
+    } else {
       this.hide = false;
     }
     this.registrationService.getUserObservable()
       .subscribe(user => {
         this.user = user;
-      })
+      });
     this.dietService.getObservableDiet().subscribe(diet => {
       if (diet) {
         this.diet = diet;
@@ -58,42 +56,42 @@ export class FoodRecommenderComponent implements OnInit {
         this.computeProteins();
         this.computeVegetables();
       }
-    })
+    });
     this.foodRecommender.getAddedFoodObservable()
       .subscribe(fAdded => {
         if (fAdded) {
           this.foodAdded = fAdded;
           this.foodRecommender.getRecommendationsGoodWiths(fAdded)
             .subscribe(response => {
-              this.currentFoodSuggestions = []
+              this.currentFoodSuggestions = [];
               Object.keys(response).forEach(key => {
-                var value = response[key]
-                var food = new FoodRdf()
-                food.type = value["type"]
-                food.name = value["name"]
-                food.fatsPer100 = value["fats"]
-                food.proteinsPer100 = value["proteins"]
-                food.saltsPer100 = value["salts"]
-                food.vitaminsPer100 = value["vitamins"]
-                food.caloriesPer100 = value["caloriesPer100"]
-                food.carbsPer100 = value["carbs"]
-                food.id = value["id"]
-                food.imageUrl = value["imageUrl"]
-                food.bestEatenAt = value["bestEatenAt"]
-                this.currentFoodSuggestions.push(food)
+                let value = response[key];
+                let food = new FoodRdf();
+                food.type = value['type'];
+                food.name = value['name'];
+                food.fatsPer100 = value['fatsPer100'];
+                food.proteinsPer100 = value['proteinsPer100'];
+                food.saltsPer100 = value['saltsPer100'];
+                food.vitaminsPer100 = value['vitaminsPer100'];
+                food.caloriesPer100 = value['caloriesPer100'];
+                food.carbsPer100 = value['carbsPer100'];
+                food.id = value['id'];
+                food.imageUrl = value['imageUrl'];
+                food.bestEatenAt = value['bestEatenAt'];
+                this.currentFoodSuggestions.push(food);
               });
             });
         }
       });
   }
   onMealButtonClicked(mealName: string, food: FoodRdf) {
-    var day: DayOfWeek = DayOfWeek[this.dayPicked];
+    let day: DayOfWeek = DayOfWeek[this.dayPicked];
     if (this.diet.dailyFood.get(day).find(m => m.mealType === mealName)
       .allFoodEntries.find(f => f.name === food.name)) {
-      this.snackBar.open("Food " + food.name + " already present!", "OK", { duration: 3000 });
+      this.snackBar.open('Food ' + food.name + ' already present!', 'OK', { duration: 3000 });
       return;
     }
-    var foodForDiet = new Food()
+    let foodForDiet = new Food();
     foodForDiet.name = food.name;
     foodForDiet.proteins = food.proteinsPer100;
     foodForDiet.quantity = 100;
@@ -103,31 +101,35 @@ export class FoodRecommenderComponent implements OnInit {
     foodForDiet.carbs = food.carbsPer100;
     foodForDiet.salts = food.saltsPer100;
     foodForDiet.type = food.type;
-    foodForDiet.calories = food.caloriesPer100
-    foodForDiet.id = food.id
+    foodForDiet.calories = food.caloriesPer100;
+    foodForDiet.saltsPer100 = food.saltsPer100;
+    foodForDiet.fatsPer100 = food.fatsPer100;
+    foodForDiet.vitaminsPer100 = food.vitaminsPer100;
+    foodForDiet.proteinsPer100 = food.proteinsPer100;
+    foodForDiet.carbsPer100 = food.carbsPer100;
+    foodForDiet.id = food.id;
     this.dietService.updateMealRequest(foodForDiet, mealName, day)
       .subscribe(() => {
-        var user = JSON.parse(sessionStorage["user"]) as User
+        let user = JSON.parse(sessionStorage['user']) as User;
 
-        var caloriesCount = this.diet.caloriesPerDay.get(day);
+        let caloriesCount = this.diet.caloriesPerDay.get(day);
         if (caloriesCount > user.basicMetabolicRate) {
           const dialogRef = this.dialog.open(InformationDialogComponent,
             {
-              width: "350px",
+              width: '350px',
               data: {
                 bmr: user.basicMetabolicRate, userName: user.userName,
                 dietName: this.diet.name, foodAdded: food,
                 day: this.dayPicked, calories: caloriesCount
               }
-            })
+            });
           dialogRef.afterClosed().subscribe(() => {
-            this.snackBar.open(foodForDiet.name + " has been added!", "OK", {
+            this.snackBar.open(foodForDiet.name + ' has been added!', 'OK', {
               duration: 2000
             });
-          })
-        }
-        else {
-          this.snackBar.open(foodForDiet.name + " has been added!", "OK", {
+          });
+        } else {
+          this.snackBar.open(foodForDiet.name + ' has been added!', 'OK', {
             duration: 2000
           });
         }
@@ -135,39 +137,35 @@ export class FoodRecommenderComponent implements OnInit {
 
       }, (error: HttpErrorResponse) => {
         if (error.status == 400) {
-          console.log("bad request")
-        }
-        else if (error.status < 500) {
-          this.snackBar.open(error.error, "OK", {
+          console.log('bad request');
+        } else if (error.status < 500) {
+          this.snackBar.open(error.error, 'OK', {
             duration: 2000
-          })
-        }
-        else {
-          this.snackBar.open("Error with server. No worries, your changes will be saved and updated as soon as possible!", "OK", {
+          });
+        } else {
+          this.snackBar.open('Error with server. No worries, your changes will be saved and updated as soon as possible!', 'OK', {
             duration: 3000
           });
         }
-      })
+      });
 
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    var width = event.target.innerWidth
+    let width = event.target.innerWidth;
     if (width > 1200) {
       this.hide = false;
-    }
-    else if (width > 768 && width <= 1200) {
-      this.hide = true
-    }
-    else {
+    } else if (width > 768 && width <= 1200) {
+      this.hide = true;
+    } else {
       this.hide = false;
     }
 
   }
   onAskRecomendationClick() {
     this.foodAdded = null;
-    this.currentFoodSuggestions = []
+    this.currentFoodSuggestions = [];
     this.vegsSuggestion = true;
     this.meatSuggestion = false;
     this.vegsSuggestion = false;
@@ -175,28 +173,28 @@ export class FoodRecommenderComponent implements OnInit {
       .subscribe(response => {
         if (response) {
           Object.keys(response).forEach(key => {
-            var value = response[key]
-            var food = new FoodRdf()
-            food.type = value["type"]
-            food.bestEatenAt = value["bestEatenAt"]
-            food.name = value["name"]
-            food.description = value["description"]
-            food.fatsPer100 = value["fats"]
-            food.proteinsPer100 = value["proteins"]
-            food.saltsPer100 = value["salts"]
-            food.rdfOutput = value["rdfOutput"]
-            food.imageUrl = value["imageUrl"]
-            food.vitaminsPer100 = value["vitamins"]
-            food.goodSinergyWith = value["goodSinergyWith"]
-            food.goodWith = value["goodWith"]
-            food.caloriesPer100 = value["caloriesPer100"]
-            food.carbsPer100 = value["carbs"]
-            food.timeStamp = value["timeStamp"]
-            this.currentFoodSuggestions.push(food)
-          })
+            let value = response[key];
+            let food = new FoodRdf();
+            food.type = value['type'];
+            food.bestEatenAt = value['bestEatenAt'];
+            food.name = value['name'];
+            food.description = value['description'];
+            food.fatsPer100 = value['fats'];
+            food.proteinsPer100 = value['proteins'];
+            food.saltsPer100 = value['salts'];
+            food.rdfOutput = value['rdfOutput'];
+            food.imageUrl = value['imageUrl'];
+            food.vitaminsPer100 = value['vitamins'];
+            food.goodSinergyWith = value['goodSinergyWith'];
+            food.goodWith = value['goodWith'];
+            food.caloriesPer100 = value['caloriesPer100'];
+            food.carbsPer100 = value['carbs'];
+            food.timeStamp = value['timeStamp'];
+            this.currentFoodSuggestions.push(food);
+          });
         }
 
-      })
+      });
 
   }
   onAskMeatAndFishRecommendation() {
@@ -206,75 +204,74 @@ export class FoodRecommenderComponent implements OnInit {
     this.meatSuggestion = true;
     this.vegsSuggestion = false;
 
-    var average = this.computeProteins();
+    let average = this.computeProteins();
     if (average > this.computeProteinRightAmount()) {
-      this.snackBar.open("Try to remove high protein based food to get suggestions!", "OK", { duration: 4000 })
-    }
-    else {
+      this.snackBar.open('Try to remove high protein based food to get suggestions!', 'OK', { duration: 4000 });
+    } else {
       return this.foodRecommender.getGeneralFoodRecommendationMeatAndFish(this.diet.name.toString(), this.computeProteinRightAmount())
         .subscribe(response => {
           if (response) {
             Object.keys(response).forEach(key => {
-              var value = response[key]
-              var food = new FoodRdf()
-              food.type = value["type"]
-              food.bestEatenAt = value["bestEatenAt"]
-              food.name = value["name"]
-              food.description = value["description"]
-              food.fatsPer100 = value["fats"]
-              food.proteinsPer100 = value["proteins"]
-              food.saltsPer100 = value["salts"]
-              food.rdfOutput = value["rdfOutput"]
-              food.imageUrl = value["imageUrl"]
-              food.vitaminsPer100 = value["vitamins"]
-              food.goodSinergyWith = value["goodSinergyWith"]
-              food.goodWith = value["goodWith"]
-              food.caloriesPer100 = value["caloriesPer100"]
-              food.carbsPer100 = value["carbs"]
-              food.timeStamp = value["timeStamp"]
-              this.currentFoodSuggestions.push(food)
-            })
+              let value = response[key];
+              let food = new FoodRdf();
+              food.type = value['type'];
+              food.bestEatenAt = value['bestEatenAt'];
+              food.name = value['name'];
+              food.description = value['description'];
+              food.fatsPer100 = value['fats'];
+              food.proteinsPer100 = value['proteins'];
+              food.saltsPer100 = value['salts'];
+              food.rdfOutput = value['rdfOutput'];
+              food.imageUrl = value['imageUrl'];
+              food.vitaminsPer100 = value['vitamins'];
+              food.goodSinergyWith = value['goodSinergyWith'];
+              food.goodWith = value['goodWith'];
+              food.caloriesPer100 = value['caloriesPer100'];
+              food.carbsPer100 = value['carbs'];
+              food.timeStamp = value['timeStamp'];
+              this.currentFoodSuggestions.push(food);
+            });
           }
 
-        })
+        });
     }
 
 
   }
   computeProteinRightAmount() {
-    return Math.round(this.user.weight * 0.83*7)
+    return Math.round(this.user.weight * 0.83 * 7);
   }
   computeProteins() {
-    var totalAmount = 0;
+    let totalAmount = 0;
     this.diet.dailyFood.forEach((meals, day) => {
       meals.forEach(meal => meal.allFoodEntries.forEach(food => {
-        if (food.type === "Meat" || food.type === "Fish") {
-          totalAmount += food.proteins
+        if (food.type === 'Meat' || food.type === 'Fish') {
+          totalAmount += food.proteins;
         }
-      }))
-    })
+      }));
+    });
     return Math.round(totalAmount / 7);
   }
   computeVegetables() {
-    var totalAmount = 0;
+    let totalAmount = 0;
     this.diet.dailyFood.forEach((meals, day) => {
       meals.forEach(meal => meal.allFoodEntries.forEach(food => {
-        if (food.type === "Fruits" || food.type === "Vegetabls") {
-          totalAmount += food.quantity
+        if (food.type === 'Fruits' || food.type === 'Vegetabls') {
+          totalAmount += food.quantity;
         }
-      }))
-    })
+      }));
+    });
     return totalAmount;
   }
   computeCarbs() {
-    var totalAmount = 0;
+    let totalAmount = 0;
     this.diet.dailyFood.forEach((meals, day) => {
       meals.forEach(meal => meal.allFoodEntries.forEach(food => {
-        if (food.type === "Pasta" || food.type === "Bakery and Cereal") {
-          totalAmount += food.proteins
+        if (food.type === 'Pasta' || food.type === 'Bakery and Cereal') {
+          totalAmount += food.proteins;
         }
-      }))
-    })
+      }));
+    });
     return totalAmount;
   }
 }
