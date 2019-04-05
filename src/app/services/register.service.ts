@@ -56,7 +56,7 @@ export class RegisterService {
     if (currentUser && !currentUser.email.includes("nutrizionista")) {
       currentUser.birthDate = new Date(currentUser.birthDate)
     }
-    else{
+    else {
       currentUser = null;
     }
     if (!this.userBehavior) {
@@ -77,8 +77,8 @@ export class RegisterService {
   public getNutritionistObservable() {
     var currentUser: Nutritionist;
     sessionStorage["user"] ? currentUser = JSON.parse(sessionStorage["user"]) as Nutritionist : null
-    var nutritionist = new Nutritionist();
     if (currentUser) {
+      var nutritionist = new Nutritionist();
       nutritionist.email = currentUser["email"];
       nutritionist.id = currentUser["id"];
       nutritionist.patients = []

@@ -5,6 +5,7 @@
     -webkit-overflow-scrolling: touch;
     display: block;
     overflow-y: hidden;
+    overflow-x: hidden;
     background-color: white
     
 }
@@ -14,7 +15,7 @@
     display: block;
     height: 100%;
     min-height: 100vh;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
     /* overflow: auto; */
 }

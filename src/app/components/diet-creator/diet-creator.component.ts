@@ -16,7 +16,7 @@ import { Food } from 'src/app/model/food';
 })
 export class DietCreatorComponent implements OnInit {
 
-  currentDietName: String;
+  currentDietName: string;
   isHistorySelected: boolean;
   isSpinnerShown: boolean;
   isSmall: boolean
@@ -75,6 +75,7 @@ export class DietCreatorComponent implements OnInit {
               duration: 3500
             })
         }, 500)
+        this.currentDietName = Object.assign(this.currentDietName,this.diet.name.toString());
 
       }
     }, (error: HttpErrorResponse) => {
@@ -90,6 +91,7 @@ export class DietCreatorComponent implements OnInit {
           {
             duration: 3500
           })
+          
       }
       else {
         console.log(error)
@@ -157,7 +159,7 @@ export class DietCreatorComponent implements OnInit {
       })
 
       this.diet = new Diet(map, caloriesPerDay, response.body.name, response.body.userId)
-      this.currentDietName = this.diet.name;
+      this.currentDietName = Object.assign(this.currentDietName,this.diet.name.toString());
       this.isReady = true;
       this.isDietEditable = true;
 
@@ -172,7 +174,7 @@ export class DietCreatorComponent implements OnInit {
         this.diet = new Diet(new Map(), new Map(), null, user.id);
 
         this.dietService.setDiet(this.diet)
-        this.currentDietName = this.diet.name;
+        this.currentDietName = Object.assign(this.currentDietName,this.diet.name.toString());
 
 
       }
@@ -182,7 +184,7 @@ export class DietCreatorComponent implements OnInit {
         this.diet = new Diet(new Map(), new Map(), null, user.id);
         // this.diet.dailyFood = this.dietService.createEmptyFoodEntries();
         this.dietService.setDiet(this.diet)
-        this.currentDietName = this.diet.name;
+        this.currentDietName = Object.assign(this.currentDietName,this.diet.name.toString());
       }
     })
 

@@ -1,5 +1,4 @@
-<div fxLayout="column" fxLayoutAlign="start center" fxHide.md="true"
-  class="reco-container">
+<div fxLayout="column" fxLayoutAlign="start center" fxHide.md="true" class="reco-container">
 
   <div fxLayout="column" fxLayoutAlign="start center" style="margin-top:20px;">
     <h2 style="font-weight: 300; margin-bottom: 5px">Your Food suggestions!</h2>
@@ -61,10 +60,14 @@
 
 
   <h3 style="font-weight: 300" *ngIf="foodAdded">Food working best with {{foodAdded.name}}</h3>
-  <h3 style="font-weight: 300" *ngIf="vegsSuggestion">Your current amount of vegetables per day is {{computeVegetables()}} g</h3>
-  <h3 style="font-weight: 300" *ngIf="meatSuggestion">Your weekly amount of proteins is {{computeProteinRightAmount()}} g</h3>
-  <h3 style="font-weight: 300" *ngIf="carbsSuggestion">Your current average amount of carbs per day is {{computeCarbs()}} g</h3>
-  <mat-list style="margin-top: 20px; min-width:100%; max-width:400px;" id="food_list" *ngIf="currentFoodSuggestions">
+  <h3 style="font-weight: 300" *ngIf="vegsSuggestion">Your current amount of vegetables per day is
+    {{computeVegetables()}} g</h3>
+  <h3 style="font-weight: 300" *ngIf="meatSuggestion">Your weekly amount of proteins is {{computeProteinRightAmount()}}
+    g</h3>
+  <h3 style="font-weight: 300" *ngIf="carbsSuggestion">Your current average amount of carbs per day is
+    {{computeCarbs()}} g</h3>
+  <mat-list style="margin-top: 20px; min-width:100%; max-width:400px; max-height: 400px;overflow-y: auto" id="food_list"
+    *ngIf="currentFoodSuggestions">
     <mat-list-item *ngFor="let foodRdf of currentFoodSuggestions;last as last" [matMenuTriggerFor]="dayMenu">
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
         <img matListAvatar [src]="foodRdf.imageUrl">

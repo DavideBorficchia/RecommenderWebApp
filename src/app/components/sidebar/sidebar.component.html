@@ -74,12 +74,16 @@
         </div>
         <mat-card id="goalsection" *ngIf="currentUserGoal && allPhysicalActivities">
           <mat-card-header fxLayoutAlign="start">
-            <h3 style="font-weight: 300">Current Goal: {{currentUserGoal.weeklyGoal}} kcal</h3>
+            <h3 style="font-weight: 300">{{getActivityName()}}</h3>
           </mat-card-header>
           <mat-card-content >
             <div fxLayout="row" fxLayoutAlign="space-evenly center">
-                <img [src]="getPhysicalActivityImage()" style="max-width: 80px">
-                <p>Adherence: {{currentUserGoal.adherence.toFixed(2)}}%</p>
+                <img [src]="getPhysicalActivityImage()" style="max-width: 60px">
+                <div fxLayout="column" fxLayoutAlign="space-evenly start">
+                  <p>Adherence: {{currentUserGoal.adherence.toFixed(2)}}%</p>
+                  <p>Current Goal: {{currentUserGoal.weeklyGoal}} kcal</p>   
+                </div>
+             
             </div>
 
           </mat-card-content>
