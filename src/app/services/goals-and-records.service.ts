@@ -38,16 +38,17 @@ export class GoalsAndRecordsService {
       .pipe(catchError(error => throwError(error)));
 
   }
-  getRecords(startDate: string, endDate: string, userId: string, paId: string) {
+  getRecords(startDate: string, endDate: string, dietId:string, userId: string, paId: string) {
     return this.httpClient.get<PhysicalActivityRecord[]>(this.baseUrlRecords + "/" + userId + "/activities/" + paId, {
       params: {
         startDate: startDate,
-        endDate: endDate
+        endDate: endDate,
+        dietId:dietId
       }
     }).pipe(catchError(error => throwError(error)));
   }
-  postRecord(record: PhysicalActivityRecord,physicalActivityId:string,userId:string) {
-    return this.httpClient.post<PhysicalActivityRecord>(this.baseUrlRecords + "/"+userId+"/activities/"+physicalActivityId, record).pipe(catchError(error => throwError(error)));
+  postRecord(record: PhysicalActivityRecord, dietId: string, physicalActivityId: string, userId: string) {
+    return this.httpClient.post<PhysicalActivityRecord>(this.baseUrlRecords + "/" + userId + "/diets/" + dietId + "/activities/" + physicalActivityId, record).pipe(catchError(error => throwError(error)));
   }
   getObservableGoal() {
     if (!this.goalBehavior) {
@@ -85,7 +86,7 @@ export class GoalsAndRecordsService {
 
   }
   updateGoalAdherence(records: PhysicalActivityRecord[], goalId: string) {
-    return this.httpClient.put<Goal>(this.baseUrlGoals + "/weekly/" + goalId + "/adherence",records)
+    return this.httpClient.put<Goal>(this.baseUrlGoals + "/weekly/" + goalId + "/adherence", records)
       .pipe(catchError(error => throwError(error)));
   }
 

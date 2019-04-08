@@ -141,6 +141,7 @@ export class SidebarComponent implements OnInit {
         this.isNutritionist = false;
         this.dietService.getObservableDiet().subscribe(diet => {
           if (diet) {
+            console.log(diet.name)
             this.goalService.getCurrentGoalForDiet(diet.id.toString(), this.currentUser.id).subscribe(goalResponse => {
               if (goalResponse) {
                 const goal = new Goal();
@@ -152,26 +153,29 @@ export class SidebarComponent implements OnInit {
                 goal.dietId = goalResponse['dietId'];
                 this.currentUserGoal = goal;
               }
-              this.physicalService.getAllPhysicalActivities(this.currentUser.id).subscribe(response => {
-                if (response) {
-                  this.allPhysicalActivities = [];
-                  response.forEach(value => {
-                    const physicalActivity = new PhysicalActivity();
-                    physicalActivity.name = value['name'];
-                    physicalActivity.rdfOutput = value['rdfOutput'];
-                    physicalActivity.imageUrl = value['imageUrl'];
-                    physicalActivity.description = value['description'];
-                    physicalActivity.startDate = new Date(value['startDate']);
-                    physicalActivity.endDate = new Date(value['endDate']);
-                    physicalActivity.caloriesPerHour = value['caloriesPerHour'];
-                    physicalActivity.userId = value['userId'];
-                    physicalActivity.id = value['id'];
-                    this.allPhysicalActivities.push(physicalActivity);
 
-                  });
-                }
-              });
 
+            }, (error: HttpErrorResponse) => {
+              this.currentUserGoal = null
+            });
+            this.physicalService.getAllPhysicalActivities(this.currentUser.id).subscribe(response => {
+              if (response) {
+                this.allPhysicalActivities = [];
+                response.forEach(value => {
+                  const physicalActivity = new PhysicalActivity();
+                  physicalActivity.name = value['name'];
+                  physicalActivity.rdfOutput = value['rdfOutput'];
+                  physicalActivity.imageUrl = value['imageUrl'];
+                  physicalActivity.description = value['description'];
+                  physicalActivity.startDate = new Date(value['startDate']);
+                  physicalActivity.endDate = new Date(value['endDate']);
+                  physicalActivity.caloriesPerHour = value['caloriesPerHour'];
+                  physicalActivity.userId = value['userId'];
+                  physicalActivity.id = value['id'];
+                  this.allPhysicalActivities.push(physicalActivity);
+
+                });
+              }
             });
           }
         });
@@ -329,7 +333,7 @@ export class SidebarComponent implements OnInit {
           nutritionist.id = responseNutritionist['id'];
           nutritionist.patients = [];
           Object.values(responseNutritionist['patients']).forEach(value => {
-// tslint:disable-next-line: no-shadowed-variable
+            // tslint:disable-next-line: no-shadowed-variable
             const patient = new User();
             patient.id = value['id'];
             patient.basicMetabolicRate = value['basicMetabolicRate'];

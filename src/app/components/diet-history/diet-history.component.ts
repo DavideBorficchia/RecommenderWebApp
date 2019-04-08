@@ -10,6 +10,7 @@ import { Food } from 'src/app/model/food';
 import { Diet } from 'src/app/model/diet';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class DietHistoryComponent implements OnInit {
   dietFromHistoryIsLoading: boolean;
   constructor(private dietService: DietService,
     private registerService: RegisterService,
-    public snack: MatSnackBar) { }
+    public snack: MatSnackBar,
+    private datePipe: DatePipe) { }
 
   getTodayDate() {
     return this.dietService.getTodayDate();
@@ -122,7 +124,7 @@ export class DietHistoryComponent implements OnInit {
           var dietHistoryFromServer: DietHistory[] = []
           Object.values(response.body).forEach(dietObject => {
 
-            var timestamp = dietObject["timeStamp"];
+            var timestamp = this.datePipe.transform(dietObject["timeStamp"],"dd/MM/yyyy");
             var name = dietObject["name"];
             var totalCalories = dietObject["totalCalories"]
             dietHistoryFromServer.push(new DietHistory(name, timestamp,totalCalories))
@@ -160,7 +162,7 @@ export class DietHistoryComponent implements OnInit {
         if (response.ok) {
          
           Object.values(response.body).forEach(dietObject => {
-            var timestamp:String = dietObject["timeStamp"];
+            var timestamp = this.datePipe.transform(dietObject["timeStamp"],"dd/MM/yyyy");
             var month = timestamp.toString().substring(1,2);
             var name = dietObject["name"];
             var totalCalories = dietObject["totalCalories"]

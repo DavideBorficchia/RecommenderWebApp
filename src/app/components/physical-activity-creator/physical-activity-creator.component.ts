@@ -153,7 +153,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
 
             var start = this.datePipe.transform(this.currentPhysicalActivity.startDate, 'dd/MM/yyyy hh:MM:ss')
             var end = this.datePipe.transform(this.currentPhysicalActivity.endDate, 'dd/MM/yyyy hh:MM:ss')
-            this.goalService.getRecords(start, end, this.currentPatient.id,
+            this.goalService.getRecords(start, end, this.currentDiet.id.toString(), this.currentPatient.id,
               this.currentPhysicalActivity.id).subscribe(response => {
                 if (response) {
                   var records = [];
@@ -190,9 +190,12 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                     this.goalService.getObservableRecords().subscribe(records => {
                       if (records) {
                         this.allPhysicalActivityRecords = records;
-                        this.records = this.allPhysicalActivityRecords.filter(record => record.physicalActivityId === this.currentPhysicalActivity.id)
+                        this.records = this.allPhysicalActivityRecords.filter(record => record.physicalActivityId ===
+                          this.tempDietPhysicalActivity.id);
+
                         this.goalService.updateGoalAdherence(this.records, this.currentGoal.id).subscribe(goalResponse => {
                           if (goalResponse) {
+
                             var goal = new Goal()
                             goal.adherence = goalResponse['adherence']
                             goal.id = goalResponse['id'];
@@ -214,7 +217,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                         if (!this.currentPhysicalActivity.name.includes('Create')
                           && this.allPhysicalActivities.length > 0 && this.postRecordSubscription === Subscription.EMPTY
                           && this.currentGoal.weeklyGoal !== 0) {
-                          this.postRecordSubscription = interval(10000).pipe(takeWhile(() => true)).subscribe(() => {
+                          this.postRecordSubscription = interval(60000).pipe(takeWhile(() => true)).subscribe(() => {
                             var record = new PhysicalActivityRecord();
                             record.id = Guid.create().toString();
                             record.sessionTimeStart = new Date();
@@ -224,7 +227,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                             record.sessionTimeEnd = new Date(Date.now())
                             record.burntCalories = 5 * 10;
                             console.log('posting new activity record...')
-                            this.goalService.postRecord(record,
+                            this.goalService.postRecord(record, this.currentDiet.id.toString(),
                               this.currentPhysicalActivity.id, this.currentPatient.id).subscribe(response => {
                                 if (response) {
                                   var recordToAdd = new PhysicalActivityRecord();
@@ -363,6 +366,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                   this.currentGoal = goal;
                   Object.assign(this.tempGoal, this.currentGoal);
                 }
+                diet.goal = goal;
 
 
 
@@ -400,6 +404,8 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
       return;
     }
 
+
+    this.currentGoal.physicalActivityId = this.currentPhysicalActivity.id;
     this.goalService.postGoal(this.currentGoal).subscribe(goalResponse => {
       if (goalResponse) {
         var goal = new Goal()
@@ -418,7 +424,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
     })
   }
   onPaClicked(pa: PhysicalActivity) {
-  
+
     if (this.isUpdating) {
       this.snackBar.open('Updating physical activity ' + this.currentPhysicalActivity.name + ', wait a bit!', 'OK', { duration: 3000 })
       return
@@ -448,7 +454,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
     return this.allPhysicalActivities.find(pa => pa.id === record.physicalActivityId).imageUrl;
   }
   onTextAreaDeselect() {
-    if(!this.activityInCreation){
+    if (!this.activityInCreation) {
       this.nameIsChanging = false;
       this.descriptionIsChanging = false;
       this.imageIsClicked = false;
@@ -473,36 +479,37 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
               this.isUpdating = false
               var temp = this.allPhysicalActivities.find(pa => pa.id === this.currentPhysicalActivity.id)
               const index = this.allPhysicalActivities.indexOf(temp);
-  
+
+
               if (index >= 0) {
                 this.allPhysicalActivities.splice(index, 1);
                 this.columnsSameHeight()
                 this.allPhysicalActivities.push(this.currentPhysicalActivity)
-  
+
               }
               else {
                 this.allPhysicalActivities.push(this.currentPhysicalActivity)
               }
               this.physicaActivityService.setObservablePhysicalActivities(this.allPhysicalActivities)
               Object.assign(this.tempPhysicalActivity, this.currentPhysicalActivity)
-              this.currentDiet.physicalActivity = this.tempPhysicalActivity;
-  
+
               if (this.isAlreadyAdded) {
-                this.componentReload = true;
+                Object.assign(this.tempDietPhysicalActivity, this.currentPhysicalActivity);
+
                 this.snackBar.open(this.currentPhysicalActivity.name + ' successfully updated! Reload page', 'OK', { duration: 3000 })
-  
+
               } else {
                 this.snackBar.open(this.currentPhysicalActivity.name + ' successfully updated!', 'OK', { duration: 3000 })
-  
+
               }
-  
+
             }
           }, (error: HttpErrorResponse) => {
             this.isUpdating = false;
             this.addNewGoal = true;
             this.snackBar.open(error.error, 'OK', { duration: 3000 })
           })
-  
+
       }
       else if (this.tempPhysicalActivity.name.includes('Create')) {
         this.isSend = true;
@@ -510,10 +517,10 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
       }
       else {
         this.isSend = false;
-  
+
       }
     }
-   
+
   }
   onGoalDeselect() {
     if (this.compareGoals()) {
@@ -659,6 +666,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
   onAddNewCurrentPhysicalActivity() {
     var dietToSend = this.currentDiet;
     dietToSend.physicalActivity = this.currentPhysicalActivity;
+
     this.dietService.updateCurrentPhysicalActivity(dietToSend).subscribe(response => {
 
       var map: Map<DayOfWeek, Meal[]> = new Map();
@@ -723,8 +731,32 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
 
       diet.physicalActivity = currentPhysicalActivity;
 
+      var goalResponse = response.body['goal']
+      if (goalResponse) {
+        var goal = new Goal()
+        goal.adherence = goalResponse['adherence']
+        goal.id = goalResponse['id'];
+        goal.physicalActivityId = goalResponse['physicalActivityId'];
+        goal.userId = goalResponse['userId'];
+        goal.weeklyGoal = goalResponse['weeklyGoal'];
+        goal.dietId = goalResponse['dietId'];
+        this.currentGoal = goal;
+        diet.goal = goal;
+
+        Object.assign(this.tempGoal, this.currentGoal);
+      }
+
       this.dietService.setDiet(diet);
-      this.snackBar.open('Current physical activity for diet ' + diet.name + ' updated!', 'OK', { duration: 3000 })
+      this.snackBar.open("Current physical activity for diet " + diet.name + " has been updated!", "OK", { duration: 3000 })
+
+      this.currentGoal.physicalActivityId = this.currentPhysicalActivity.id;
+
+      this.goalService.updateGoal(this.currentGoal).subscribe(response => {
+        this.goalService.setNewObservableGoal(diet.goal);
+
+
+      });
+
     });
   }
 
