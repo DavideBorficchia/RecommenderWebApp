@@ -152,6 +152,8 @@ export class SidebarComponent implements OnInit {
                 goal.weeklyGoal = goalResponse['weeklyGoal'];
                 goal.dietId = goalResponse['dietId'];
                 this.currentUserGoal = goal;
+                console.log(this.currentUserGoal)
+                
               }
 
 

@@ -4,9 +4,8 @@
 </div>
 
 <div fxLayout="row" fxLayoutAlign="space-evenly start" style="margin-bottom: 100px;" fxHide.lt-lg="true"
-*ngIf="currentDiet && currentGoal && allPhysicalActivities && allPhysicalActivityRecords">
-  <div fxLayout="column" fxLayoutAlign="start center" style="margin-top: 40px; "
-    id="left_content">
+  *ngIf="currentDiet && currentGoal && allPhysicalActivities && allPhysicalActivityRecords">
+  <div fxLayout="column" fxLayoutAlign="start center" style="margin-top: 40px; " id="left_content">
     <!-- first column -->
     <div fxLayout="row" fxLayout="space-evenly center" fxLayoutGap="40px">
       <div fxLayout="column" fxLayoutAlign="center center">
@@ -52,8 +51,9 @@
         <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
           <h2 style="font-weight: 300">Activity:</h2>
           <div fxLayout="row" fxLayoutAlign="space-between center" style="width:150px">
-            <p class="important-p" *ngIf="!currentDiet.physicalActivity">Add one!</p>
-            <p class="important-p" *ngIf="currentDiet.physicalActivity">{{currentDiet.physicalActivity.name}}</p>
+            <p class="important-p" *ngIf="!currentGoal.physicalActivityId">Add one! {{printrandomstuff()}}</p>
+            <p class="important-p" *ngIf="currentGoal.physicalActivityId">
+              {{currentGoal.physicalActivityName}}</p>
 
           </div>
         </div>
@@ -198,11 +198,11 @@
   </div>
 </div>
 
-<mat-tab-group mat-align-tabs="center" fxHide.gt-md="true" *ngIf="currentDiet && currentGoal && allPhysicalActivities && allPhysicalActivityRecords">
+<mat-tab-group mat-align-tabs="center" fxHide.gt-md="true"
+  *ngIf="currentDiet && currentGoal && allPhysicalActivities && allPhysicalActivityRecords">
   <mat-tab label="Current Diet">
     <ng-template matTabContent>
-      <div fxLayout="column" fxLayoutAlign="start center" style="margin-top: 40px; "
-        id="left_content">
+      <div fxLayout="column" fxLayoutAlign="start center" style="margin-top: 40px; " id="left_content">
         <!-- first column -->
         <div fxLayout="row" fxLayout="space-evenly center" fxLayoutAlign.xs="center start" fxLayoutGap.gt-xs="40px">
           <div fxLayout="column" fxLayoutAlign="center center">
@@ -249,9 +249,9 @@
             <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
               <h2 style="font-weight: 300">Activity:</h2>
               <div fxLayout="row" fxLayoutAlign="space-between center" style="width:150px">
-                <p class="important-p" *ngIf="!currentDiet.physicalActivity">Add one!</p>
-                <p class="important-p" *ngIf="currentDiet.physicalActivity">{{currentDiet.physicalActivity.name}}</p>
-
+                <p class="important-p" *ngIf="!currentGoal.physicalActivityId">Add one!</p>
+                <p class="important-p" *ngIf="currentGoal.physicalActivityId">
+                  {{currentGoal.physicalActivityName}}</p>
               </div>
             </div>
             <div fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="15px">
@@ -269,7 +269,7 @@
         overflow-y: auto;
         overflow-x: hidden;" *ngIf="records.length > 0">
           <mat-list-item mat-ripple *ngFor="let record of records; lastRecord as last" (click)="onRecordClicked()">
-            
+
             <img matListAvatar [src]="getRecordImage(record)" (load)="columnsSameHeight()">
             <h3 matLine *ngIf="!isToday(record)"> Date: {{record.sessionTimeStart.toLocaleDateString()}} at
               {{record.sessionTimeStart.getHours()}}:{{record.sessionTimeStart.getMinutes()}} </h3>

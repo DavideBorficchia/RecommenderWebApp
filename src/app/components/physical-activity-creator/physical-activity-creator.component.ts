@@ -40,7 +40,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
   serializedStartDate: FormControl;
   serializedEndDate: FormControl;
   tempPhysicalActivity: PhysicalActivity = new PhysicalActivity();
-  tempDietPhysicalActivity = new PhysicalActivity();
+  goalPhysicalActivity = new PhysicalActivity();
   tempGoal: Goal = new Goal();
   allPhysicalActivityRecords: PhysicalActivityRecord[];
   allPhysicalActivities: PhysicalActivity[];
@@ -79,25 +79,14 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
         defaultPhysicalActivity.id = Guid.create().toString();
         defaultPhysicalActivity.userId = this.currentPatient.id;
         defaultPhysicalActivity.imageUrl = 'https://api.adorable.io/avatars/120/' + Math.random().toString() + '.png';
-
         this.dietService.getObservableDiet().subscribe(diet => {
           if (diet && diet.userId === this.currentPatient.id) {
             this.currentDiet = diet;
 
-            if (diet.physicalActivity.id) {
-              this.tempDietPhysicalActivity = diet.physicalActivity;
 
-              this.isAlreadyAdded = true;
-            }
-            else {
-              this.tempDietPhysicalActivity = defaultPhysicalActivity;
-              this.isAlreadyAdded = false;
-            }
             this.postRecordSubscription.unsubscribe()
             this.postRecordSubscription = Subscription.EMPTY;
-            this.currentPhysicalActivity = new PhysicalActivity();
-            Object.assign(this.currentPhysicalActivity, this.tempDietPhysicalActivity)
-            Object.assign(this.tempPhysicalActivity, this.tempDietPhysicalActivity)
+
             this.allPhysicalActivities = [];
             this.allPhysicalActivityRecords = [];
 
@@ -111,7 +100,10 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                   goal.userId = goalResponse['userId'];
                   goal.weeklyGoal = goalResponse['weeklyGoal'];
                   goal.dietId = goalResponse['dietId'];
+                  goal.physicalActivityName = this.getPhysicalActivityName(goal.physicalActivityId);
+
                   this.goalService.setNewObservableGoal(goal)
+
                 }
               }, (error: HttpErrorResponse) => {
                 this.addNewGoal = true;
@@ -120,6 +112,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                 emptyGoal.adherence = 0.0;
                 emptyGoal.dietId = this.currentDiet.id.toString();
                 emptyGoal.userId = this.currentPatient.id;
+                emptyGoal.physicalActivityId = null;
                 emptyGoal.weeklyGoal = 0.0;
                 this.goalService.setNewObservableGoal(emptyGoal);
                 this.snackBar.open(error.error, 'OK', { duration: 3000 })
@@ -151,116 +144,144 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
               this.physicaActivityService.setObservablePhysicalActivities([])
             })
 
-            var start = this.datePipe.transform(this.currentPhysicalActivity.startDate, 'dd/MM/yyyy hh:MM:ss')
-            var end = this.datePipe.transform(this.currentPhysicalActivity.endDate, 'dd/MM/yyyy hh:MM:ss')
-            this.goalService.getRecords(start, end, this.currentDiet.id.toString(), this.currentPatient.id,
-              this.currentPhysicalActivity.id).subscribe(response => {
-                if (response) {
-                  var records = [];
-                  Object.keys(response).forEach(key => {
-                    var value = response[key]
-                    var recordToAdd = new PhysicalActivityRecord();
-                    recordToAdd.id = value['id'];
-                    recordToAdd.physicalActivityId = value['physicalActivityId'];
-                    recordToAdd.sessionTimeStart = new Date(value['sessionTimeStart']);
-                    recordToAdd.sessionTimeEnd = new Date(value['sessionTimeEnd']);
-                    recordToAdd.burntCalories = value['burntCalories'];
-                    recordToAdd.userId = value['userId'];
-                    records.push(recordToAdd)
 
-                  })
-                  this.goalService.setNewObservableRecords(records);
 
-                }
-              }, (error: HttpErrorResponse) => {
-                this.goalService.setNewObservableRecords([]);
-                this.snackBar.open(error.error, 'OK', { duration: 3000 });
-              })
 
             this.physicaActivityService.getObservablePhysicalActivities().subscribe(activities => {
+
 
               if (activities) {
                 this.allPhysicalActivities = activities;
                 this.goalService.getObservableGoal().subscribe(goal => {
                   if (goal && goal.userId === this.currentPatient.id) {
                     this.currentGoal = goal;
-                    this.currentGoal.physicalActivityId = this.currentPhysicalActivity.id;
+                    console.log(goal)
+
+                    if (this.currentGoal.physicalActivityId) {
+                      this.goalPhysicalActivity = this.allPhysicalActivities.find(pa => pa.id === this.currentGoal.physicalActivityId)
+
+                      this.isAlreadyAdded = true;
+
+                    }
+                    else {
+                      this.goalPhysicalActivity = defaultPhysicalActivity;
+                      this.isAlreadyAdded = false;
+                    }
+                    this.currentPhysicalActivity = new PhysicalActivity();
+                    this.tempPhysicalActivity = new PhysicalActivity();
+                    Object.assign(this.currentPhysicalActivity, this.goalPhysicalActivity)
+                    Object.assign(this.tempPhysicalActivity, this.goalPhysicalActivity)
                     Object.assign(this.tempGoal, this.currentGoal);
-                    this.currentDiet.goal = this.tempGoal;
-                    this.goalService.getObservableRecords().subscribe(records => {
-                      if (records) {
-                        this.allPhysicalActivityRecords = records;
-                        this.records = this.allPhysicalActivityRecords.filter(record => record.physicalActivityId ===
-                          this.tempDietPhysicalActivity.id);
+                    this.serializedStartDate = new FormControl(this.currentPhysicalActivity.startDate);
+                    this.serializedEndDate = new FormControl(this.currentPhysicalActivity.endDate)
+                    this.serializedStartDate.valueChanges.subscribe((value: string | number | Date) => {
 
-                        this.goalService.updateGoalAdherence(this.records, this.currentGoal.id).subscribe(goalResponse => {
-                          if (goalResponse) {
+                      console.log(value)
+                      if (value !== this.tempPhysicalActivity.startDate) {
 
-                            var goal = new Goal()
-                            goal.adherence = goalResponse['adherence']
-                            goal.id = goalResponse['id'];
-                            goal.physicalActivityId = goalResponse['physicalActivityId'];
-                            goal.userId = goalResponse['userId'];
-                            goal.weeklyGoal = goalResponse['weeklyGoal'];
-                            goal.dietId = goalResponse['dietId'];
-                            this.currentGoalIsChanging = false;
-                            this.currentGoal = goal;
+                        this.currentPhysicalActivity.startDate = new Date(value)
+                        this.onTextAreaDeselect()
+                      }
 
-                            Object.assign(this.tempGoal, this.currentGoal);
-                            this.currentDiet.goal = this.tempGoal;
-                          }
-                        }, (error: HttpErrorResponse) => {
+                    })
+                    this.serializedEndDate.valueChanges.subscribe(value => {
+                      console.log(value)
 
-                          this.snackBar.open(error.error, 'OK', { duration: 3000 })
-                        })
+                      if (value !== this.tempPhysicalActivity.endDate) {
 
-                        if (!this.currentPhysicalActivity.name.includes('Create')
-                          && this.allPhysicalActivities.length > 0 && this.postRecordSubscription === Subscription.EMPTY
-                          && this.currentGoal.weeklyGoal !== 0) {
-                          this.postRecordSubscription = interval(60000).pipe(takeWhile(() => true)).subscribe(() => {
-                            var record = new PhysicalActivityRecord();
-                            record.id = Guid.create().toString();
-                            record.sessionTimeStart = new Date();
-                            record.sessionTimeEnd = new Date();
-                            record.sessionTimeStart = Object.assign(record.sessionTimeStart, this.currentPhysicalActivity.startDate)
-                            record.sessionTimeStart.setHours(new Date(Date.now()).getHours())
-                            record.sessionTimeEnd = new Date(Date.now())
-                            record.burntCalories = 5 * 10;
-                            console.log('posting new activity record...')
-                            this.goalService.postRecord(record, this.currentDiet.id.toString(),
-                              this.currentPhysicalActivity.id, this.currentPatient.id).subscribe(response => {
-                                if (response) {
-                                  var recordToAdd = new PhysicalActivityRecord();
-                                  recordToAdd.id = response['id'];
-                                  recordToAdd.physicalActivityId = response['physicalActivityId'];
-                                  recordToAdd.sessionTimeStart = new Date(response['sessionTimeStart']);
-                                  recordToAdd.sessionTimeEnd = new Date(response['sessionTimeEnd']);
-                                  recordToAdd.burntCalories = response['burntCalories'];
-                                  recordToAdd.userId = response['userId'];
-                                }
-                                this.allPhysicalActivityRecords.unshift(recordToAdd)
-                                this.goalService.setNewObservableRecords(this.allPhysicalActivityRecords)
-                                this.goalService.updateGoalAdherence(this.records, this.currentGoal.id).subscribe(goalResponse => {
-                                  if (goalResponse) {
-                                    var goal = new Goal()
-                                    goal.adherence = goalResponse['adherence']
-                                    goal.id = goalResponse['id'];
-                                    goal.physicalActivityId = goalResponse['physicalActivityId'];
-                                    goal.userId = goalResponse['userId'];
-                                    goal.weeklyGoal = goalResponse['weeklyGoal'];
-                                    goal.dietId = goalResponse['dietId'];
-                                    this.currentGoalIsChanging = false;
-                                    this.goalService.setNewObservableGoal(goal)
-                                  }
-                                }, (error: HttpErrorResponse) => {
-
-                                  this.snackBar.open(error.error, 'OK', { duration: 3000 })
-                                })
-                              });
-                          });
-                        }
+                        this.currentPhysicalActivity.endDate = new Date(value)
+                        this.onTextAreaDeselect()
                       }
                     })
+                    var start = this.datePipe.transform(this.currentPhysicalActivity.startDate, 'dd/MM/yyyy hh:MM:ss')
+                    var end = this.datePipe.transform(this.currentPhysicalActivity.endDate, 'dd/MM/yyyy hh:MM:ss')
+                    this.goalService.getRecords(start, end, this.currentDiet.id.toString(), this.currentPatient.id,
+                      this.tempPhysicalActivity.id).subscribe(response => {
+                        if (response) {
+                          var records = [];
+                          Object.keys(response).forEach(key => {
+                            var value = response[key]
+                            var recordToAdd = new PhysicalActivityRecord();
+                            recordToAdd.id = value['id'];
+                            recordToAdd.physicalActivityId = value['physicalActivityId'];
+                            recordToAdd.sessionTimeStart = new Date(value['sessionTimeStart']);
+                            recordToAdd.sessionTimeEnd = new Date(value['sessionTimeEnd']);
+                            recordToAdd.burntCalories = value['burntCalories'];
+                            recordToAdd.userId = value['userId'];
+                            records.push(recordToAdd)
+
+                          })
+                          this.goalService.setNewObservableRecords(records);
+
+                        }
+                      }, (error: HttpErrorResponse) => {
+                        this.goalService.setNewObservableRecords([]);
+                        this.snackBar.open(error.error, 'OK', { duration: 3000 });
+                      })
+                    if (!this.goalPhysicalActivity.name.includes('Create')
+                      && this.allPhysicalActivities.length > 0 && this.postRecordSubscription === Subscription.EMPTY
+                      && this.currentGoal.weeklyGoal !== 0) {
+                      this.postRecordSubscription = interval(10000).pipe(takeWhile(() => true)).subscribe(() => {
+                        var record = new PhysicalActivityRecord();
+                        record.id = Guid.create().toString();
+                        record.sessionTimeStart = new Date();
+                        record.sessionTimeEnd = new Date();
+                        record.sessionTimeStart = Object.assign(record.sessionTimeStart, this.goalPhysicalActivity.startDate)
+                        record.sessionTimeStart.setHours(new Date(Date.now()).getHours())
+                        record.sessionTimeEnd.setHours(record.sessionTimeStart.getHours() + 1);
+                        record.sessionTimeEnd.setMinutes(Math.floor(Math.random() * 59) + 1);
+                        record.burntCalories = 5 * 10;
+                        console.log('posting new activity record...')
+                        this.goalService.postRecord(record, this.currentDiet.id.toString(),
+                          this.goalPhysicalActivity.id, this.currentPatient.id).subscribe(response => {
+                            if (response) {
+                              var recordToAdd = new PhysicalActivityRecord();
+                              recordToAdd.id = response['id'];
+                              recordToAdd.physicalActivityId = response['physicalActivityId'];
+                              recordToAdd.sessionTimeStart = new Date(response['sessionTimeStart']);
+                              recordToAdd.sessionTimeEnd = new Date(response['sessionTimeEnd']);
+                              recordToAdd.burntCalories = response['burntCalories'];
+                              recordToAdd.userId = response['userId'];
+                            }
+                            this.allPhysicalActivityRecords.unshift(recordToAdd)
+                            this.goalService.setNewObservableRecords(this.allPhysicalActivityRecords)
+
+                          });
+                      });
+                    }
+
+                  }
+                })
+                this.goalService.getObservableRecords().subscribe(records => {
+                  if (records) {
+                    this.allPhysicalActivityRecords = records;
+                    this.records = this.allPhysicalActivityRecords.filter(record => record.physicalActivityId ===
+                      this.goalPhysicalActivity.id);
+
+                    this.goalService.updateGoalAdherence(this.records, this.currentGoal.id).subscribe(goalResponse => {
+                      if (goalResponse) {
+
+                        var goal = new Goal()
+                        goal.adherence = goalResponse['adherence']
+                        goal.id = goalResponse['id'];
+                        goal.physicalActivityId = goalResponse['physicalActivityId'];
+                        goal.userId = goalResponse['userId'];
+                        goal.weeklyGoal = goalResponse['weeklyGoal'];
+                        goal.dietId = goalResponse['dietId'];
+                        goal.physicalActivityName = this.getPhysicalActivityName(goal.physicalActivityId);
+
+                        this.currentGoalIsChanging = false;
+                        this.currentGoal = goal;
+
+                        Object.assign(this.tempGoal, this.currentGoal);
+                        // this.currentDiet.goal = this.tempGoal;
+                      }
+                    }, (error: HttpErrorResponse) => {
+
+                      this.snackBar.open(error.error, 'OK', { duration: 3000 })
+                    })
+
+
                   }
                 })
 
@@ -269,24 +290,6 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
 
 
 
-            this.serializedStartDate = new FormControl(this.currentPhysicalActivity.startDate);
-            this.serializedEndDate = new FormControl(this.currentPhysicalActivity.endDate)
-            this.serializedStartDate.valueChanges.subscribe((value: string | number | Date) => {
-
-              if (value !== this.currentPhysicalActivity.startDate) {
-
-                this.currentPhysicalActivity.startDate = new Date(value)
-                this.onTextAreaDeselect()
-              }
-
-            })
-            this.serializedEndDate.valueChanges.subscribe(value => {
-              if (value !== this.currentPhysicalActivity.endDate) {
-
-                this.currentPhysicalActivity.endDate = new Date(value)
-                this.onTextAreaDeselect()
-              }
-            })
 
 
             this.columnsSameHeight();
@@ -354,19 +357,19 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                   currentPhysicalActivity.id = value['id']
                 }
                 diet.physicalActivity = currentPhysicalActivity;
-                var goalResponse = response.body['goal']
-                if (goal) {
-                  var goal = new Goal()
-                  goal.adherence = goalResponse['adherence']
-                  goal.id = goalResponse['id'];
-                  goal.physicalActivityId = goalResponse['physicalActivityId'];
-                  goal.userId = goalResponse['userId'];
-                  goal.weeklyGoal = goalResponse['weeklyGoal'];
-                  goal.dietId = goalResponse['dietId'];
-                  this.currentGoal = goal;
-                  Object.assign(this.tempGoal, this.currentGoal);
-                }
-                diet.goal = goal;
+                // var goalResponse = response.body['goal']
+                // if (goal) {
+                //   var goal = new Goal()
+                //   goal.adherence = goalResponse['adherence']
+                //   goal.id = goalResponse['id'];
+                //   goal.physicalActivityId = goalResponse['physicalActivityId'];
+                //   goal.userId = goalResponse['userId'];
+                //   goal.weeklyGoal = goalResponse['weeklyGoal'];
+                //   goal.dietId = goalResponse['dietId'];
+                //   this.currentGoal = goal;
+                //   Object.assign(this.tempGoal, this.currentGoal);
+                // }
+                // diet.goal = goal;
 
 
 
@@ -415,6 +418,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
         goal.userId = goalResponse['userId'];
         goal.weeklyGoal = goalResponse['weeklyGoal'];
         goal.dietId = goalResponse['dietId'];
+        goal.physicalActivityName = this.getPhysicalActivityName(goal.physicalActivityId);
 
         this.goalService.setNewObservableGoal(goal)
         this.addNewGoal = false;
@@ -433,13 +437,12 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
       this.currentPhysicalActivity = pa;
       this.serializedStartDate = new FormControl(this.currentPhysicalActivity.startDate);
       this.serializedEndDate = new FormControl(this.currentPhysicalActivity.endDate)
-      this.isSend = false;
       this.nameIsChanging = false;
       this.descriptionIsChanging = false;
       Object.assign(this.tempPhysicalActivity, this.currentPhysicalActivity)
     }
     this.columnsSameHeight();
-    if (this.currentDiet.physicalActivity.id !== this.currentPhysicalActivity.id) {
+    if (this.currentGoal.physicalActivityId !== this.currentPhysicalActivity.id) {
       this.isAlreadyAdded = false;
     }
     else {
@@ -494,7 +497,6 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
               Object.assign(this.tempPhysicalActivity, this.currentPhysicalActivity)
 
               if (this.isAlreadyAdded) {
-                Object.assign(this.tempDietPhysicalActivity, this.currentPhysicalActivity);
 
                 this.snackBar.open(this.currentPhysicalActivity.name + ' successfully updated! Reload page', 'OK', { duration: 3000 })
 
@@ -533,8 +535,9 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
           goal.userId = goalResponse['userId'];
           goal.weeklyGoal = goalResponse['weeklyGoal'];
           goal.dietId = goalResponse['dietId'];
+          goal.physicalActivityName = this.getPhysicalActivityName(goal.physicalActivityId);
           this.currentGoalIsChanging = false;
-          this.goalService.setNewObservableGoal(goal);
+          this.currentGoal = goal;
         }
       }, (error: HttpErrorResponse) => {
         this.currentGoalIsChanging = false;
@@ -544,8 +547,10 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
     }
 
   }
-  getPhysicalActivityName(activityId: string) {
-    return this.allPhysicalActivities.find(pa => pa.id === activityId).name;
+
+  getPhysicalActivityName(activityId: string): string {
+    var pa = this.allPhysicalActivities.find(pa => pa.id === activityId)
+    return pa.name;
 
   }
   onToggleChange(event: MatSlideToggleChange) {
@@ -664,74 +669,9 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
 
   }
   onAddNewCurrentPhysicalActivity() {
-    var dietToSend = this.currentDiet;
-    dietToSend.physicalActivity = this.currentPhysicalActivity;
+    this.currentGoal.physicalActivityId = this.currentPhysicalActivity.id
+    this.goalService.updateGoal(this.currentGoal).subscribe(goalResponse => {
 
-    this.dietService.updateCurrentPhysicalActivity(dietToSend).subscribe(response => {
-
-      var map: Map<DayOfWeek, Meal[]> = new Map();
-
-      Object.keys(response.body.dailyFood).forEach(key => {
-        var meals: Meal[] = []
-        Object.values(response.body.dailyFood[key]).forEach(mealValue => {
-          var meal = new Meal();
-          var foodArray = mealValue['allFoodEntries'];
-          Object.values(foodArray).forEach(value => {
-            var food = new Food();
-
-            food.calories = value['calories'];
-            food.caloriesPer100 = value['caloriesPer100']
-            food.carbs = value['carbs']
-            food.fats = value['fats']
-            // food.mealTypes = value["mealTypes"]
-            food.name = value['name']
-            food.proteins = value['proteins']
-            food.quantity = value['quantity']
-            food.vitamins = value['vitamins'];
-            food.salts = value['salts']
-            food.type = value['type']
-            food.id = value['id']
-            food.saltsPer100 = value['saltsPer100']
-            food.vitaminsPer100 = value['vitaminsPer100']
-            food.fatsPer100 = value['fatsPer100']
-            food.proteinsPer100 = value['proteinsPer100']
-            food.carbsPer100 = value['carbsPer100']
-            food.calories = value['calories']
-            meal.addFood(food);
-          });
-          meal.mealType = mealValue['mealType'];
-          meals.push(meal)
-        });
-        map.set(DayOfWeek[key], meals)
-
-
-      });
-      var caloriesPerDay: Map<DayOfWeek, number> = new Map()
-      Object.keys(response.body.caloriesPerDay).forEach(key => {
-        caloriesPerDay.set(DayOfWeek[key], response.body.caloriesPerDay[key])
-      });
-
-      var diet = new Diet(map, caloriesPerDay, response.body.name, response.body.userId)
-      diet.totalCalories = response.body.totalCalories
-      diet.id = response.body.id
-      var currentPhysicalActivity = new PhysicalActivity();
-
-      var value = response.body['physicalActivity']
-      if (value) {
-        currentPhysicalActivity.name = value['name']
-        currentPhysicalActivity.rdfOutput = value['rdfOutput'];
-        currentPhysicalActivity.imageUrl = value['imageUrl']
-        currentPhysicalActivity.description = value['description']
-        currentPhysicalActivity.startDate = new Date(value['startDate'])
-        currentPhysicalActivity.endDate = new Date(value['endDate'])
-        currentPhysicalActivity.userId = value['userId']
-        currentPhysicalActivity.caloriesPerHour = value['caloriesPerHour'];
-        currentPhysicalActivity.id = value['id']
-      }
-
-      diet.physicalActivity = currentPhysicalActivity;
-
-      var goalResponse = response.body['goal']
       if (goalResponse) {
         var goal = new Goal()
         goal.adherence = goalResponse['adherence']
@@ -740,24 +680,104 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
         goal.userId = goalResponse['userId'];
         goal.weeklyGoal = goalResponse['weeklyGoal'];
         goal.dietId = goalResponse['dietId'];
-        this.currentGoal = goal;
-        diet.goal = goal;
+        goal.physicalActivityName = this.getPhysicalActivityName(goal.physicalActivityId);
 
-        Object.assign(this.tempGoal, this.currentGoal);
+
+        this.goalService.setNewObservableGoal(goal);
+        this.snackBar.open("Current physical activity for diet " + this.currentDiet.name + " has been updated!", "OK", { duration: 3000 })
+
       }
 
-      this.dietService.setDiet(diet);
-      this.snackBar.open("Current physical activity for diet " + diet.name + " has been updated!", "OK", { duration: 3000 })
-
-      this.currentGoal.physicalActivityId = this.currentPhysicalActivity.id;
-
-      this.goalService.updateGoal(this.currentGoal).subscribe(response => {
-        this.goalService.setNewObservableGoal(diet.goal);
-
-
-      });
 
     });
+    // var dietToSend = this.currentDiet;
+
+    // this.dietService.updateCurrentPhysicalActivity(dietToSend).subscribe(response => {
+
+    //   var map: Map<DayOfWeek, Meal[]> = new Map();
+
+    //   Object.keys(response.body.dailyFood).forEach(key => {
+    //     var meals: Meal[] = []
+    //     Object.values(response.body.dailyFood[key]).forEach(mealValue => {
+    //       var meal = new Meal();
+    //       var foodArray = mealValue['allFoodEntries'];
+    //       Object.values(foodArray).forEach(value => {
+    //         var food = new Food();
+
+    //         food.calories = value['calories'];
+    //         food.caloriesPer100 = value['caloriesPer100']
+    //         food.carbs = value['carbs']
+    //         food.fats = value['fats']
+    //         // food.mealTypes = value["mealTypes"]
+    //         food.name = value['name']
+    //         food.proteins = value['proteins']
+    //         food.quantity = value['quantity']
+    //         food.vitamins = value['vitamins'];
+    //         food.salts = value['salts']
+    //         food.type = value['type']
+    //         food.id = value['id']
+    //         food.saltsPer100 = value['saltsPer100']
+    //         food.vitaminsPer100 = value['vitaminsPer100']
+    //         food.fatsPer100 = value['fatsPer100']
+    //         food.proteinsPer100 = value['proteinsPer100']
+    //         food.carbsPer100 = value['carbsPer100']
+    //         food.calories = value['calories']
+    //         meal.addFood(food);
+    //       });
+    //       meal.mealType = mealValue['mealType'];
+    //       meals.push(meal)
+    //     });
+    //     map.set(DayOfWeek[key], meals)
+
+
+    //   });
+    //   var caloriesPerDay: Map<DayOfWeek, number> = new Map()
+    //   Object.keys(response.body.caloriesPerDay).forEach(key => {
+    //     caloriesPerDay.set(DayOfWeek[key], response.body.caloriesPerDay[key])
+    //   });
+
+    //   var diet = new Diet(map, caloriesPerDay, response.body.name, response.body.userId)
+    //   diet.totalCalories = response.body.totalCalories
+    //   diet.id = response.body.id
+    //   var currentPhysicalActivity = new PhysicalActivity();
+
+    //   // var value = response.body['physicalActivity']
+    //   // if (value) {
+    //   //   currentPhysicalActivity.name = value['name']
+    //   //   currentPhysicalActivity.rdfOutput = value['rdfOutput'];
+    //   //   currentPhysicalActivity.imageUrl = value['imageUrl']
+    //   //   currentPhysicalActivity.description = value['description']
+    //   //   currentPhysicalActivity.startDate = new Date(value['startDate'])
+    //   //   currentPhysicalActivity.endDate = new Date(value['endDate'])
+    //   //   currentPhysicalActivity.userId = value['userId']
+    //   //   currentPhysicalActivity.caloriesPerHour = value['caloriesPerHour'];
+    //   //   currentPhysicalActivity.id = value['id']
+    //   // }
+
+    //   // diet.physicalActivity = currentPhysicalActivity;
+
+    //   // var goalResponse = response.body['goal']
+    //   // if (goalResponse) {
+    //   //   var goal = new Goal()
+    //   //   goal.adherence = goalResponse['adherence']
+    //   //   goal.id = goalResponse['id'];
+    //   //   goal.physicalActivityId = goalResponse['physicalActivityId'];
+    //   //   goal.userId = goalResponse['userId'];
+    //   //   goal.weeklyGoal = goalResponse['weeklyGoal'];
+    //   //   goal.dietId = goalResponse['dietId'];
+    //   //   this.currentGoal = goal;
+    //   //   diet.goal = goal;
+
+    //   //   Object.assign(this.tempGoal, this.currentGoal);
+    //   // }
+
+    //   this.dietService.setDiet(diet);
+
+    //   this.currentGoal.physicalActivityId = this.currentPhysicalActivity.id;
+
+
+
+    // });
   }
 
   private columnsSameHeight() {
@@ -808,6 +828,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
     }
     return false;
   }
+
 
 
 }
