@@ -38,12 +38,12 @@ export class GoalsAndRecordsService {
       .pipe(catchError(error => throwError(error)));
 
   }
-  getRecords(startDate: string, endDate: string, dietId:string, userId: string, paId: string) {
+  getRecords(startDate: string, endDate: string, dietId: string, userId: string, paId: string) {
     return this.httpClient.get<PhysicalActivityRecord[]>(this.baseUrlRecords + "/" + userId + "/activities/" + paId, {
       params: {
         startDate: startDate,
         endDate: endDate,
-        dietId:dietId
+        dietId: dietId
       }
     }).pipe(catchError(error => throwError(error)));
   }
@@ -85,8 +85,13 @@ export class GoalsAndRecordsService {
       .pipe(catchError(error => throwError(error)));
 
   }
-  updateGoalAdherence(records: PhysicalActivityRecord[], goalId: string) {
-    return this.httpClient.put<Goal>(this.baseUrlGoals + "/weekly/" + goalId + "/adherence", records)
+  updateGoalAdherence(goal: Goal, startDate: string, endDate: string) {
+    return this.httpClient.put<Goal>(this.baseUrlGoals + "/weekly/adherence", goal, {
+      params: {
+        startDate: startDate,
+        endDate: endDate
+      }
+    })
       .pipe(catchError(error => throwError(error)));
   }
 

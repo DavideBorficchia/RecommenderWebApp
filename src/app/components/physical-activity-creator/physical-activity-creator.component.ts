@@ -37,6 +37,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
   isUpdating = false;
   isSend = false;
   postRecordSubscription: Subscription = Subscription.EMPTY;
+  physicalActivitySubscription: Subscription = Subscription.EMPTY;
   serializedStartDate: FormControl;
   serializedEndDate: FormControl;
   tempPhysicalActivity: PhysicalActivity = new PhysicalActivity();
@@ -121,7 +122,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
 
 
 
-            this.physicaActivityService.getObservablePhysicalActivities().subscribe(activities => {
+            this.physicalActivitySubscription = this.physicaActivityService.getObservablePhysicalActivities().subscribe(activities => {
 
 
               if (activities) {
@@ -129,7 +130,6 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                 this.goalService.getObservableGoal().subscribe(goal => {
                   if (goal && goal.userId === this.currentPatient.id) {
                     this.currentGoal = goal;
-                    console.log(goal)
 
                     if (this.currentGoal.physicalActivityId) {
                       this.goalPhysicalActivity = this.allPhysicalActivities.find(pa => pa.id === this.currentGoal.physicalActivityId)
@@ -195,7 +195,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                     if (!this.goalPhysicalActivity.name.includes('Create')
                       && this.allPhysicalActivities.length > 0 && this.postRecordSubscription === Subscription.EMPTY
                       && this.currentGoal.weeklyGoal !== 0) {
-                      this.postRecordSubscription = interval(10 * 60 * 1000).pipe(takeWhile(() => true)).subscribe(() => {
+                      this.postRecordSubscription = interval(20 * 60 * 1000).pipe(takeWhile(() => true)).subscribe(() => {
                         var record = new PhysicalActivityRecord();
                         record.id = Guid.create().toString();
                         record.sessionTimeStart = new Date();
@@ -260,8 +260,9 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
                     this.allPhysicalActivityRecords = records;
                     this.records = this.allPhysicalActivityRecords.filter(record => record.physicalActivityId ===
                       this.goalPhysicalActivity.id);
-
-                    this.goalService.updateGoalAdherence(this.records, this.currentGoal.id).subscribe(goalResponse => {
+                    var start = this.datePipe.transform(this.currentPhysicalActivity.startDate, 'dd/MM/yyyy hh:MM:ss')
+                    var end = this.datePipe.transform(this.currentPhysicalActivity.endDate, 'dd/MM/yyyy hh:MM:ss')
+                    this.goalService.updateGoalAdherence(this.currentGoal, start, end).subscribe(goalResponse => {
                       if (goalResponse) {
 
                         var goal = new Goal()
@@ -395,7 +396,8 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.postRecordSubscription.unsubscribe()
+    this.postRecordSubscription.unsubscribe();
+    this.physicalActivitySubscription.unsubscribe();
   }
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -526,7 +528,7 @@ export class PhysicalActivityCreatorComponent implements OnInit, OnDestroy {
 
       }
     }
-    else{
+    else {
       this.nameIsChanging = false;
       this.descriptionIsChanging = false;
       this.imageIsClicked = false;

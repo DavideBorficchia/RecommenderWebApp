@@ -83,7 +83,7 @@ export class FoodRecommenderService {
 
       })
     }
-    else{
+    else if(user.currentPatient.id){
       console.log("ciao")
       this.httpClient.get<FoodRdf[]>(this.baseUrl + "/all",
       {
