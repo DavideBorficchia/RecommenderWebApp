@@ -169,7 +169,7 @@ export class FoodRecommenderComponent implements OnInit {
     this.vegsSuggestion = true;
     this.meatSuggestion = false;
     this.vegsSuggestion = false;
-    return this.foodRecommender.getGeneralFoodRecommendationFruitsAndVegetables(this.diet.name.toString())
+    this.foodRecommender.getGeneralFoodRecommendationFruitsAndVegetables(this.diet.name.toString())
       .subscribe(response => {
         if (response) {
           Object.keys(response).forEach(key => {
@@ -179,16 +179,16 @@ export class FoodRecommenderComponent implements OnInit {
             food.bestEatenAt = value['bestEatenAt'];
             food.name = value['name'];
             food.description = value['description'];
-            food.fatsPer100 = value['fats'];
-            food.proteinsPer100 = value['proteins'];
-            food.saltsPer100 = value['salts'];
+            food.fatsPer100 = value['fatsPer100'];
+            food.proteinsPer100 = value['proteinsPer100'];
+            food.saltsPer100 = value['saltsPer100'];
             food.rdfOutput = value['rdfOutput'];
             food.imageUrl = value['imageUrl'];
-            food.vitaminsPer100 = value['vitamins'];
+            food.vitaminsPer100 = value['vitaminsPer100'];
             food.goodSinergyWith = value['goodSinergyWith'];
             food.goodWith = value['goodWith'];
             food.caloriesPer100 = value['caloriesPer100'];
-            food.carbsPer100 = value['carbs'];
+            food.carbsPer100 = value['carbsPer100'];
             food.timeStamp = value['timeStamp'];
             this.currentFoodSuggestions.push(food);
           });
@@ -208,7 +208,7 @@ export class FoodRecommenderComponent implements OnInit {
     if (average > this.computeProteinRightAmount()) {
       this.snackBar.open('Try to remove high protein based food to get suggestions!', 'OK', { duration: 4000 });
     } else {
-      return this.foodRecommender.getGeneralFoodRecommendationMeatAndFish(this.diet.name.toString(), this.computeProteinRightAmount())
+      this.foodRecommender.getGeneralFoodRecommendationMeatAndFish(this.diet.name.toString(), this.computeProteinRightAmount())
         .subscribe(response => {
           if (response) {
             Object.keys(response).forEach(key => {
@@ -218,16 +218,16 @@ export class FoodRecommenderComponent implements OnInit {
               food.bestEatenAt = value['bestEatenAt'];
               food.name = value['name'];
               food.description = value['description'];
-              food.fatsPer100 = value['fats'];
-              food.proteinsPer100 = value['proteins'];
-              food.saltsPer100 = value['salts'];
+              food.fatsPer100 = value['fatsPer100'];
+              food.proteinsPer100 = value['proteinsPer100'];
+              food.saltsPer100 = value['saltsPer100'];
               food.rdfOutput = value['rdfOutput'];
               food.imageUrl = value['imageUrl'];
-              food.vitaminsPer100 = value['vitamins'];
+              food.vitaminsPer100 = value['vitaminsPer100'];
               food.goodSinergyWith = value['goodSinergyWith'];
               food.goodWith = value['goodWith'];
               food.caloriesPer100 = value['caloriesPer100'];
-              food.carbsPer100 = value['carbs'];
+              food.carbsPer100 = value['carbsPer100'];
               food.timeStamp = value['timeStamp'];
               this.currentFoodSuggestions.push(food);
             });
