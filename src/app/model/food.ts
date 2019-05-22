@@ -2,8 +2,8 @@ import { FoodType } from "./foodtypes";
 import { MealType } from "./mealtypes";
 
 export class Food {
-  type: String;
-  name: String;
+  type: string;
+  name: string;
   calories: number;
   fats: number;
   carbs: number;
@@ -18,6 +18,8 @@ export class Food {
   carbsPer100:number;
   proteinsPer100:number;
   id: string;
+
+  imgUrl: string;//TEST
 
 
 

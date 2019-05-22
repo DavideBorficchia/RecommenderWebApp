@@ -260,7 +260,7 @@ export class FoodRecommenderService {
   }
 
   getFoodRdfByCategoryName(categoryName: String): FoodRdf[] {
-    return
+    return this.allFoodRdf.filter(food => food.type === categoryName)
   }
   getMostRecentAddedRdfFood(foodCategoryName: string): FoodRdf {
     return this.allFoodRdf.filter(food => food.type === foodCategoryName)

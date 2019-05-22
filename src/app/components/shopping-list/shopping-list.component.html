@@ -1,3 +1,35 @@
-<p>
-  shopping-list works!
-</p>
+<div class="shoppingList">
+    <mat-list style="margin-top: 60px; min-width:100%; max-width:400px;overflow-y: auto; overflow-x: hidden;"
+    id="food_list" fxHide.lt-md="true">
+    <h2 class="title" style="font-weight: 300; ">Shopping list for diet: {{this.diet.name}} </h2>
+    <mat-list-item mat-ripple *ngFor="let foodRdf of this.shoppingList | keyvalue" (click)="onItemClicked(foodRdf)">
+      <!-- <img matListAvatar src="{{foodCategory.avatarAssetPath}}">    foodRdf.imgUrl-->
+      <img matListAvatar [src]="foodRdf.value.imgUrl" (load)="foodListSameHeight()">
+      <h3 matLine> {{foodRdf.key}} </h3>
+      <div matLine fxLayout="row" fxLayoutAlign="space-between center">
+        <p style="  white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: ellipsis; width: 150px !important">
+          {{foodRdf.value.quantity}} gr.
+        </p>
+        <!-- <span>
+          <mat-icon>edit</mat-icon>
+        </span> -->
+
+<!-- UTILIZZARLA PER VISUALIZZARE CIBI ALTERNATIVI
+        <mat-form-field style="min-width: 60px; margin-top: 20px; margin-bottom: 20px" color="accent" fxLayout="row"
+            fxLayoutAlign="center start">
+            <mat-select placeholder="Pick some {{meal.mealType}} food" #select (selectionChange)="addFoodComponent($event)">
+                <mat-option *ngFor="let food of foodToDisplayForOptions" [value]="food.name">
+                    {{food.name}}
+                </mat-option>
+            </mat-select>
+            <mat-hint>You can add more food to your diet</mat-hint>
+        </mat-form-field> -->
+
+
+      </div>
+      <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+    </mat-list-item>
+  </mat-list>
+</div>
