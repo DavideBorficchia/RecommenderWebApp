@@ -21,7 +21,7 @@
     </mat-grid-tile>
   </mat-grid-list>
   <!-- Desktop -->
-  <mat-grid-list [cols]="numberOfCols" rowHeight="400" gutterSize="10px" *ngIf="foodCategorySelected==null" role="list"  fxShow.lg="true" fxShow="false" style="margin-bottom: 40px">
+  <mat-grid-list [cols]="numberOfCols" rowHeight="400" gutterSize="10px" *ngIf="foodCategorySelected==null" role="list"  fxShow.lg="true" fxShow.md="true" style="margin-bottom: 40px">
     <mat-grid-tile *ngFor="let foodCategory of foodCategories" role="listitem">
       <app-foodcategory [foodCategory]=foodCategory (foodCategorySelected)="onFoodCategorySelected($event)">
       </app-foodcategory>

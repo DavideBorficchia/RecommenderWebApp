@@ -50,6 +50,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { InformationDialogComponent } from './components/information-dialog/information-dialog.component';
 import { PhysicalActivityCreatorComponent } from './components/physical-activity-creator/physical-activity-creator.component';
 import { DatePipe } from '@angular/common';
+import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
 const appRoutes: Routes = [
 
   // { path: "signup", component: SignUpComponent, outlet:"registration" },
@@ -76,6 +77,9 @@ const appRoutes: Routes = [
                 path: "suggestions",component:FoodRecommenderComponent
               }
             ]
+        },
+        {
+          path: "shopping-list", component: ShoppingListComponent
         },
         {
           path:"food",component:FoodTableComponent, children:
@@ -112,7 +116,8 @@ const appRoutes: Routes = [
     FoodRdfCreatorComponent,
     FoodListComponent,
     InformationDialogComponent,
-    PhysicalActivityCreatorComponent
+    PhysicalActivityCreatorComponent,
+    ShoppingListComponent
   ],
   imports: [
     MatSelectModule,

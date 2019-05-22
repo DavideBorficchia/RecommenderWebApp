@@ -9,6 +9,7 @@
     <a mat-button routerLink="/home/food" *ngIf="isNutritionist && userName!==undefined">Food</a>
     <a mat-button routerLink="/home/physicalactivities" *ngIf="isNutritionist && userName!==undefined">Physical Activities</a>
     <a mat-button routerLink="/home/diary" *ngIf="!isNutritionist && userName!==undefined">Diary</a>
+    <a mat-button routerLink="/home/shopping-list" *ngIf="!isNutritionist && userName!==undefined">Shopping List</a>
   </div>
   <span class="spacer"></span>
   <img mat-button [matMenuTriggerFor]="account_menu" src="./assets/man.svg" class="toolbar-icon">
@@ -19,6 +20,7 @@
     <button mat-menu-item routerLink="/home/food" *ngIf="isMobile && isNutritionist && userName!==undefined">Food</button>
     <button mat-menu-item routerLink="/home/physicalactivities" *ngIf="isMobile && isNutritionist && userName!==undefined">Physical Activities</button>
     <button mat-menu-item routerLink="/home/diary" *ngIf="isMobile && !isNutritionist && userName!==undefined">Diary</button>
+    <button mat-menu-item routerLink="/home/shopping-list" *ngIf="isMobile && !isNutritionist && userName!==undefined">Shopping list</button>
 
   </mat-menu>
 
