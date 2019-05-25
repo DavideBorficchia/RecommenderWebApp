@@ -18,10 +18,37 @@ export class ShoppingListComponent implements OnInit {
 
   diet:Diet;
   user:User;
+  show = true;
   shoppingList: Map<String, Food> = new Map();
   alternativeFoods: Map<String, FoodRdf[]> = new Map();
 
   constructor(private dietService:DietService, private registerService:RegisterService, private foodService: FoodRecommenderService ) { }
+
+  printClik(){
+    this.show = false;
+  }
+
+  editList(event, oldFoodName){
+    console.log(event.value + " " + oldFoodName);
+    var foodRdf = this.foodService.getFoodRdfByName(event.value);
+    console.log("foodRDF " + foodRdf.name);
+    var newFood = new Food();
+    
+    newFood.name = foodRdf.name;
+
+    newFood.quantity = this.shoppingList.get(oldFoodName).quantity;
+    newFood.type = foodRdf.type;
+    newFood.id = foodRdf.id;
+    newFood.caloriesPer100 = foodRdf.caloriesPer100;
+    newFood.saltsPer100 = foodRdf.saltsPer100;
+    newFood.vitaminsPer100 = foodRdf.vitaminsPer100;
+    newFood.fatsPer100 = foodRdf.fatsPer100;
+    newFood.proteinsPer100 = foodRdf.proteinsPer100;
+    newFood.carbsPer100 = foodRdf.carbsPer100;
+    newFood.imgUrl = foodRdf.imageUrl;
+    this.shoppingList.delete(oldFoodName);
+    this.shoppingList.set(newFood.name, newFood);
+  }
 
   ngOnInit() {
         this.registerService.getUserObservable().subscribe(user => {
@@ -71,8 +98,7 @@ export class ShoppingListComponent implements OnInit {
               });
             });*/
 
-            this.foodService.getAllFood()
-
+            this.foodService.getAllFood();
 
 
             var caloriesPerDay: Map<DayOfWeek, number> = new Map()

@@ -51,6 +51,7 @@ import { InformationDialogComponent } from './components/information-dialog/info
 import { PhysicalActivityCreatorComponent } from './components/physical-activity-creator/physical-activity-creator.component';
 import { DatePipe } from '@angular/common';
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
+import {NgxPrintModule} from 'ngx-print';
 const appRoutes: Routes = [
 
   // { path: "signup", component: SignUpComponent, outlet:"registration" },
@@ -159,6 +160,7 @@ const appRoutes: Routes = [
     LayoutModule,
     MatChipsModule,
     MatAutocompleteModule,
+    NgxPrintModule,
     RouterModule.forRoot(
       appRoutes
     ),
