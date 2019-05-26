@@ -14,16 +14,16 @@
       </div>
 
       <mat-form-field class="noPrint" style="min-width: 70px; margin-bottom: 30px" color="accent" fxLayout="row" fxLayoutAlign="center start">
-          <mat-select placeholder="Alternative foods" #select (selectionChange)="editList($event, foodRdf.value.name)"> 
+          <mat-select class="noPrint"  #select (selectionChange)="editList($event, foodRdf.value.name)"> 
 
-              <div *ngFor="let food of  this.foodService.getAllFood()">
-                  <mat-option  *ngIf="food.type === foodRdf.value.type" [value]="food.name">
+              <div class="noPrint" *ngFor="let food of  this.foodService.getAllFood()">
+                  <mat-option class="noPrint" *ngIf="food.type === foodRdf.value.type" [value]="food.name">
                       {{food.name}}
                   </mat-option>
               </div>
 
           </mat-select>
-          <mat-hint>You can choose an alternative food</mat-hint>
+          <mat-hint class="noPrint" >You can choose an alternative food</mat-hint>
       </mat-form-field> 
       
       <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
@@ -33,6 +33,6 @@
 
 <div class="buttons">
   <button mat-raised-button printSectionId="print-section" ngxPrint color="primary"
-  styleSheetFile="./src/app/component/printCss.css" >Print list</button>
+  [printStyle]="{'.noPrint' : {'display': 'none'}}" >Print list</button>
   <button mat-raised-button color="primary">Buy online</button>
 </div>
