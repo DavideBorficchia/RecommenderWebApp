@@ -1,0 +1,42 @@
+<div class="buyOnline">
+  <mat-list style="margin-top: 60px; min-width:70%; max-width:600px;overflow-y: hidden; overflow-x: hidden;"
+  id="food_list" fxHide.lt-md="true">
+  <h2 class="title" style="font-weight: 300; ">Choose your products's brands! </h2>
+  <mat-list-item *ngFor="let foodRdf of this.shoppingList | keyvalue" >
+    <img matListAvatar [src]="foodRdf.value.imgUrl" >
+    <h3  matLine> {{foodRdf.key}} </h3>
+    <div matLine fxLayout="row" fxLayoutAlign="space-between center">
+      <p style="  white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis; width: 150px !important">
+        {{foodRdf.value.quantity}} gr.
+      </p>
+    </div>
+
+    <mat-form-field style="min-width: 70px; margin-bottom: 30px" color="accent" fxLayout="row" fxLayoutAlign="center start">
+        <mat-select #select (selectionChange)="editList($event, foodRdf.value.name)"> 
+
+            <!-- <div *ngFor="let food of  this.foodService.getAllFood()">
+                <mat-option *ngIf="food.type === foodRdf.value.type" [value]="food.name">
+                    {{food.name}}
+                </mat-option>
+            </div> -->
+
+        </mat-select>
+        <mat-hint >Choose the brand</mat-hint>
+    </mat-form-field> 
+    
+    <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+  </mat-list-item>
+</mat-list>
+<div class="total">
+  <p>
+    Total: 100 €
+  </p>
+</div>
+</div>
+
+<div class="buttons">
+<button mat-raised-button color="warn" (click)="backToShopping()">Back</button>
+<button mat-raised-button color="primary">Confirm</button>
+</div>

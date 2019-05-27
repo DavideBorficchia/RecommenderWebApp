@@ -34,5 +34,5 @@
 <div class="buttons">
   <button mat-raised-button printSectionId="print-section" ngxPrint color="primary"
   [printStyle]="{'.noPrint' : {'display': 'none'}}" >Print list</button>
-  <button mat-raised-button color="primary">Buy online</button>
+  <button mat-raised-button color="primary" (click)="navigateToBuy()">Buy online</button>
 </div>

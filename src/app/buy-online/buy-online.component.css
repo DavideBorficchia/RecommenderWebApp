@@ -1,0 +1,20 @@
+.buyOnline {
+    margin-top: 100px;
+    padding-left: 25%;
+}
+
+.buttons{
+    padding-left: 45%;
+}
+
+button{
+    margin: 5px;
+}
+
+.title {
+    text-align: center;
+}
+
+.total {
+    padding-left: 45%;
+}

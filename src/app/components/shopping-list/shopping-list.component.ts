@@ -8,6 +8,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../register/model/user';
 import { FoodRecommenderService } from 'src/app/services/food-recommender.service';
 import { FoodRdf } from 'src/app/model/foodRdf';
+import { Router } from '@angular/router';
+import { DataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-shopping-list',
@@ -22,16 +24,17 @@ export class ShoppingListComponent implements OnInit {
   shoppingList: Map<String, Food> = new Map();
   alternativeFoods: Map<String, FoodRdf[]> = new Map();
 
-  constructor(private dietService:DietService, private registerService:RegisterService, private foodService: FoodRecommenderService ) { }
+  constructor(private dietService:DietService, private registerService:RegisterService, private foodService: FoodRecommenderService,
+    private router: Router, private ds: DataService ) { }
 
-  printClik(){
-    this.show = false;
+  navigateToBuy(){
+    this.ds.setShoppingList(this.shoppingList);
+    this.router.navigateByUrl('/home/buy-online');
   }
 
   editList(event, oldFoodName){
     console.log(event.value + " " + oldFoodName);
     var foodRdf = this.foodService.getFoodRdfByName(event.value);
-    console.log("foodRDF " + foodRdf.name);
     var newFood = new Food();
     
     newFood.name = foodRdf.name;

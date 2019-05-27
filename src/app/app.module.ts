@@ -52,6 +52,8 @@ import { PhysicalActivityCreatorComponent } from './components/physical-activity
 import { DatePipe } from '@angular/common';
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
 import {NgxPrintModule} from 'ngx-print';
+import { BuyOnlineComponent } from './buy-online/buy-online.component';
+import { DataService } from './services/shared-data.service';
 const appRoutes: Routes = [
 
   // { path: "signup", component: SignUpComponent, outlet:"registration" },
@@ -81,6 +83,9 @@ const appRoutes: Routes = [
         },
         {
           path: "shopping-list", component: ShoppingListComponent
+        },
+        {
+          path: "buy-online", component: BuyOnlineComponent
         },
         {
           path:"food",component:FoodTableComponent, children:
@@ -118,7 +123,8 @@ const appRoutes: Routes = [
     FoodListComponent,
     InformationDialogComponent,
     PhysicalActivityCreatorComponent,
-    ShoppingListComponent
+    ShoppingListComponent,
+    BuyOnlineComponent
   ],
   imports: [
     MatSelectModule,
@@ -166,7 +172,7 @@ const appRoutes: Routes = [
     ),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, DataService],
   entryComponents:[InformationDialogComponent],
   bootstrap: [AppComponent],
 })
