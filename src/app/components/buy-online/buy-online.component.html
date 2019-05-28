@@ -17,8 +17,8 @@
         <mat-select #select (selectionChange)="editList($event, foodRdf.value.name)"> 
 
             <div *ngFor="let brand of this.getBrandsByProduct(foodRdf.key)">
-                <mat-option [value]="brand">
-                    {{brand}}
+                <mat-option [value]="brand.name">
+                    {{brand.name}} - {{brand.price*foodRdf.value.quantity}}€
                 </mat-option>
             </div> 
 

@@ -4,6 +4,7 @@ import { Food } from 'src/app/model/food';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ProductInBrand } from 'src/app/model/productInBrand';
 
 @Component({
   selector: 'app-buy-online',
@@ -28,24 +29,33 @@ export class BuyOnlineComponent implements OnInit {
         .subscribe(data => {
           this.brandsOntology = data;
           this.rowBrandsOntology = this.brandsOntology.split("\n");    
-          console.log(this.getBrandsByProduct("Pollo"));
+          //console.log(this.getBrandsByProduct("Pollo"));
           //this.brandsMatches.forEach(elem => console.log(elem));
         });        
   }
 
-  getBrandsByProduct(productName:string):string[]{
-    var brandsMatches: string[] = [];
+  getBrandsByProduct(productName:string):ProductInBrand[]{
+    console.log("product name " + productName);
+    var products: ProductInBrand[] = [];
     for (var i: number = 0; i < this.rowBrandsOntology.length; i++){
       if (this.rowBrandsOntology[i].includes(productName)){
+        
         for (var brandIndex: number = i; brandIndex > 0; brandIndex--){
           if (this.rowBrandsOntology[brandIndex].includes("brand:name")){
-            brandsMatches.push(this.getProperyValue(this.rowBrandsOntology[brandIndex]));
+            var product: ProductInBrand = new ProductInBrand;
+            // product.name = this.getProperyValue(this.rowBrandsOntology[brandIndex]);
+            // product.price = Number(this.getProperyValue(this.rowBrandsOntology[i + 1]));
+            console.log(this.getProperyValue(this.rowBrandsOntology[brandIndex]));
+            console.log(this.getProperyValue(this.rowBrandsOntology[i + 1]));
+            // products.push(product);
             brandIndex = 0;
+
+            //TODO va a finire in un ciclo infinito
           }
         }
       }
     }
-    return brandsMatches
+    return products
   }
 
   getProperyValue(row: string): string{
