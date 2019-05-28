@@ -16,11 +16,11 @@
     <mat-form-field style="min-width: 70px; margin-bottom: 30px" color="accent" fxLayout="row" fxLayoutAlign="center start">
         <mat-select #select (selectionChange)="editList($event, foodRdf.value.name)"> 
 
-            <!-- <div *ngFor="let food of  this.foodService.getAllFood()">
-                <mat-option *ngIf="food.type === foodRdf.value.type" [value]="food.name">
-                    {{food.name}}
+            <div *ngFor="let brand of this.getBrandsByProduct(foodRdf.key)">
+                <mat-option [value]="brand">
+                    {{brand}}
                 </mat-option>
-            </div> -->
+            </div> 
 
         </mat-select>
         <mat-hint >Choose the brand</mat-hint>
