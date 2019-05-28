@@ -20,6 +20,7 @@ export class BuyOnlineComponent implements OnInit {
   shoppingList: Map<String, Food>;
   brandsOntology: string;
   rowBrandsOntology: string[];
+  brandsMatches: string[] = [];
   
 
   constructor(private ds:DataService, private router:Router, private http: HttpClient) {
@@ -31,18 +32,19 @@ export class BuyOnlineComponent implements OnInit {
           //console.log(data)
           this.brandsOntology = data;
           this.rowBrandsOntology = this.brandsOntology.split("\n");    
-          this.getBrandsByProduct("Spaghetti al pomodoro");
+          this.getBrandsByProduct("Pollo");
+          this.brandsMatches.forEach(elem => console.log(elem));
         });        
   }
 
 getBrandsByProduct(productName:string){
   for (var i: number = 0; i < this.rowBrandsOntology.length; i++){
-    //console.log(this.rowBrandsOntology[i]);
     if (this.rowBrandsOntology[i].includes(productName)){
-      console.log("------------ INDEX ------------- " + i);
+      // console.log("------------ INDEX ------------- " + i);
       for (var brandIndex: number = i; brandIndex > 0; brandIndex--){
         if (this.rowBrandsOntology[brandIndex].includes("brand:name")){
-          this.getProperyValue(this.rowBrandsOntology[brandIndex]);
+          // this.getProperyValue(this.rowBrandsOntology[brandIndex]);
+          this.brandsMatches.push(this.getProperyValue(this.rowBrandsOntology[brandIndex]));
           brandIndex = 0;
         }
       }
@@ -50,8 +52,8 @@ getBrandsByProduct(productName:string){
   }
 }
 
-getProperyValue(row: string){
-  console.log(row.split(/(?=<)|(?<=>)/)[2]);
+getProperyValue(row: string): string{
+  return (row.split(/(?=<)|(?<=>)/)[2]);
 }
 
   ngOnInit() {
