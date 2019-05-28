@@ -1,0 +1,78 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:brand="http://temphost/ontologies/brand#">
+	
+  <rdf:Description rdf:about="http://temphost/ontologies/brand#Barilla">
+    <brand:description>Azienda italiana di prodotti culinari</brand:description>
+    <brand:id>1</brand:id>
+    <brand:name>Barilla</brand:name>
+    <brand:nationality>Italiana</brand:nationality>
+    <brand:foundationYear>1877</brand:foundationYear>
+    <brand:products>
+		<brand:product>
+			<brand:productName>Spaghetti al pomodoro</brand:productName>
+			<brand:pricePerGr>0.019<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Pasta alla carbonara</brand:productName>
+			<brand:pricePerGr>0.022<brand:pricePerGr>
+		</brand:product>		
+	</brand:produts>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="http://temphost/ontologies/brand#De_Cecco">
+    <brand:description>Un'altra azienda italiana di prodotti culinari</brand:description>
+    <brand:id>2</brand:id>
+    <brand:name>De Cecco</brand:name>
+    <brand:nationality>Italiana</brand:nationality>
+    <brand:foundationYear>1886</brand:foundationYear>
+    <brand:products>
+		<brand:product>
+			<brand:productName>Spaghetti al pomodoro</brand:productName>
+			<brand:pricePerGr>0.021<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Pasta alla carbonara</brand:productName>
+			<brand:pricePerGr>0.026<brand:pricePerGr>
+		</brand:product>		
+	</brand:produts>
+  </rdf:Description>
+  
+   <rdf:Description rdf:about="http://temphost/ontologies/brand#Amadori">
+    <brand:description>Azienda italiana di prodotti a base di carne</brand:description>
+    <brand:id>3</brand:id>
+    <brand:name>Amadori</brand:name>
+    <brand:nationality>Italiana</brand:nationality>
+    <brand:foundationYear>1969</brand:foundationYear>
+    <brand:products>
+		<brand:product>
+			<brand:productName>Pollo</brand:productName>
+			<brand:pricePerGr>0.03<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Maiale ai ferri</brand:productName>
+			<brand:pricePerGr>0.036<brand:pricePerGr>
+		</brand:product>		
+	</brand:produts>
+  </rdf:Description>   
+  
+  <rdf:Description rdf:about="http://temphost/ontologies/brand#AIA">
+    <brand:description>Un'altra azienda italiana di prodotti a base di carne</brand:description>
+    <brand:id>4</brand:id>
+    <brand:name>AIA</brand:name>
+    <brand:nationality>Italiana</brand:nationality>
+    <brand:foundationYear>1968</brand:foundationYear>
+    <brand:products>
+		<brand:product>
+			<brand:productName>Pollo</brand:productName>
+			<brand:pricePerGr>0.037<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Maiale ai ferri</brand:productName>
+			<brand:pricePerGr>0.04<brand:pricePerGr>
+		</brand:product>		
+	</brand:produts>
+  </rdf:Description>
+
+  
+</rdf:RDF>

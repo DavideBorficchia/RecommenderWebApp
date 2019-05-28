@@ -52,7 +52,7 @@ import { PhysicalActivityCreatorComponent } from './components/physical-activity
 import { DatePipe } from '@angular/common';
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
 import {NgxPrintModule} from 'ngx-print';
-import { BuyOnlineComponent } from './buy-online/buy-online.component';
+import { BuyOnlineComponent } from './components/buy-online/buy-online.component';
 import { DataService } from './services/shared-data.service';
 const appRoutes: Routes = [
 
