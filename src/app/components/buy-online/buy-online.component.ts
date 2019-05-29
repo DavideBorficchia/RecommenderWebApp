@@ -21,41 +21,46 @@ export class BuyOnlineComponent implements OnInit {
   shoppingList: Map<String, Food>;
   brandsOntology: string;
   rowBrandsOntology: string[] = [];
+  total: number = 0;
+
+  listBrandPrice: ProductInBrand[] = [];
 
   constructor(private ds:DataService, private router:Router, private http: HttpClient) {
+
     this.shoppingList = ds.getShoppingList();
 
     this.http.get('./assets/brands.rdf', {responseType: 'text'})
         .subscribe(data => {
           this.brandsOntology = data;
-          this.rowBrandsOntology = this.brandsOntology.split("\n");    
-          //console.log(this.getBrandsByProduct("Pollo"));
-          //this.brandsMatches.forEach(elem => console.log(elem));
+          this.rowBrandsOntology = this.brandsOntology.split("\n");   
+          this.shoppingList.forEach(e => this.getBrandsByProduct(e.name)); //carico in listBrandPrice tutte le triple < prodotto, brand, prezzo >
+          //this.listBrandPrice.forEach(elem => console.log(elem));
         });        
   }
 
-  getBrandsByProduct(productName:string):ProductInBrand[]{
-    console.log("product name " + productName);
-    var products: ProductInBrand[] = [];
-    for (var i: number = 0; i < this.rowBrandsOntology.length; i++){
-      if (this.rowBrandsOntology[i].includes(productName)){
-        
-        for (var brandIndex: number = i; brandIndex > 0; brandIndex--){
-          if (this.rowBrandsOntology[brandIndex].includes("brand:name")){
-            var product: ProductInBrand = new ProductInBrand;
-            // product.name = this.getProperyValue(this.rowBrandsOntology[brandIndex]);
-            // product.price = Number(this.getProperyValue(this.rowBrandsOntology[i + 1]));
-            console.log(this.getProperyValue(this.rowBrandsOntology[brandIndex]));
-            console.log(this.getProperyValue(this.rowBrandsOntology[i + 1]));
-            // products.push(product);
-            brandIndex = 0;
+  editList(price){
+    console.log("CLICK");
+    console.log(price.value);
+    this.total = this.total + price.value;
+  }
 
-            //TODO va a finire in un ciclo infinito
+  getBrandsByProduct(productName:string){ 
+    if(this.rowBrandsOntology.length > 0){
+      for (var i: number = 0; i < this.rowBrandsOntology.length; i++){
+        if (this.rowBrandsOntology[i].includes(productName)){
+          for (var brandIndex: number = i; brandIndex > 0; brandIndex--){
+            if (this.rowBrandsOntology[brandIndex].includes("brand:name")){
+              var p: ProductInBrand = new ProductInBrand();
+              p.product = productName;
+              p.brandName = this.getProperyValue(this.rowBrandsOntology[brandIndex]);
+              p.price = this.getProperyValue(this.rowBrandsOntology[i + 1]);
+              this.listBrandPrice.push(p);
+              brandIndex = 0;
+            }
           }
         }
       }
     }
-    return products
   }
 
   getProperyValue(row: string): string{

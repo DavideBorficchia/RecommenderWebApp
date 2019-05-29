@@ -14,11 +14,12 @@
     </div>
 
     <mat-form-field style="min-width: 70px; margin-bottom: 30px" color="accent" fxLayout="row" fxLayoutAlign="center start">
-        <mat-select #select (selectionChange)="editList($event, foodRdf.value.name)"> 
+        <mat-select #select (selectionChange)="editList($event)"> 
 
-            <div *ngFor="let brand of this.getBrandsByProduct(foodRdf.key)">
-                <mat-option [value]="brand.name">
-                    {{brand.name}} - {{brand.price*foodRdf.value.quantity}}€
+            <div *ngFor="let brand of this.listBrandPrice">
+                <mat-option *ngIf="brand.product == foodRdf.key" [value]="brand.price * foodRdf.value.quantity">
+                    {{brand.brandName}} - {{brand.price * foodRdf.value.quantity}}€
+                    <!-- {{brand}} -->
                 </mat-option>
             </div> 
 
@@ -31,7 +32,7 @@
 </mat-list>
 <div class="total">
   <p>
-    Total: 100 €
+    Total: {{this.total}} €
   </p>
 </div>
 </div>
