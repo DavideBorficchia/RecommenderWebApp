@@ -73,6 +73,66 @@
 		</brand:product>		
 	</brand:produts>
   </rdf:Description>
+  
+  <rdf:Description rdf:about="http://temphost/ontologies/brand#COOP">
+    <brand:description>La coop sei tu</brand:description>
+    <brand:id>5</brand:id>
+    <brand:name>COOP</brand:name>
+    <brand:nationality>Italiana</brand:nationality>
+    <brand:foundationYear>1967</brand:foundationYear>
+    <brand:products>
+		<brand:product>
+			<brand:productName>Kiwi</brand:productName>
+			<brand:pricePerGr>0.007<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Banana</brand:productName>
+			<brand:pricePerGr>0.004<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Melone</brand:productName>
+			<brand:pricePerGr>0.006<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Arancia</brand:productName>
+			<brand:pricePerGr>0.003<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Mandarino</brand:productName>
+			<brand:pricePerGr>0.003<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Melanzana</brand:productName>
+			<brand:pricePerGr>0.007<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Patata</brand:productName>
+			<brand:pricePerGr>0.009<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Lattuga</brand:productName>
+			<brand:pricePerGr>0.008<brand:pricePerGr>
+		</brand:product>		
+	</brand:produts>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="http://temphost/ontologies/brand#RioMare">
+    <brand:description>Vende prevalentemente pesce</brand:description>
+    <brand:id>6</brand:id>
+    <brand:name>Rio Mare</brand:name>
+    <brand:nationality>Italiana</brand:nationality>
+    <brand:foundationYear>1978</brand:foundationYear>
+    <brand:products>
+		<brand:product>
+			<brand:productName>Filetto di pesce spada</brand:productName>
+			<brand:pricePerGr>0.06<brand:pricePerGr>
+		</brand:product>
+		<brand:product>
+			<brand:productName>Trota</brand:productName>
+			<brand:pricePerGr>0.059<brand:pricePerGr>
+		</brand:product>	
+	</brand:produts>
+  </rdf:Description>
 
   
 </rdf:RDF>

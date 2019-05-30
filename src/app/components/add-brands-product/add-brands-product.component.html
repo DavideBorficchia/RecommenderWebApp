@@ -1,0 +1,16 @@
+    <table mat-table class="mat-elevation-z8">
+      <thead>
+        <tr>
+          <th mat-header-cell >Brand bane</th>
+          <th mat-header-cell >Prduct</th>
+          <th mat-header-cell >Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prod of this.allProducts; let i = index">
+          <td mat-cell>{{prod.brandName }}</td>
+          <td mat-cell>{{prod.product}}</td>
+          <td mat-cell>{{prod.price}}</td>
+        </tr>
+      </tbody>
+   </table>

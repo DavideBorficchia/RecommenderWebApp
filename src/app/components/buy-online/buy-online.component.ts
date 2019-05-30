@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ProductInBrand } from 'src/app/model/productInBrand';
+import { MatDialog, MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-buy-online',
@@ -26,7 +27,7 @@ export class BuyOnlineComponent implements OnInit {
 
   listBrandPrice: ProductInBrand[] = [];
 
-  constructor(private ds:DataService, private router:Router, private http: HttpClient) {
+  constructor(private ds:DataService, private router:Router, private http: HttpClient, public snackBar: MatSnackBar) {
 
     this.shoppingList = ds.getShoppingList();
 
@@ -40,9 +41,14 @@ export class BuyOnlineComponent implements OnInit {
   }
 
   editList(price){
-    console.log("CLICK");
-    console.log(price.value);
     this.total = this.total + price.value;
+  }
+
+  openDialog(){
+    this.snackBar.open("Your products will arrived in 3 working days!", "Order completed!", {
+      duration: 3000
+    });
+    this.router.navigateByUrl("/home/diary");
   }
 
   getBrandsByProduct(productName:string){ 

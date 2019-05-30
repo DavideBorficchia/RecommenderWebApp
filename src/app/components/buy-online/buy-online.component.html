@@ -32,12 +32,12 @@
 </mat-list>
 <div class="total">
   <p>
-    Total:<span>{{this.total | number : '1.2-2'}}</span> €
+    Total: <span>{{this.total | number : '1.2-2'}}</span> €
   </p>
 </div>
 </div>
 
 <div class="buttons">
 <button mat-raised-button color="warn" (click)="backToShopping()">Back</button>
-<button mat-raised-button color="primary">Confirm</button>
+<button mat-raised-button color="primary" (click)="openDialog()">Confirm</button>
 </div>

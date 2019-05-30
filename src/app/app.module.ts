@@ -54,6 +54,8 @@ import { ShoppingListComponent } from './components/shopping-list/shopping-list.
 import {NgxPrintModule} from 'ngx-print';
 import { BuyOnlineComponent } from './components/buy-online/buy-online.component';
 import { DataService } from './services/shared-data.service';
+import { AddBrandsProductComponent } from './components/add-brands-product/add-brands-product.component';
+
 const appRoutes: Routes = [
 
   // { path: "signup", component: SignUpComponent, outlet:"registration" },
@@ -83,6 +85,9 @@ const appRoutes: Routes = [
         },
         {
           path: "shopping-list", component: ShoppingListComponent
+        },
+        {
+          path: "add-product", component: AddBrandsProductComponent
         },
         {
           path: "buy-online", component: BuyOnlineComponent
@@ -124,7 +129,8 @@ const appRoutes: Routes = [
     InformationDialogComponent,
     PhysicalActivityCreatorComponent,
     ShoppingListComponent,
-    BuyOnlineComponent
+    BuyOnlineComponent,
+    AddBrandsProductComponent
   ],
   imports: [
     MatSelectModule,
