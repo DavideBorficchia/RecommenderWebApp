@@ -22,6 +22,7 @@ export class BuyOnlineComponent implements OnInit {
   brandsOntology: string;
   rowBrandsOntology: string[] = [];
   total: number = 0;
+  numberOfSelected = 0;
 
   listBrandPrice: ProductInBrand[] = [];
 
